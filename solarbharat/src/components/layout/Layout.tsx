@@ -52,6 +52,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Link className="text-sb-gold hover:text-sb-goldDark" href="/report">
               {t('nav.report')}
             </Link>
+            <Link className="text-white/50 hover:text-white/80" href="/preview">
+              {t('nav.preview')}
+            </Link>
             <LanguageSwitcher />
           </nav>
         </div>

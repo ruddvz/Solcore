@@ -17,6 +17,8 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 | **Solar resource** (district centroid) | Done — `/api/solar` uses **NREL PVWatts** when `NREL_API_KEY` is set, else **NASA POWER**, else heuristic fallback |
 | **PDF export** (client jsPDF + html2canvas, watermarked footer) | Done |
 | **SEO**: metadata, `sitemap.xml`, `robots.txt` | Done |
+| **PWA**: `@ducanh2912/next-pwa`, `manifest.ts`, icons `public/icons/`, `/offline` fallback | Done — install prompt after `npm run build` + `npm run start` or HTTPS deploy |
+| **`/preview`** testing hub | Done — noindex |
 | **PostHog** (optional key) | Done — `Providers.tsx` |
 | i18n EN + partial HI/GU | Done (extend strings as needed) |
 | Performance / mobile polish | Ongoing — test on real devices |

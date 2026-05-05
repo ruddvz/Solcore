@@ -4,12 +4,29 @@
     "tagline": "India's Solar Truth Engine",
     "home": "Home",
     "calculator": "Calculator",
-    "report": "Report"
+    "report": "Report",
+    "preview": "Preview"
   },
   "lang": {
     "en": "English",
     "hi": "हिंदी",
     "gu": "ગુજરાતી"
+  },
+  "preview": {
+    "title": "UI preview & install checklist",
+    "subtitle": "Jump to every screen and install the app as a PWA while you test on a phone or desktop.",
+    "pwaTitle": "Install as app (PWA)",
+    "pwaBody": "Production builds register a service worker for offline shell caching. Use HTTPS or deploy to Vercel — Chrome shows “Install app” when the manifest validates.",
+    "pwaStep1": "Run npm run build && npm run start locally, or open your deployed URL.",
+    "pwaStep2": "Chrome / Edge: address bar install icon, or menu → Install SolarBharat.",
+    "pwaStep3": "Safari (iOS): Share → Add to Home Screen.",
+    "routesTitle": "Screens",
+    "link": {
+      "home": "Home — hero, features, state list",
+      "calculator": "Calculator — state, district, land, technology",
+      "report": "Report — six tabs, PDF export",
+      "offline": "Offline fallback page (PWA)"
+    }
   },
   "home": {
     "heroTitle": "Honest, district-specific solar feasibility — in seconds.",

@@ -15,6 +15,15 @@ npm run dev
 
 Build: `npm run build` · Start: `npm run start`
 
+**UI testing hub:** open **`/preview`** for links to Home, Calculator, Report, Offline page, and short PWA install notes.
+
+## PWA (installable app)
+
+- **`src/app/manifest.ts`** serves **`/manifest.webmanifest`** (standalone display, theme colours, icons).
+- **`@ducanh2912/next-pwa`** registers a service worker in **production** only (`next.config.mjs`). **`npm run dev`** does not enable the worker — use **`npm run build && npm run start`** or your HTTPS preview deploy to test install prompts.
+- **`/offline`** is the document fallback when offline (after precache warms up).
+- Icons live in **`public/icons/`** (regenerate: `npm run generate:pwa-icons`).
+
 ## Environment
 
 Copy `.env.example` to `.env.local`. Set **`NEXT_PUBLIC_SITE_URL`** to your canonical URL in production so `sitemap.xml` and metadata resolve correctly.
