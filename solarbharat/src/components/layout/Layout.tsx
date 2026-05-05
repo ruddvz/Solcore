@@ -49,6 +49,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Link className="text-white/70 hover:text-white" href="/calculator">
               {t('nav.calculator')}
             </Link>
+            <Link className="text-white/70 hover:text-white" href="/contractors">
+              {t('nav.contractors')}
+            </Link>
             <Link className="text-sb-gold hover:text-sb-goldDark" href="/report">
               {t('nav.report')}
             </Link>

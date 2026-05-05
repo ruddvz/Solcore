@@ -5,7 +5,8 @@
     "home": "Home",
     "calculator": "Calculator",
     "report": "Report",
-    "preview": "Preview"
+    "preview": "Preview",
+    "contractors": "Contractors"
   },
   "lang": {
     "en": "English",
@@ -25,8 +26,40 @@
       "home": "Home — hero, features, state list",
       "calculator": "Calculator — state, district, land, technology",
       "report": "Report — six tabs, PDF export",
+      "contractors": "Contractors — directory & apply",
       "offline": "Offline fallback page (PWA)"
     }
+  },
+  "contractors": {
+    "title": "Verified contractors",
+    "subtitle": "Empaneled-style listings for discovery — always verify GEDA/MNRE status yourself before signing.",
+    "applyCta": "List your company",
+    "filterState": "Filter by state",
+    "allStates": "All states",
+    "loading": "Loading…",
+    "verified": "Listed",
+    "empty": "No contractors match this filter.",
+    "disclaimer": "SolarBharat does not endorse contractors; listings are for research only.",
+    "applyTitle": "Apply for a directory listing",
+    "applySubtitle": "Submit details for manual verification against nodal agency empaneled lists (plan §6.3).",
+    "applyRequired": "Company name and email are required.",
+    "applySuccess": "Thanks — we received your application.",
+    "applyNoBackend": "Directory submissions require Supabase: add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY, run migrations in Supabase SQL Editor.",
+    "applySending": "Sending…",
+    "applySubmit": "Submit application",
+    "fieldCompany": "Company name",
+    "fieldContact": "Contact person",
+    "fieldEmail": "Email",
+    "fieldPhone": "Phone",
+    "fieldState": "Primary state",
+    "fieldDistrict": "Primary district",
+    "fieldEmpanelment": "GEDA/MNRE reference (optional)",
+    "fieldNotes": "Notes",
+    "backToDirectory": "Back to directory",
+    "companyNotFound": "Company not found or not listed.",
+    "noProfile": "No profile text yet.",
+    "contact": "Contact",
+    "verifyDisclaimer": "Verify tariff, subsidy, and contractor empaneled status with your nodal agency before paying deposits."
   },
   "home": {
     "heroTitle": "Honest, district-specific solar feasibility — in seconds.",

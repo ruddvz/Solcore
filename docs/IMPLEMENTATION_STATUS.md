@@ -30,11 +30,11 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 |------|--------|
 | **NREL NSRDB** via PVWatts v8 (`solrad_monthly`) | Done — server-only `NREL_API_KEY`, see `src/lib/nrelSolar.ts` |
 | **Supabase** SSR clients + cookie middleware | Done — `src/lib/supabase/*`, optional env |
-| Phase 2 **Postgres schema** (contractors, reviews, quota, quotes, alerts, forum stubs) | SQL migration `solarbharat/supabase/migrations/` — apply in Supabase manually |
-| **Phase 2** | Pin-drop **Leaflet** map + **shading** slider (plan §6.1–6.2), `/api/solar?lat&lon` | Done — `PinMap`, `shading.ts`, `calculatorStore` |
-| Leaflet pin-drop map, scrapers, forum UI, email jobs | **Partial** — map + shading done; rest pending |
+| **Contractor directory** (plan §6.3): `/contractors`, apply form → Supabase `contractor_applications`, detail `?slug=` | Done — seed listings when DB empty; migration `20260505200000_seed_demo_contractors.sql` |
+| Pin-drop **Leaflet** + **shading** (§6.1–6.2), `/api/solar?lat&lon` | Done |
+| Scrapers, forum UI, email jobs, verified reviews | **Not** done |
 
-Next engineering steps: wire UI forms to Supabase RLS, Leaflet map, background jobs.
+Next engineering steps: forum topics UI, quota tracker ingest, email (Resend), review moderation dashboard.
 
 ## Phase 3 (plan §7)
 

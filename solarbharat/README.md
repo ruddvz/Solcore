@@ -33,6 +33,14 @@ Optional Phase 2 keys:
 - **`NREL_API_KEY`** — NSRDB-backed irradiance (register at [developer.nrel.gov](https://developer.nrel.gov/signup/)).
 - **`NEXT_PUBLIC_SUPABASE_URL`** + **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** — run `supabase/migrations/*.sql` in your Supabase project first (see [`IMPLEMENTATION_STATUS.md`](../docs/IMPLEMENTATION_STATUS.md)).
 
+## Phase 2 contractor directory
+
+- **`/contractors`** — verified listings (Supabase `contractors` when configured; otherwise curated seed data).
+- **`/contractors/apply`** — inserts into `contractor_applications` (needs Supabase env).
+- **`/contractors/company?slug=…`** — detail page (works with static export).
+
+Run migrations in Supabase SQL Editor (schema + optional seed): `supabase/migrations/`.
+
 ## Manual vs automated work
 
 Checklists live in the repo root docs: **[`MANUAL_TASKS.md`](../docs/MANUAL_TASKS.md)** (your manual steps) and **[`IMPLEMENTATION_STATUS.md`](../docs/IMPLEMENTATION_STATUS.md)** (what is implemented vs Phase 2/3).

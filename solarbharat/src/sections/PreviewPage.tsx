@@ -3,10 +3,11 @@
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
-const ROUTES: { href: string; key: 'home' | 'calculator' | 'report' | 'offline' }[] = [
+const ROUTES: { href: string; key: 'home' | 'calculator' | 'report' | 'contractors' | 'offline' }[] = [
   { href: '/', key: 'home' },
   { href: '/calculator', key: 'calculator' },
   { href: '/report', key: 'report' },
+  { href: '/contractors', key: 'contractors' },
   { href: '/offline', key: 'offline' },
 ]
 
