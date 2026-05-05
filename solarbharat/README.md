@@ -33,6 +33,10 @@ Optional Phase 2 keys:
 - **`NREL_API_KEY`** — NSRDB-backed irradiance (register at [developer.nrel.gov](https://developer.nrel.gov/signup/)).
 - **`NEXT_PUBLIC_SUPABASE_URL`** + **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** — run `supabase/migrations/*.sql` in your Supabase project first (see [`IMPLEMENTATION_STATUS.md`](../docs/IMPLEMENTATION_STATUS.md)).
 
+## Phase 2 community (forum, quota, alerts)
+
+Run **`20260505210000_forum_anon_insert_policies.sql`** and **`20260505211000_seed_demo_forum_quota.sql`** after the base schema so anonymous posting and demo rows work.
+
 ## Phase 2 contractor directory
 
 - **`/contractors`** — verified listings (Supabase `contractors` when configured; otherwise curated seed data).

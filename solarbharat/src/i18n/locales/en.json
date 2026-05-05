@@ -6,7 +6,10 @@
     "calculator": "Calculator",
     "report": "Report",
     "preview": "Preview",
-    "contractors": "Contractors"
+    "contractors": "Contractors",
+    "quota": "Quota",
+    "forum": "Forum",
+    "alerts": "Alerts"
   },
   "lang": {
     "en": "English",
@@ -27,6 +30,9 @@
       "calculator": "Calculator — state, district, land, technology",
       "report": "Report — six tabs, PDF export",
       "contractors": "Contractors — directory & apply",
+      "quota": "PM-KUSUM quota tracker",
+      "forum": "Community Q&A",
+      "alerts": "Email alerts signup",
       "offline": "Offline fallback page (PWA)"
     }
   },
@@ -60,6 +66,63 @@
     "noProfile": "No profile text yet.",
     "contact": "Contact",
     "verifyDisclaimer": "Verify tariff, subsidy, and contractor empaneled status with your nodal agency before paying deposits."
+  },
+  "forum": {
+    "title": "Community Q&A",
+    "subtitle": "Ask scheme and DISCOM questions — answers are crowd-sourced; verify critical facts with nodal agencies.",
+    "newTopic": "New topic",
+    "loading": "Loading…",
+    "empty": "No topics yet.",
+    "disclaimer": "Content is user-generated and not legal or financial advice.",
+    "back": "Back to forum",
+    "newTitle": "Start a topic",
+    "fieldTitle": "Title",
+    "fieldCategory": "Category",
+    "fieldState": "State (optional)",
+    "fieldScheme": "Scheme tag",
+    "fieldBody": "Question",
+    "optional": "Any",
+    "required": "Title and body are required.",
+    "publish": "Publish",
+    "posting": "Publishing…",
+    "notFound": "Topic not found.",
+    "replies": "Replies",
+    "verified": "Verified answer",
+    "yourReply": "Your reply",
+    "reply": "Post reply"
+  },
+  "quota": {
+    "title": "PM-KUSUM quota tracker",
+    "subtitle": "Latest recorded snapshots — combine official portals with crowdsourced updates (plan §6.5).",
+    "loading": "Loading…",
+    "empty": "No quota data yet.",
+    "updated": "Updated",
+    "statewide": "Statewide",
+    "disclaimer": "Figures are indicative only; confirm with GEDA / MNRE / DISCOM before banking on quota.",
+    "band": {
+      "available": "Available",
+      "limited": "Limited",
+      "nearly_full": "Nearly full",
+      "closed": "Closed",
+      "unknown": "Unknown"
+    }
+  },
+  "alerts": {
+    "title": "Email alerts",
+    "subtitle": "Subscribe for quota reopenings, tariff digests, or report reminders — requires Supabase + future email worker (plan §6.10).",
+    "email": "Email",
+    "emailRequired": "Email is required.",
+    "type": "Alert type",
+    "typeQuota": "Quota opens / updates",
+    "typeTariff": "Tariff digest (future)",
+    "typeReminder": "Report reminder (future)",
+    "state": "State",
+    "district": "District",
+    "optional": "Any state",
+    "success": "Saved — double opt-in email coming soon.",
+    "sending": "Saving…",
+    "submit": "Subscribe",
+    "disclaimer": "We will only use your email for SolarBharat alerts; no resale. Confirmation flow not wired yet."
   },
   "home": {
     "heroTitle": "Honest, district-specific solar feasibility — in seconds.",

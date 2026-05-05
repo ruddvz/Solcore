@@ -32,9 +32,12 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 | **Supabase** SSR clients + cookie middleware | Done — `src/lib/supabase/*`, optional env |
 | **Contractor directory** (plan §6.3): `/contractors`, apply form → Supabase `contractor_applications`, detail `?slug=` | Done — seed listings when DB empty; migration `20260505200000_seed_demo_contractors.sql` |
 | Pin-drop **Leaflet** + **shading** (§6.1–6.2), `/api/solar?lat&lon` | Done |
-| Scrapers, forum UI, email jobs, verified reviews | **Not** done |
+| **Public Q&A forum** (plan §6.9): `/forum`, `/forum/new`, `/forum/topic?slug=` | Done — anon insert policies migration; seed topics + replies |
+| **PM-KUSUM quota tracker UI** (plan §6.5): `/quota` | Done — reads `quota_snapshots`; seed migration |
+| **Email alerts signup** (plan §6.10): `/alerts` → `email_alert_subscriptions` | Done — UI only; sending requires worker |
+| Scrapers (automated quota ingest), Resend/email worker, moderation dashboard | **Not** done |
 
-Next engineering steps: forum topics UI, quota tracker ingest, email (Resend), review moderation dashboard.
+Next engineering steps: Edge Function or cron for quota ingest, Resend + confirm links, forum moderation UI.
 
 ## Phase 3 (plan §7)
 
