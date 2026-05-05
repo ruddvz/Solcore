@@ -1,14 +1,16 @@
 import type { MetadataRoute } from 'next'
 
+const base = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '')
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    id: '/',
+    id: `${base}/`,
     name: 'SolarBharat — India’s Solar Truth Engine',
     short_name: 'SolarBharat',
     description:
       'District-level solar feasibility for India — estimates only. PM-KUSUM-style modelling.',
-    start_url: '/',
-    scope: '/',
+    start_url: `${base}/`,
+    scope: `${base}/`,
     display: 'standalone',
     orientation: 'portrait-primary',
     background_color: '#0a0f1e',
@@ -16,19 +18,19 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['utilities', 'finance', 'productivity'],
     icons: [
       {
-        src: '/icons/icon-192.png',
+        src: `${base}/icons/icon-192.png`,
         sizes: '192x192',
         type: 'image/png',
         purpose: 'any',
       },
       {
-        src: '/icons/icon-512.png',
+        src: `${base}/icons/icon-512.png`,
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any',
       },
       {
-        src: '/icons/icon-512-maskable.png',
+        src: `${base}/icons/icon-512-maskable.png`,
         sizes: '512x512',
         type: 'image/png',
         purpose: 'maskable',

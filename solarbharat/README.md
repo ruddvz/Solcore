@@ -56,6 +56,16 @@ This writes:
 - **Coordinates**: Photon (Komoot) OpenStreetMap search; tariff/subsidy rows marked **fallback** must be verified against current DISCOM / nodal orders.
 - **Irradiance**: NREL (when configured) or NASA POWER at district centroid — not a substitute for a site survey.
 
-## Optional analytics
+## GitHub Pages (static preview)
+
+From **`solarbharat/`**:
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/<repo> NEXT_PUBLIC_SITE_URL=https://<user>.github.io npm run export:github-pages
+```
+
+Produces **`out/`** with **`BASE_PATH`** baked in. CI: **[`.github/workflows/deploy-github-pages.yml`](../.github/workflows/deploy-github-pages.yml)** — enable **Pages → GitHub Actions** in repo settings.
+
+On Pages there are **no API routes**; irradiance uses **NASA POWER** in the client. For **NREL** + `/api/solar` use **Vercel** or `npm run start` after `npm run build`.
 
 Set `NEXT_PUBLIC_POSTHOG_KEY` (and optionally `NEXT_PUBLIC_POSTHOG_HOST`) for PostHog.

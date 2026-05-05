@@ -4,6 +4,24 @@ For **what the codebase already delivers** vs the product plan, see [`IMPLEMENTA
 
 Use this list for anything that **cannot** be automated in code or that requires **your** credentials, legal judgment, or ongoing operational discipline. Tick items as you complete them.
 
+## GitHub Pages (optional preview — static export)
+
+The workflow **[`.github/workflows/deploy-github-pages.yml`](../.github/workflows/deploy-github-pages.yml)** deploys a **static** build of the app (no server API routes; solar data uses **NASA POWER in the browser** on project sites).
+
+1. **Repository** → **Settings** → **Pages** → **Source**: **GitHub Actions**.
+2. Merge to **`main`** (or run **Actions → Deploy GitHub Pages → Run workflow**).
+3. Open **`https://<your-username>.github.io/<repository>/`** (for a normal repo).  
+   If your repo is **`<username>.github.io`**, the site is **`https://<username>.github.io/`** with **no** extra path — the workflow clears **`NEXT_PUBLIC_BASE_PATH`** automatically.
+
+Static export command locally:
+
+```bash
+cd solarbharat
+NEXT_PUBLIC_BASE_PATH=/YourRepoName NEXT_PUBLIC_SITE_URL=https://your-username.github.io npm run export:github-pages
+```
+
+The app is `output: 'export'` when **`STATIC_EXPORT=1`**; **NREL** and **`/api/solar`** are **not** available on Pages — use **Vercel** for the full server route.
+
 ---
 
 ## One-time setup (you)

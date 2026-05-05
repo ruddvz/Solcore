@@ -36,6 +36,10 @@ yarn-error.log*
 /public/workbox-*.js
 /public/fallback-*.js
 
+# Static export temp backups (scripts/prepare-static-export.mjs)
+.static-export-backup-api
+.static-export-backup-middleware.ts
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

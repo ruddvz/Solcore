@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "generate:data": "node scripts/build-geography.mjs && node scripts/generate-state-policies.mjs",
-    "generate:pwa-icons": "node scripts/generate-pwa-icons.mjs"
+    "generate:pwa-icons": "node scripts/generate-pwa-icons.mjs",
+    "export:github-pages": "node scripts/run-static-export.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",

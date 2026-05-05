@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { LandUnit, SolarResource, StateInfo } from '@/types'
 import { listGeographyStates, resolveStateForCalculator } from '@/lib/region'
+import { fetchSolarForStaticSite } from '@/lib/clientSolar'
 import { calculateFinancials } from '@/lib/finance'
 import type { FinancialResult } from '@/types'
 
@@ -71,22 +72,36 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
       return
     }
     set({ solarLoading: true, solarError: null })
-    try {
-      const qs = new URLSearchParams({ stateId })
-      if (districtId) qs.set('districtId', districtId)
-      const res = await fetch(`/api/solar?${qs.toString()}`)
-      if (!res.ok) throw new Error(`Solar API ${res.status}`)
-      const solar = (await res.json()) as SolarResource
+
+    const applySolar = (solar: SolarResource) =>
       set((s) => ({
         solarCache: { ...s.solarCache, [key]: solar },
         solarResource: solar,
         solarLoading: false,
+        solarError: null,
       }))
-    } catch (e) {
-      set({
-        solarLoading: false,
-        solarError: e instanceof Error ? e.message : 'Solar fetch failed',
-      })
+
+    try {
+      const qs = new URLSearchParams({ stateId })
+      if (districtId) qs.set('districtId', districtId)
+      const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
+      const res = await fetch(`${base}/api/solar?${qs.toString()}`)
+      if (res.ok) {
+        const solar = (await res.json()) as SolarResource
+        applySolar(solar)
+        return
+      }
+      /** Static hosts (GitHub Pages) have no `/api/solar` — use browser-side NASA POWER */
+      applySolar(await fetchSolarForStaticSite(stateId, districtId))
+    } catch {
+      try {
+        applySolar(await fetchSolarForStaticSite(stateId, districtId))
+      } catch (e) {
+        set({
+          solarLoading: false,
+          solarError: e instanceof Error ? e.message : 'Solar fetch failed',
+        })
+      }
     }
   },
 

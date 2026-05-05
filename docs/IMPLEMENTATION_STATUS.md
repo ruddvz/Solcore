@@ -22,7 +22,7 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 | **PostHog** (optional key) | Done — `Providers.tsx` |
 | i18n EN + partial HI/GU | Done (extend strings as needed) |
 | Performance / mobile polish | Ongoing — test on real devices |
-| Deploy domain | **Manual** — see `MANUAL_TASKS.md` |
+| Deploy domain | **Manual** — see `MANUAL_TASKS.md` (Vercel or optional **GitHub Pages** static preview) |
 
 ## Phase 2 (plan §6)
 
