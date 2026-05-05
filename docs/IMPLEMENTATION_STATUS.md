@@ -14,7 +14,7 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 | Report **6 tabs** | Done |
 | Agrivoltaics section | Done |
 | Homepage hero + features | Done |
-| **NASA POWER** solar resource (district centroid) | Done — `/api/solar` |
+| **Solar resource** (district centroid) | Done — `/api/solar` uses **NREL PVWatts** when `NREL_API_KEY` is set, else **NASA POWER**, else heuristic fallback |
 | **PDF export** (client jsPDF + html2canvas, watermarked footer) | Done |
 | **SEO**: metadata, `sitemap.xml`, `robots.txt` | Done |
 | **PostHog** (optional key) | Done — `Providers.tsx` |
@@ -24,7 +24,14 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 
 ## Phase 2 (plan §6)
 
-Requires **Supabase**, scrapers, forum, email — **not** completed in this codebase iteration. Next engineering steps: DB schema, auth, NREL wrapper service, Leaflet map page.
+| Item | Status |
+|------|--------|
+| **NREL NSRDB** via PVWatts v8 (`solrad_monthly`) | Done — server-only `NREL_API_KEY`, see `src/lib/nrelSolar.ts` |
+| **Supabase** SSR clients + cookie middleware | Done — `src/lib/supabase/*`, optional env |
+| Phase 2 **Postgres schema** (contractors, reviews, quota, quotes, alerts, forum stubs) | SQL migration `solarbharat/supabase/migrations/` — apply in Supabase manually |
+| Leaflet pin-drop map, scrapers, forum UI, email jobs | **Not** done |
+
+Next engineering steps: wire UI forms to Supabase RLS, Leaflet map, background jobs.
 
 ## Phase 3 (plan §7)
 

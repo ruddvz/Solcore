@@ -10,6 +10,8 @@
     "generate:data": "node scripts/build-geography.mjs && node scripts/generate-state-policies.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.105.3",
     "html2canvas": "^1.4.1",
     "i18next": "^26.0.8",
     "jspdf": "^4.2.1",

@@ -1,6 +1,6 @@
 # SolarBharat (Next.js)
 
-India-wide **district-level** solar feasibility UI: **762 districts / 36 states & UTs** (open datasets), **NASA POWER** irradiance per district centroid via `/api/solar`, conservative financial model (PR 78%, capex split, subsidy stack).
+India-wide **district-level** solar feasibility UI: **762 districts / 36 states & UTs** (open datasets). **`/api/solar`** prefers **NREL PVWatts / NSRDB** when `NREL_API_KEY` is set; otherwise **NASA POWER** climatology; last resort is a latitude heuristic. Conservative financial model (PR 78%, capex split, subsidy stack).
 
 ## Product plan
 
@@ -18,6 +18,11 @@ Build: `npm run build` · Start: `npm run start`
 ## Environment
 
 Copy `.env.example` to `.env.local`. Set **`NEXT_PUBLIC_SITE_URL`** to your canonical URL in production so `sitemap.xml` and metadata resolve correctly.
+
+Optional Phase 2 keys:
+
+- **`NREL_API_KEY`** — NSRDB-backed irradiance (register at [developer.nrel.gov](https://developer.nrel.gov/signup/)).
+- **`NEXT_PUBLIC_SUPABASE_URL`** + **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** — run `supabase/migrations/*.sql` in your Supabase project first (see [`IMPLEMENTATION_STATUS.md`](../docs/IMPLEMENTATION_STATUS.md)).
 
 ## Manual vs automated work
 
@@ -40,7 +45,7 @@ This writes:
 
 - **District names**: sourced from public datasets (see `scripts/build-geography.mjs` headers).
 - **Coordinates**: Photon (Komoot) OpenStreetMap search; tariff/subsidy rows marked **fallback** must be verified against current DISCOM / nodal orders.
-- **Irradiance**: NASA POWER climatology at district centroid — not a substitute for a site survey.
+- **Irradiance**: NREL (when configured) or NASA POWER at district centroid — not a substitute for a site survey.
 
 ## Optional analytics
 

@@ -167,9 +167,11 @@ export function CalculatorPage() {
                 <KV
                   label={t('calc.irradianceSource')}
                   value={
-                    state.solar.source === 'nasa_power'
-                      ? t('calc.sourceNasa')
-                      : t('calc.sourceFallback')
+                    state.solar.source === 'nrel_nsrdb'
+                      ? t('calc.sourceNrel')
+                      : state.solar.source === 'nasa_power'
+                        ? t('calc.sourceNasa')
+                        : t('calc.sourceFallback')
                   }
                 />
               )}

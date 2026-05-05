@@ -48,9 +48,10 @@ export interface SolarMonthly {
   ann: number
 }
 
-/** NASA POWER climatology response (subset) */
+/** Solar resource bundle for finance + charts */
 export interface SolarResource {
-  source: 'nasa_power' | 'fallback'
+  /** Data lineage for UI labels */
+  source: 'nrel_nsrdb' | 'nasa_power' | 'fallback'
   ghiKwhM2Day: number
   peakSunHours: number
   monthlyGenShape: number[]

@@ -32,6 +32,27 @@ export function listGeographyStates(): GeographyState[] {
   return INDIA_GEOGRAPHY.states
 }
 
+/** Centroid for solar APIs: district pin if known, else state centroid from districts. */
+export function coordsForLocation(
+  stateId: string,
+  districtId: string | null,
+): { lat: number; lon: number } | null {
+  if (districtId) {
+    const d = getGeographyDistrict(stateId, districtId)
+    if (d) return { lat: d.lat, lon: d.lon }
+  }
+  const st = getGeographyState(stateId)
+  if (!st?.districts.length) return null
+  let lat = 0
+  let lon = 0
+  for (const x of st.districts) {
+    lat += x.lat
+    lon += x.lon
+  }
+  const n = st.districts.length
+  return { lat: lat / n, lon: lon / n }
+}
+
 /** Derive relative monthly generation shape from NASA monthly GHI (12 values). */
 export function monthlyShapeFromGhi(monthly: SolarMonthly): number[] {
   const vals = MONTH_KEYS.map((k) => monthly[k])

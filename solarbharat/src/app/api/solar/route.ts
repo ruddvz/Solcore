@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { SolarMonthly, SolarResource } from '@/types'
-import { getGeographyDistrict, getGeographyState, fallbackSolar, monthlyShapeFromGhi } from '@/lib/region'
+import {
+  coordsForLocation,
+  fallbackSolar,
+  monthlyShapeFromGhi,
+} from '@/lib/region'
+import { fetchNrelPvwattsSolar } from '@/lib/nrelSolar'
 
 function parseNasaMonthly(p: Record<string, number>): SolarMonthly | null {
   const req = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'ANN']
@@ -24,21 +29,32 @@ function parseNasaMonthly(p: Record<string, number>): SolarMonthly | null {
   }
 }
 
-function coordsForLocation(stateId: string, districtId: string | null): { lat: number; lon: number } | null {
-  if (districtId) {
-    const d = getGeographyDistrict(stateId, districtId)
-    if (d) return { lat: d.lat, lon: d.lon }
+async function fetchNasaSolar(lat: number, lon: number): Promise<SolarResource | null> {
+  const url =
+    `https://power.larc.nasa.gov/api/temporal/climatology/point` +
+    `?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=${lon}&latitude=${lat}&format=JSON`
+
+  try {
+    const res = await fetch(url, { next: { revalidate: 86400 } })
+    if (!res.ok) return null
+    const data = (await res.json()) as {
+      properties?: { parameter?: Record<string, Record<string, number>> }
+    }
+    const raw = data.properties?.parameter?.ALLSKY_SFC_SW_DWN
+    const monthly = raw ? parseNasaMonthly(raw) : null
+    if (!monthly) return null
+
+    const shape = monthlyShapeFromGhi(monthly)
+    return {
+      source: 'nasa_power',
+      ghiKwhM2Day: monthly.ann,
+      peakSunHours: monthly.ann,
+      monthlyGenShape: shape,
+      monthlyGhi: monthly,
+    }
+  } catch {
+    return null
   }
-  const st = getGeographyState(stateId)
-  if (!st?.districts.length) return null
-  let lat = 0
-  let lon = 0
-  for (const x of st.districts) {
-    lat += x.lat
-    lon += x.lon
-  }
-  const n = st.districts.length
-  return { lat: lat / n, lon: lon / n }
 }
 
 export async function GET(req: Request) {
@@ -54,35 +70,14 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'unknown location' }, { status: 404 })
   }
 
-  const url =
-    `https://power.larc.nasa.gov/api/temporal/climatology/point` +
-    `?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=${c.lon}&latitude=${c.lat}&format=JSON`
-
-  try {
-    const res = await fetch(url, { next: { revalidate: 86400 } })
-    if (!res.ok) {
-      return NextResponse.json(fallbackSolar(c.lat))
-    }
-    const data = (await res.json()) as {
-      properties?: { parameter?: Record<string, Record<string, number>> }
-    }
-    const raw = data.properties?.parameter?.ALLSKY_SFC_SW_DWN
-    const monthly = raw ? parseNasaMonthly(raw) : null
-
-    if (!monthly) {
-      return NextResponse.json(fallbackSolar(c.lat))
-    }
-
-    const shape = monthlyShapeFromGhi(monthly)
-    const out: SolarResource = {
-      source: 'nasa_power',
-      ghiKwhM2Day: monthly.ann,
-      peakSunHours: monthly.ann,
-      monthlyGenShape: shape,
-      monthlyGhi: monthly,
-    }
-    return NextResponse.json(out)
-  } catch {
-    return NextResponse.json(fallbackSolar(c.lat))
+  const nrelKey = process.env.NREL_API_KEY
+  if (nrelKey) {
+    const nrel = await fetchNrelPvwattsSolar({ lat: c.lat, lon: c.lon, apiKey: nrelKey })
+    if (nrel) return NextResponse.json(nrel)
   }
+
+  const nasa = await fetchNasaSolar(c.lat, c.lon)
+  if (nasa) return NextResponse.json(nasa)
+
+  return NextResponse.json(fallbackSolar(c.lat))
 }

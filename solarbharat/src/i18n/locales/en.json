@@ -57,9 +57,10 @@
     "unitBigha": "Bigha",
     "unitGuntha": "Guntha",
     "unitHa": "Hectare",
-    "solarLoading": "Fetching NASA POWER irradiance for your district…",
+    "solarLoading": "Fetching solar irradiance for your district…",
     "policyVerify": "Verify tariff/subsidy locally",
     "irradianceSource": "Irradiance data",
+    "sourceNrel": "NREL PVWatts / NSRDB (when API key configured)",
     "sourceNasa": "NASA POWER (climatology)",
     "sourceFallback": "Latitude heuristic (NASA unavailable)"
   },

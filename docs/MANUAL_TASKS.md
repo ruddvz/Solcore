@@ -21,6 +21,8 @@ Use this list for anything that **cannot** be automated in code or that requires
    - [ ] Copy `solarbharat/.env.example` → Vercel **Environment Variables**.
    - [ ] Add **PostHog** (optional): `NEXT_PUBLIC_POSTHOG_KEY`, optionally `NEXT_PUBLIC_POSTHOG_HOST`.
    - [ ] Set **`NEXT_PUBLIC_SITE_URL`** to your canonical URL (e.g. `https://solarbharat.in`) so `sitemap.xml` and metadata URLs are correct.
+   - [ ] **NREL** (recommended for Phase 2 solar): register at [developer.nrel.gov](https://developer.nrel.gov/signup/) and set **`NREL_API_KEY`** on the server (not `NEXT_PUBLIC_*`). The app uses PVWatts v8 / NSRDB when this key is present.
+   - [ ] **Supabase** (when you enable Phase 2 backend): create a project, run the SQL in `solarbharat/supabase/migrations/`, then set **`NEXT_PUBLIC_SUPABASE_URL`** and **`NEXT_PUBLIC_SUPABASE_ANON_KEY`**.
 
 4. **Analytics**
    - [ ] Create PostHog project (if using) and paste keys into Vercel.
@@ -70,7 +72,8 @@ Use this list for anything that **cannot** be automated in code or that requires
     - [ ] Government portal scrapers need **monitoring** when sites change layout (plan §8.2).
 
 14. **NREL / pin-drop**
-    - [ ] Obtain NREL API key if required for NSRDB beyond NASA POWER; implement pin-map flow.
+   - [ ] Add **`NREL_API_KEY`** in Vercel (server-side) so `/api/solar` uses NSRDB-backed PVWatts; optional — NASA POWER remains the fallback without it.
+   - [ ] Pin-drop **Leaflet** map (plan §6.1–6.2) still needs UI work — lat/lon override not in the store yet.
 
 15. **Community**
     - [ ] Forum moderation policy and moderator hiring per plan §6.9.
