@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import {
@@ -30,6 +30,7 @@ import {
   ROBOT_SYSTEMS,
 } from '@/data/suppliers'
 import type { RiskLevel, StateInfo } from '@/types'
+import { exportReportElementToPdf, exportTabSequenceToPdf } from '@/lib/exportPdf'
 
 type TabId = 'overview' | 'costs' | 'model' | 'risks' | 'action' | 'suppliers'
 
@@ -61,6 +62,8 @@ export function ReportPage() {
     fetchSolarForSelection,
   } = useCalculatorStore()
   const [tab, setTab] = useState<TabId>('overview')
+  const [pdfBusy, setPdfBusy] = useState(false)
+  const pdfCaptureRef = useRef<HTMLDivElement>(null)
 
   const state = getResolvedState()
 
@@ -116,6 +119,31 @@ export function ReportPage() {
 
   const line40 = fin.cumulative40.map((d) => ({ x: d.year, y: d.cumulativeRs }))
 
+  const pdfBaseName = `SolarBharat-${state.name}-${district?.name ?? 'district'}-${tech.label}`
+
+  async function handlePdfCurrentTab() {
+    const el = pdfCaptureRef.current
+    if (!el || pdfBusy) return
+    setPdfBusy(true)
+    try {
+      await exportReportElementToPdf(el, `${pdfBaseName}-tab`)
+    } finally {
+      setPdfBusy(false)
+    }
+  }
+
+  async function handlePdfFullReport() {
+    const el = pdfCaptureRef.current
+    if (!el || pdfBusy) return
+    const tabIds: TabId[] = ['overview', 'costs', 'model', 'risks', 'action', 'suppliers']
+    setPdfBusy(true)
+    try {
+      await exportTabSequenceToPdf(el, tabIds, (id) => setTab(id as TabId), 400, pdfBaseName)
+    } finally {
+      setPdfBusy(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -125,12 +153,30 @@ export function ReportPage() {
             {district?.name}, {state.name} · {tech.label}
           </p>
         </div>
-        <Link
-          href="/calculator"
-          className="shrink-0 rounded-xl border border-white/15 px-4 py-2 text-sm font-bold text-white/75 hover:border-white/30"
-        >
-          ← {t('report.back')}
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            disabled={pdfBusy}
+            onClick={() => void handlePdfCurrentTab()}
+            className="rounded-xl border border-sb-gold/40 bg-sb-gold/10 px-4 py-2 text-sm font-bold text-sb-gold hover:bg-sb-gold/20 disabled:opacity-50"
+          >
+            {pdfBusy ? t('report.pdf.downloading') : t('report.pdf.currentTab')}
+          </button>
+          <button
+            type="button"
+            disabled={pdfBusy}
+            onClick={() => void handlePdfFullReport()}
+            className="rounded-xl border border-white/15 px-4 py-2 text-sm font-bold text-white/85 hover:border-white/30 disabled:opacity-50"
+          >
+            {pdfBusy ? t('report.pdf.downloading') : t('report.pdf.fullReport')}
+          </button>
+          <Link
+            href="/calculator"
+            className="shrink-0 rounded-xl border border-white/15 px-4 py-2 text-sm font-bold text-white/75 hover:border-white/30"
+          >
+            ← {t('report.back')}
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
@@ -144,6 +190,7 @@ export function ReportPage() {
 
       <TabBar tabs={[...tabs]} active={tab} onChange={(id) => setTab(id as TabId)} />
 
+      <div ref={pdfCaptureRef} className="space-y-6">
       {tab === 'overview' && (
         <div className="grid gap-4 lg:grid-cols-2">
           <Card>
@@ -416,6 +463,7 @@ export function ReportPage() {
       {tab === 'action' && <ActionPlanTab state={state} />}
 
       {tab === 'suppliers' && <SuppliersTab stateId={stateId} />}
+      </div>
     </div>
   )
 }

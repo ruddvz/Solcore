@@ -74,6 +74,11 @@
       "action": "Action plan",
       "suppliers": "Suppliers"
     },
+    "pdf": {
+      "currentTab": "Download PDF (this tab)",
+      "fullReport": "Download full report (6 tabs)",
+      "downloading": "Preparing PDF…"
+    },
     "pills": {
       "y1": "Year 1 units",
       "capex": "Project cost",
