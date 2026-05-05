@@ -1,12 +1,8 @@
-# SolarBharat
+# SolarBharat / Solcore
 
-India-focused **Phase 1 MVP** web app: Vite + React + TypeScript + Tailwind, client-side solar feasibility (PM-KUSUM style) for six states.
+## SolarBharat app (`solarbharat/`)
 
-## Product plan
-
-See [`docs/SOLAR_BHARAT_PRODUCT_PLAN.md`](docs/SOLAR_BHARAT_PRODUCT_PLAN.md) for the full product specification.
-
-## App (`solarbharat/`)
+Next.js 14 app — **all India districts**, NASA POWER solar API route, Zustand + Recharts + i18n.
 
 ```bash
 cd solarbharat
@@ -14,10 +10,8 @@ npm install
 npm run dev
 ```
 
-- **Build:** `npm run build`
-- **Preview:** `npm run preview`
-- **Deploy:** connect the `solarbharat` folder to Vercel (SPA rewrites included in `vercel.json`).
+See [`solarbharat/README.md`](solarbharat/README.md) for data regeneration scripts and env vars.
 
-## Stack (Phase 1)
+## Product plan
 
-React 18, Vite, Tailwind, Zustand, Recharts, React Router, react-i18next (EN / partial HI & GU).
+[`docs/SOLAR_BHARAT_PRODUCT_PLAN.md`](docs/SOLAR_BHARAT_PRODUCT_PLAN.md)

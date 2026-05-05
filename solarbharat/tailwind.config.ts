@@ -1,6 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       colors: {
@@ -21,17 +22,11 @@ export default {
         },
       },
       fontFamily: {
-        sans: [
-          'Segoe UI',
-          'system-ui',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'Roboto',
-          'sans-serif',
-        ],
+        sans: ['Segoe UI', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Roboto', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
     },
   },
   plugins: [],
 }
+export default config

@@ -1,8 +1,15 @@
 import { create } from 'zustand'
-import type { LandUnit } from '../types'
-import { STATES } from '../data/states'
-import { calculateFinancials } from '../lib/finance'
-import type { FinancialResult } from '../types'
+import type { LandUnit, SolarResource, StateInfo } from '@/types'
+import { listGeographyStates, resolveStateForCalculator } from '@/lib/region'
+import { calculateFinancials } from '@/lib/finance'
+import type { FinancialResult } from '@/types'
+
+const GEO_STATES = listGeographyStates()
+const DEFAULT_STATE = GEO_STATES[0]
+
+function solarCacheKey(stateId: string, districtId: string) {
+  return `${stateId}::${districtId}`
+}
 
 interface CalculatorState {
   stateId: string
@@ -10,34 +17,87 @@ interface CalculatorState {
   landValue: number
   landUnit: LandUnit
   technologyId: string
+  solarCache: Record<string, SolarResource>
+  solarResource: SolarResource | null
+  solarLoading: boolean
+  solarError: string | null
   setStateId: (id: string) => void
   setDistrictId: (id: string) => void
   setLandValue: (v: number) => void
   setLandUnit: (u: LandUnit) => void
   setTechnologyId: (id: string) => void
+  fetchSolarForSelection: () => Promise<void>
+  getResolvedState: () => StateInfo | null
   getFinancials: () => FinancialResult | null
 }
 
 export const useCalculatorStore = create<CalculatorState>((set, get) => ({
-  stateId: STATES[0]?.id ?? 'gj',
-  districtId: STATES[0]?.districts[0]?.id ?? 'bharuch',
+  stateId: DEFAULT_STATE?.id ?? '',
+  districtId: DEFAULT_STATE?.districts[0]?.id ?? '',
   landValue: 5,
   landUnit: 'acre',
   technologyId: 'topcon_bifacial',
+  solarCache: {},
+  solarResource: null,
+  solarLoading: false,
+  solarError: null,
+
   setStateId: (id) => {
-    const st = STATES.find((s) => s.id === id)
+    const st = GEO_STATES.find((s) => s.id === id)
     set({
       stateId: id,
       districtId: st?.districts[0]?.id ?? '',
     })
+    void get().fetchSolarForSelection()
   },
-  setDistrictId: (districtId) => set({ districtId }),
+
+  setDistrictId: (districtId) => {
+    set({ districtId })
+    void get().fetchSolarForSelection()
+  },
+
   setLandValue: (landValue) => set({ landValue }),
+
   setLandUnit: (landUnit) => set({ landUnit }),
+
   setTechnologyId: (technologyId) => set({ technologyId }),
+
+  fetchSolarForSelection: async () => {
+    const { stateId, districtId, solarCache } = get()
+    const key = solarCacheKey(stateId, districtId)
+    const hit = solarCache[key]
+    if (hit) {
+      set({ solarResource: hit })
+      return
+    }
+    set({ solarLoading: true, solarError: null })
+    try {
+      const qs = new URLSearchParams({ stateId })
+      if (districtId) qs.set('districtId', districtId)
+      const res = await fetch(`/api/solar?${qs.toString()}`)
+      if (!res.ok) throw new Error(`Solar API ${res.status}`)
+      const solar = (await res.json()) as SolarResource
+      set((s) => ({
+        solarCache: { ...s.solarCache, [key]: solar },
+        solarResource: solar,
+        solarLoading: false,
+      }))
+    } catch (e) {
+      set({
+        solarLoading: false,
+        solarError: e instanceof Error ? e.message : 'Solar fetch failed',
+      })
+    }
+  },
+
+  getResolvedState: () => {
+    const { stateId, districtId, solarResource } = get()
+    return resolveStateForCalculator(stateId, districtId, solarResource)
+  },
+
   getFinancials: () => {
-    const { stateId, landValue, landUnit, technologyId } = get()
-    const state = STATES.find((s) => s.id === stateId)
+    const { landValue, landUnit, technologyId } = get()
+    const state = get().getResolvedState()
     if (!state || landValue <= 0) return null
     return calculateFinancials({ state, landValue, landUnit, technologyId })
   },

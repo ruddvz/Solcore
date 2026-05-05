@@ -1,4 +1,4 @@
-import type { TechnologySpec } from '../../types'
+import type { TechnologySpec } from '@/types'
 import { useTranslation } from 'react-i18next'
 
 export function TechCard({

@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+'use client'
+
+import { useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import {
   LineChart,
@@ -10,25 +12,24 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts'
-import { useCalculatorStore } from '../store/calculatorStore'
-import { getState } from '../data/states'
-import { getTechnology } from '../data/technologies'
-import { formatCr, formatInr, formatUnitsLakh } from '../lib/format'
-import { Card } from '../components/ui/Card'
-import { Pill } from '../components/ui/Pill'
-import { TabBar } from '../components/ui/TabBar'
-import { KV } from '../components/ui/KV'
-import { LineChartSvg } from '../components/charts/LineChartSvg'
-import { DonutSvg } from '../components/charts/DonutSvg'
-import { FundingStack } from '../components/ui/FundingStack'
+import { useCalculatorStore } from '@/store/calculatorStore'
+import { getTechnology } from '@/data/technologies'
+import { formatCr, formatInr, formatUnitsLakh } from '@/lib/format'
+import { Card } from '@/components/ui/Card'
+import { Pill } from '@/components/ui/Pill'
+import { TabBar } from '@/components/ui/TabBar'
+import { KV } from '@/components/ui/KV'
+import { LineChartSvg } from '@/components/charts/LineChartSvg'
+import { DonutSvg } from '@/components/charts/DonutSvg'
+import { FundingStack } from '@/components/ui/FundingStack'
 import {
-  EPC_BY_STATE,
+  getEpcListForState,
   FINANCING_PARTNERS,
   INVERTER_BRANDS,
   PANEL_MANUFACTURERS,
   ROBOT_SYSTEMS,
-} from '../data/suppliers'
-import type { RiskLevel } from '../types'
+} from '@/data/suppliers'
+import type { RiskLevel, StateInfo } from '@/types'
 
 type TabId = 'overview' | 'costs' | 'model' | 'risks' | 'action' | 'suppliers'
 
@@ -51,10 +52,21 @@ function levelStyle(level: RiskLevel) {
 
 export function ReportPage() {
   const { t } = useTranslation()
-  const { stateId, districtId, technologyId, getFinancials } = useCalculatorStore()
+  const {
+    stateId,
+    districtId,
+    technologyId,
+    getFinancials,
+    getResolvedState,
+    fetchSolarForSelection,
+  } = useCalculatorStore()
   const [tab, setTab] = useState<TabId>('overview')
 
-  const state = getState(stateId)
+  const state = getResolvedState()
+
+  useEffect(() => {
+    void fetchSolarForSelection()
+  }, [fetchSolarForSelection])
   const district = state?.districts.find((d) => d.id === districtId)
   const fin = getFinancials()
   const tech = getTechnology(technologyId)
@@ -95,7 +107,7 @@ export function ReportPage() {
         <p className="text-white/70">
           Adjust your land area in the calculator (must be greater than zero).
         </p>
-        <Link className="mt-4 inline-block font-bold text-sb-gold" to="/calculator">
+        <Link className="mt-4 inline-block font-bold text-sb-gold" href="/calculator">
           ← {t('nav.calculator')}
         </Link>
       </Card>
@@ -114,7 +126,7 @@ export function ReportPage() {
           </p>
         </div>
         <Link
-          to="/calculator"
+          href="/calculator"
           className="shrink-0 rounded-xl border border-white/15 px-4 py-2 text-sm font-bold text-white/75 hover:border-white/30"
         >
           ← {t('report.back')}
@@ -408,7 +420,7 @@ export function ReportPage() {
   )
 }
 
-function ActionPlanTab({ state }: { state: NonNullable<ReturnType<typeof getState>> }) {
+function ActionPlanTab({ state }: { state: StateInfo }) {
   const { t } = useTranslation()
   const docs = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10'] as const
   const [done, setDone] = useState<Record<string, boolean>>({})
@@ -493,7 +505,7 @@ function ActionPlanTab({ state }: { state: NonNullable<ReturnType<typeof getStat
 function AgrivoltaicsSection({ stateId }: { stateId: string }) {
   const { t } = useTranslation()
   const cropsKey =
-    stateId === 'gj' ? 'cropsGj' : stateId === 'rj' ? 'cropsRj' : 'cropsDef'
+    stateId === 'gujarat' ? 'cropsGj' : stateId === 'rajasthan' ? 'cropsRj' : 'cropsDef'
   return (
     <Card accent="green">
       <div className="text-xs font-extrabold uppercase text-sb-greenMuted">
@@ -534,12 +546,15 @@ function AgrivoltaicsSection({ stateId }: { stateId: string }) {
 
 function SuppliersTab({ stateId }: { stateId: string }) {
   const { t } = useTranslation()
-  const epcs = EPC_BY_STATE[stateId] ?? EPC_BY_STATE.gj
+  const epcs = getEpcListForState(stateId)
 
   return (
     <div className="space-y-4">
       <Card>
         <div className="text-xs font-extrabold uppercase text-white/45">{t('report.suppliers.epc')}</div>
+        {epcs.length === 0 ? (
+          <p className="mt-2 text-sm text-white/55">{t('report.suppliers.epcPlaceholder')}</p>
+        ) : null}
         <ul className="mt-3 space-y-2">
           {epcs.map((e) => (
             <li

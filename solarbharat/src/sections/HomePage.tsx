@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
-import { Pill } from '../components/ui/Pill'
-import { STATES } from '../data/states'
+import { Pill } from '@/components/ui/Pill'
+import { listGeographyStates } from '@/lib/region'
 
 const FEATURES = [
   { icon: '📍', t: 'f1t', d: 'f1d' },
@@ -14,14 +16,9 @@ const FEATURES = [
   { icon: '🏭', t: 'f8t', d: 'f8d' },
 ] as const
 
-const PHASE2 = [
-  'Tamil Nadu',
-  'Andhra Pradesh',
-  'Telangana',
-  'Haryana',
-  'Punjab',
-  'Odisha',
-]
+const ALL_STATES = listGeographyStates()
+const stateCount = ALL_STATES.length
+const districtCount = ALL_STATES.reduce((n, s) => n + s.districts.length, 0)
 
 export function HomePage() {
   const { t } = useTranslation()
@@ -34,24 +31,24 @@ export function HomePage() {
         <p className="mt-4 max-w-2xl text-pretty text-base text-white/60">{t('home.heroSubtitle')}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
-            to="/calculator"
+            href="/calculator"
             className="inline-flex items-center justify-center rounded-xl bg-sb-gold px-6 py-3 text-sm font-extrabold text-sb-bg shadow-lg shadow-sb-gold/20 transition hover:bg-sb-goldDark"
           >
             {t('home.cta')}
           </Link>
           <Link
-            to="/report"
+            href="/report"
             className="inline-flex items-center justify-center rounded-xl border border-white/15 px-6 py-3 text-sm font-bold text-white/80 hover:border-white/30 hover:text-white"
           >
             {t('nav.report')}
           </Link>
         </div>
         <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-          <Pill value="6" label={t('home.stat1')} />
+          <Pill value={String(stateCount)} label={t('home.statStates')} />
+          <Pill value={String(districtCount)} label={t('home.statDistricts')} />
           <Pill value="25" label={t('home.stat2')} />
           <Pill value="40" label={t('home.stat3')} />
           <Pill value="78%" label={t('home.stat4')} />
-          <Pill value="₹0" label={t('home.stat5')} />
         </div>
       </section>
 
@@ -73,37 +70,18 @@ export function HomePage() {
 
       <section>
         <h2 className="text-xl font-extrabold text-white">{t('home.coverageTitle')}</h2>
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <div className="rounded-xl border border-sb-green/30 bg-sb-accent/30 p-4">
-            <div className="text-xs font-extrabold uppercase tracking-wide text-sb-greenMuted">
-              {t('home.live')}
-            </div>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {STATES.map((s) => (
-                <li
-                  key={s.id}
-                  className="rounded-full bg-sb-green/15 px-3 py-1 text-xs font-bold text-sb-green"
-                >
-                  {s.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-sb-surface/50 p-4">
-            <div className="text-xs font-extrabold uppercase tracking-wide text-white/45">
-              {t('home.soon')}
-            </div>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {PHASE2.map((s) => (
-                <li
-                  key={s}
-                  className="rounded-full bg-white/5 px-3 py-1 text-xs font-bold text-white/45"
-                >
-                  {s}
-                </li>
-              ))}
-            </ul>
-          </div>
+        <p className="mt-2 text-sm text-white/55">
+          {t('home.coverageAll', { states: stateCount, districts: districtCount })}
+        </p>
+        <div className="mt-4 max-h-80 overflow-y-auto rounded-xl border border-white/10 bg-sb-surface/50 p-4">
+          <ul className="columns-1 gap-x-8 gap-y-1 text-sm text-white/75 md:columns-2 lg:columns-3">
+            {ALL_STATES.map((s) => (
+              <li key={s.id} className="break-inside-avoid py-1">
+                <span className="font-bold text-white">{s.name}</span>{' '}
+                <span className="text-white/45">({s.districts.length})</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </div>

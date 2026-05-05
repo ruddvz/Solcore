@@ -1,16 +1,20 @@
+'use client'
+
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
-import { useCalculatorStore } from '../store/calculatorStore'
-import { STATES, getState } from '../data/states'
-import { TECHNOLOGIES } from '../data/technologies'
-import { landToAcres } from '../lib/finance'
-import type { LandUnit } from '../types'
-import { Card } from '../components/ui/Card'
-import { Select } from '../components/ui/Select'
-import { TechCard } from '../components/ui/TechCard'
-import { MonthBars } from '../components/charts/MonthBars'
-import { KV } from '../components/ui/KV'
+import { useCalculatorStore } from '@/store/calculatorStore'
+import { listGeographyStates } from '@/lib/region'
+import { TECHNOLOGIES } from '@/data/technologies'
+import { landToAcres } from '@/lib/finance'
+import type { LandUnit } from '@/types'
+import { Card } from '@/components/ui/Card'
+import { Select } from '@/components/ui/Select'
+import { TechCard } from '@/components/ui/TechCard'
+import { MonthBars } from '@/components/charts/MonthBars'
+import { KV } from '@/components/ui/KV'
+
+const GEO_STATES = listGeographyStates()
 
 export function CalculatorPage() {
   const { t } = useTranslation()
@@ -25,15 +29,24 @@ export function CalculatorPage() {
     setLandUnit,
     setTechnologyId,
     setLandValue,
+    fetchSolarForSelection,
+    solarLoading,
+    solarError,
+    getResolvedState,
   } = useCalculatorStore()
 
-  const state = getState(stateId)
-  const districts = state?.districts ?? []
+  const state = getResolvedState()
+  const geoState = GEO_STATES.find((s) => s.id === stateId)
+  const districts = geoState?.districts ?? []
   const acresEquiv = landToAcres(landValue, landUnit)
 
   useEffect(() => {
     if (landValue <= 0) setLandValue(1)
   }, [landValue, setLandValue])
+
+  useEffect(() => {
+    void fetchSolarForSelection()
+  }, [fetchSolarForSelection])
 
   return (
     <div className="grid gap-8 lg:grid-cols-5">
@@ -43,6 +56,11 @@ export function CalculatorPage() {
           <p className="mt-1 text-sm text-white/55">
             {t('calc.equiv', { acres: acresEquiv.toFixed(2) })}
           </p>
+          {(solarLoading || solarError) && (
+            <p className="mt-2 text-xs text-sb-orange">
+              {solarLoading ? t('calc.solarLoading') : solarError}
+            </p>
+          )}
         </div>
 
         <Card>
@@ -53,7 +71,7 @@ export function CalculatorPage() {
                 label={t('calc.state')}
                 value={stateId}
                 onChange={setStateId}
-                options={STATES.map((s) => ({ value: s.id, label: s.name }))}
+                options={GEO_STATES.map((s) => ({ value: s.id, label: s.name }))}
               />
               <Select
                 id="district"
@@ -111,7 +129,7 @@ export function CalculatorPage() {
 
             <div className="flex flex-wrap gap-3 pt-2">
               <Link
-                to="/report"
+                href="/report"
                 className="rounded-xl bg-sb-gold px-5 py-2.5 text-sm font-extrabold text-sb-bg hover:bg-sb-goldDark"
               >
                 {t('calc.generate')}
@@ -126,10 +144,15 @@ export function CalculatorPage() {
           <Card accent="green">
             <div className="text-xs font-extrabold uppercase tracking-wide text-sb-greenMuted">
               {state.name}
+              {state.policyIsFallback && (
+                <span className="ml-2 rounded bg-sb-orange/20 px-2 py-0.5 text-[10px] text-sb-orange">
+                  {t('calc.policyVerify')}
+                </span>
+              )}
             </div>
             <div className="mt-3 space-y-1">
-              <KV label={t('stateCard.ghi')} value={`${state.ghiKwhM2Day} kWh/m²/day`} />
-              <KV label={t('stateCard.peak')} value={`${state.peakSunHours} h`} />
+              <KV label={t('stateCard.ghi')} value={`${state.ghiKwhM2Day.toFixed(2)} kWh/m²/day`} />
+              <KV label={t('stateCard.peak')} value={`${state.peakSunHours.toFixed(2)} h`} />
               <KV
                 label={t('stateCard.tariff')}
                 value={`₹${state.tariffMinRs} – ₹${state.tariffMaxRs}`}
@@ -140,6 +163,16 @@ export function CalculatorPage() {
                 label={t('stateCard.discom')}
                 value={<span className="text-right">{state.discom}</span>}
               />
+              {state.solar && (
+                <KV
+                  label={t('calc.irradianceSource')}
+                  value={
+                    state.solar.source === 'nasa_power'
+                      ? t('calc.sourceNasa')
+                      : t('calc.sourceFallback')
+                  }
+                />
+              )}
             </div>
             <p className="mt-3 text-xs text-white/50">{state.climateNote}</p>
             <div className="mt-4">

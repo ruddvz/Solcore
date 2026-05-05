@@ -1,3 +1,5 @@
+import geography from '@/data/india-geography.json'
+
 export type LandUnit = 'acre' | 'bigha' | 'guntha' | 'hectare'
 
 export type TechId = 'topcon_bifacial' | 'perc_bifacial' | 'perc_mono'
@@ -7,8 +9,52 @@ export type RiskLevel = 'HIGH' | 'MED' | 'LOW'
 export interface DistrictInfo {
   id: string
   name: string
-  /** Rough grid / land risk note for UI */
-  notes?: string
+}
+
+/** Static geography row from india-geography.json */
+export interface GeographyDistrict {
+  id: string
+  name: string
+  lat: number
+  lon: number
+}
+
+export interface GeographyState {
+  id: string
+  name: string
+  districts: GeographyDistrict[]
+}
+
+export interface GeographyFile {
+  meta: Record<string, unknown>
+  states: GeographyState[]
+}
+
+export const INDIA_GEOGRAPHY = geography as GeographyFile
+
+export interface SolarMonthly {
+  jan: number
+  feb: number
+  mar: number
+  apr: number
+  may: number
+  jun: number
+  jul: number
+  aug: number
+  sep: number
+  oct: number
+  nov: number
+  dec: number
+  ann: number
+}
+
+/** NASA POWER climatology response (subset) */
+export interface SolarResource {
+  source: 'nasa_power' | 'fallback'
+  ghiKwhM2Day: number
+  peakSunHours: number
+  monthlyGenShape: number[]
+  monthlyGhi: SolarMonthly
 }
 
 export interface StateInfo {
@@ -22,12 +68,14 @@ export interface StateInfo {
   tariffMaxRs: number
   subsidyPct: number
   loanRatePct: number
-  /** Seasonal shape for chart (12 months, relative) */
   monthlyGenShape: number[]
   climateNote: string
   monsoonNote: string
   gridQuality: string
   districts: DistrictInfo[]
+  /** True when tariff/subsidy uses generic placeholders */
+  policyIsFallback?: boolean
+  solar?: SolarResource
 }
 
 export interface TechnologySpec {

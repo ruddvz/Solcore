@@ -19,7 +19,10 @@
     "stat2": "25-yr model",
     "stat3": "40-yr cash view",
     "stat4": "PR 78% default",
-    "stat5": "Client-side only",
+    "stat5": "Next.js SSR shell",
+    "statStates": "States & UTs",
+    "statDistricts": "Districts",
+    "coverageAll": "All {{states}} states/UTs and {{districts}} districts — district list from open government datasets; coordinates via OpenStreetMap search.",
     "featuresTitle": "Why SolarBharat",
     "f1t": "District + state truth",
     "f1d": "Tariff range, GHI, DISCOM, and nodal agency context per state.",
@@ -53,7 +56,12 @@
     "unitAcre": "Acres",
     "unitBigha": "Bigha",
     "unitGuntha": "Guntha",
-    "unitHa": "Hectare"
+    "unitHa": "Hectare",
+    "solarLoading": "Fetching NASA POWER irradiance for your district…",
+    "policyVerify": "Verify tariff/subsidy locally",
+    "irradianceSource": "Irradiance data",
+    "sourceNasa": "NASA POWER (climatology)",
+    "sourceFallback": "Latitude heuristic (NASA unavailable)"
   },
   "report": {
     "title": "Your feasibility report",
@@ -198,6 +206,7 @@
       "robots": "Cleaning robots",
       "finance": "Financing partners",
       "verified": "VERIFIED",
+      "epcPlaceholder": "No curated EPC sample list for this state yet — verify contractors against your nodal agency empanelment list.",
       "almm": "ALMM listed — verify on MNRE before purchase.",
       "warranty": "Warranty",
       "recommended": "Recommended"

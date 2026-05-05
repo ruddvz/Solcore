@@ -1,5 +1,5 @@
-import type { FinancialResult, LandUnit, StateInfo, TechnologySpec } from '../types'
-import { getTechnology } from '../data/technologies'
+import type { FinancialResult, LandUnit, StateInfo, TechnologySpec } from '@/types'
+import { getTechnology } from '@/data/technologies'
 
 type CostLineItem = FinancialResult['costLines'][number]
 
@@ -78,15 +78,16 @@ export function calculateFinancials(input: {
   const performanceRatio = 0.78
   const bifacialMult = 1 + tech.bifacialGainPct / 100
 
-  const specificYieldKwhPerKwp =
-    input.state.peakSunHours * 365 * performanceRatio * bifacialMult
+  /** NASA POWER ANN is average daily GHI (kWh/m²/day) ≈ peak sun hours for modelling */
+  const peakSun = input.state.peakSunHours
+
+  const specificYieldKwhPerKwp = peakSun * 365 * performanceRatio * bifacialMult
 
   const year1Kwh = systemKwp * specificYieldKwhPerKwp
   const year1UnitsLakh = year1Kwh / 100_000
 
   const tariffMidRs = (input.state.tariffMinRs + input.state.tariffMaxRs) / 2
 
-  /** Turnkey EPC Rs/Wp from module price (honest conservative curve). */
   const capexPerWpRs = tech.costPerWpRs * 1.85 + 20
   const totalCapexRs = Math.round(systemKwp * capexPerWpRs)
 
@@ -138,7 +139,6 @@ export function calculateFinancials(input: {
   const postLoanMonthlyIncomeRs =
     yearly.length >= 11 ? Math.round(yearly[10].netProfitRs / 12) : 0
 
-  /** 40-year cumulative for chart (extend degradation model). */
   let cum40 = -totalCashRequiredRs
   const cumulative40: { year: number; cumulativeRs: number }[] = []
   for (let y = 1; y <= 40; y++) {

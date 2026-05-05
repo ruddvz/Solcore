@@ -1,0 +1,116 @@
+import type { GeographyDistrict, GeographyState, SolarMonthly, SolarResource, StateInfo } from '@/types'
+import { INDIA_GEOGRAPHY } from '@/types'
+import { getStatePolicy, type StatePolicy } from '@/data/statePolicies.generated'
+
+const MONTH_KEYS: (keyof SolarMonthly)[] = [
+  'jan',
+  'feb',
+  'mar',
+  'apr',
+  'may',
+  'jun',
+  'jul',
+  'aug',
+  'sep',
+  'oct',
+  'nov',
+  'dec',
+]
+
+export function getGeographyState(stateId: string): GeographyState | undefined {
+  return INDIA_GEOGRAPHY.states.find((s) => s.id === stateId)
+}
+
+export function getGeographyDistrict(
+  stateId: string,
+  districtId: string,
+): GeographyDistrict | undefined {
+  return getGeographyState(stateId)?.districts.find((d) => d.id === districtId)
+}
+
+export function listGeographyStates(): GeographyState[] {
+  return INDIA_GEOGRAPHY.states
+}
+
+/** Derive relative monthly generation shape from NASA monthly GHI (12 values). */
+export function monthlyShapeFromGhi(monthly: SolarMonthly): number[] {
+  const vals = MONTH_KEYS.map((k) => monthly[k])
+  const mean = vals.reduce((a, b) => a + b, 0) / 12
+  const base = mean > 0 ? mean : 1
+  return vals.map((v) => Math.max(0.15, v / base))
+}
+
+/** Fallback when NASA POWER is unavailable — latitude-band heuristic (not site-specific). */
+export function fallbackSolar(lat: number): SolarResource {
+  const sun =
+    lat < 12
+      ? [0.92, 1.02, 1.08, 1.06, 1.02, 0.72, 0.62, 0.6, 0.88, 1.02, 1.0, 0.94]
+      : lat < 22
+        ? [0.93, 1.03, 1.08, 1.08, 1.02, 0.68, 0.58, 0.56, 0.88, 1.06, 1.02, 0.94]
+        : [0.9, 1.02, 1.08, 1.1, 1.05, 0.62, 0.52, 0.52, 0.85, 1.05, 1.0, 0.92]
+  const avgShape = sun.reduce((a, b) => a + b, 0) / 12
+  const peakSunHours = 5.2
+  const scale = peakSunHours / avgShape
+  return {
+    source: 'fallback',
+    ghiKwhM2Day: peakSunHours,
+    peakSunHours,
+    monthlyGenShape: sun.map((s) => s / avgShape),
+    monthlyGhi: {
+      jan: scale * sun[0],
+      feb: scale * sun[1],
+      mar: scale * sun[2],
+      apr: scale * sun[3],
+      may: scale * sun[4],
+      jun: scale * sun[5],
+      jul: scale * sun[6],
+      aug: scale * sun[7],
+      sep: scale * sun[8],
+      oct: scale * sun[9],
+      nov: scale * sun[10],
+      dec: scale * sun[11],
+      ann: peakSunHours,
+    },
+  }
+}
+
+export function buildStateInfo(
+  geo: GeographyState,
+  policy: StatePolicy,
+  solar: SolarResource,
+): StateInfo {
+  const districts = geo.districts.map((d) => ({ id: d.id, name: d.name }))
+  return {
+    id: geo.id,
+    name: geo.name,
+    nodalAgency: policy.nodalAgency,
+    discom: policy.discomNote,
+    ghiKwhM2Day: solar.ghiKwhM2Day,
+    peakSunHours: solar.peakSunHours,
+    tariffMinRs: policy.tariffBandRs[0],
+    tariffMaxRs: policy.tariffBandRs[1],
+    subsidyPct: policy.subsidyPctMid,
+    loanRatePct: policy.loanRatePct,
+    monthlyGenShape: solar.monthlyGenShape,
+    climateNote: policy.climateNote,
+    monsoonNote: policy.monsoonNote,
+    gridQuality: policy.gridQuality,
+    districts,
+    policyIsFallback: policy.isFallbackPolicy === true,
+    solar,
+  }
+}
+
+export function resolveStateForCalculator(
+  stateId: string,
+  districtId: string,
+  solar?: SolarResource | null,
+): StateInfo | null {
+  const geo = getGeographyState(stateId)
+  const policy = getStatePolicy(stateId)
+  if (!geo || !policy) return null
+  const d = getGeographyDistrict(stateId, districtId)
+  const lat = d?.lat ?? geo.districts[0]?.lat ?? 22
+  const resolvedSolar = solar ?? fallbackSolar(lat)
+  return buildStateInfo(geo, policy, resolvedSolar)
+}

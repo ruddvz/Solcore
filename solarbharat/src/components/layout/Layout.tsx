@@ -1,4 +1,6 @@
-import { Link, Outlet } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
 export function LanguageSwitcher() {
@@ -23,13 +25,13 @@ export function LanguageSwitcher() {
   )
 }
 
-export function Layout() {
+export function Layout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation()
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-20 border-b border-white/10 bg-sb-bg/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <Link to="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sb-gold to-sb-orange text-lg">
               ☀
             </span>
@@ -41,22 +43,20 @@ export function Layout() {
             </span>
           </Link>
           <nav className="flex items-center gap-3 text-sm font-bold">
-            <Link className="text-white/70 hover:text-white" to="/">
+            <Link className="text-white/70 hover:text-white" href="/">
               {t('nav.home')}
             </Link>
-            <Link className="text-white/70 hover:text-white" to="/calculator">
+            <Link className="text-white/70 hover:text-white" href="/calculator">
               {t('nav.calculator')}
             </Link>
-            <Link className="text-sb-gold hover:text-sb-goldDark" to="/report">
+            <Link className="text-sb-gold hover:text-sb-goldDark" href="/report">
               {t('nav.report')}
             </Link>
             <LanguageSwitcher />
           </nav>
         </div>
       </header>
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8">
-        <Outlet />
-      </main>
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8">{children}</main>
       <footer className="border-t border-white/10 bg-sb-surface/40 py-6">
         <p className="mx-auto max-w-6xl px-4 text-center text-xs text-white/45">
           {t('footer.disclaimer')}
