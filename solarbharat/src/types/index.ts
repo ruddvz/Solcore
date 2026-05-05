@@ -1,0 +1,84 @@
+export type LandUnit = 'acre' | 'bigha' | 'guntha' | 'hectare'
+
+export type TechId = 'topcon_bifacial' | 'perc_bifacial' | 'perc_mono'
+
+export type RiskLevel = 'HIGH' | 'MED' | 'LOW'
+
+export interface DistrictInfo {
+  id: string
+  name: string
+  /** Rough grid / land risk note for UI */
+  notes?: string
+}
+
+export interface StateInfo {
+  id: string
+  name: string
+  nodalAgency: string
+  discom: string
+  ghiKwhM2Day: number
+  peakSunHours: number
+  tariffMinRs: number
+  tariffMaxRs: number
+  subsidyPct: number
+  loanRatePct: number
+  /** Seasonal shape for chart (12 months, relative) */
+  monthlyGenShape: number[]
+  climateNote: string
+  monsoonNote: string
+  gridQuality: string
+  districts: DistrictInfo[]
+}
+
+export interface TechnologySpec {
+  id: TechId
+  label: string
+  efficiencyPct: number
+  degradationPctPerYear: number
+  costPerWpRs: number
+  bifacialGainPct: number
+  verdict: 'best' | 'good' | 'acceptable'
+}
+
+export interface CostLineItem {
+  key: string
+  labelKey: string
+  amountRs: number
+  category: 'hardware' | 'soft' | 'other'
+}
+
+export interface YearlyRow {
+  year: number
+  unitsLakh: number
+  grossRevenueRs: number
+  omPlusEmiRs: number
+  netProfitRs: number
+  cumulativeRs: number
+}
+
+export interface FinancialResult {
+  systemMwAc: number
+  systemMwDc: number
+  systemKwp: number
+  panelCountApprox: number
+  dcAcRatio: number
+  year1UnitsLakh: number
+  totalCapexRs: number
+  costLines: CostLineItem[]
+  subsidyAmountRs: number
+  loanAmountRs: number
+  cashEquityRs: number
+  operatingReserveRs: number
+  totalCashRequiredRs: number
+  monthlyEmiRs: number
+  yearly: YearlyRow[]
+  cumulative40: { year: number; cumulativeRs: number }[]
+  breakevenYear: number | null
+  cashRecoveryYear: number | null
+  postLoanMonthlyIncomeRs: number
+  netProfit25YrsRs: number
+  netProfit40YrsRs: number
+  returnMultiple25: number
+  tariffMidRs: number
+  performanceRatio: number
+}

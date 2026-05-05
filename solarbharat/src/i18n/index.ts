@@ -1,0 +1,21 @@
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
+import en from './locales/en.json'
+import hi from './locales/hi.json'
+import gu from './locales/gu.json'
+
+const resources = {
+  en: { translation: en },
+  hi: { translation: hi },
+  gu: { translation: gu },
+} as const
+
+void i18n.use(initReactI18next).init({
+  resources,
+  lng: typeof navigator !== 'undefined' ? navigator.language.split('-')[0] : 'en',
+  fallbackLng: 'en',
+  supportedLngs: ['en', 'hi', 'gu'],
+  interpolation: { escapeValue: false },
+})
+
+export default i18n
