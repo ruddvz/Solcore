@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useCalculatorStore } from '@/store/calculatorStore'
-import { listGeographyStates } from '@/lib/region'
+import { listGeographyStates, coordsForLocation, getGeographyDistrict } from '@/lib/region'
 import { TECHNOLOGIES } from '@/data/technologies'
 import { landToAcres } from '@/lib/finance'
 import type { LandUnit } from '@/types'
@@ -13,6 +13,7 @@ import { Select } from '@/components/ui/Select'
 import { TechCard } from '@/components/ui/TechCard'
 import { MonthBars } from '@/components/charts/MonthBars'
 import { KV } from '@/components/ui/KV'
+import { PinMapPanel } from '@/components/map/PinMapPanel'
 
 const GEO_STATES = listGeographyStates()
 
@@ -33,11 +34,35 @@ export function CalculatorPage() {
     solarLoading,
     solarError,
     getResolvedState,
+    pinLat,
+    pinLon,
+    setPin,
+    resetPinToDistrict,
+    shadingLossPct,
+    setShadingLossPct,
   } = useCalculatorStore()
 
   const state = getResolvedState()
   const geoState = GEO_STATES.find((s) => s.id === stateId)
   const districts = geoState?.districts ?? []
+  const centroid = coordsForLocation(stateId, districtId)
+  const centroidLat = centroid?.lat
+  const centroidLon = centroid?.lon
+
+  const markerPos = useMemo((): [number, number] => {
+    if (pinLat !== null && pinLon !== null) return [pinLat, pinLon]
+    if (centroidLat !== undefined && centroidLon !== undefined)
+      return [centroidLat, centroidLon]
+    return [22.5, 78.9]
+  }, [pinLat, pinLon, centroidLat, centroidLon])
+
+  const mapCenter = useMemo((): [number, number] => {
+    if (centroidLat !== undefined && centroidLon !== undefined)
+      return [centroidLat, centroidLon]
+    return markerPos
+  }, [centroidLat, centroidLon, markerPos])
+
+  const districtRow = getGeographyDistrict(stateId, districtId)
   const acresEquiv = landToAcres(landValue, landUnit)
 
   useEffect(() => {
@@ -127,6 +152,56 @@ export function CalculatorPage() {
               </div>
             </div>
 
+            <div className="border-t border-white/10 pt-4">
+              <div className="text-[11px] font-bold uppercase tracking-wide text-white/45">
+                {t('calc.phase2MapTitle')}
+              </div>
+              <p className="mt-1 text-xs text-white/45">{t('calc.phase2MapHint')}</p>
+              {mapCenter && (
+                <div className="mt-3">
+                  <PinMapPanel
+                    center={mapCenter}
+                    marker={markerPos}
+                    onMarkerChange={(lat, lon) => setPin(lat, lon)}
+                    ariaLabel={t('calc.phase2MapTitle')}
+                  />
+                </div>
+              )}
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => resetPinToDistrict()}
+                  className="text-xs font-bold text-sb-gold hover:text-sb-goldDark"
+                >
+                  {t('calc.phase2ResetPin')}
+                </button>
+                {districtRow && (
+                  <span className="font-mono text-[11px] text-white/40">
+                    {districtRow.lat.toFixed(4)}°, {districtRow.lon.toFixed(4)}°
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="border-t border-white/10 pt-4">
+              <label className="flex flex-col gap-2" htmlFor="shading">
+                <span className="text-[11px] font-bold uppercase tracking-wide text-white/45">
+                  {t('calc.phase2Shading')} ({shadingLossPct}%)
+                </span>
+                <input
+                  id="shading"
+                  type="range"
+                  min={0}
+                  max={30}
+                  step={1}
+                  value={shadingLossPct}
+                  onChange={(e) => setShadingLossPct(Number(e.target.value))}
+                  className="w-full accent-sb-gold"
+                />
+                <span className="text-xs text-white/45">{t('calc.phase2ShadingHint')}</span>
+              </label>
+            </div>
+
             <div className="flex flex-wrap gap-3 pt-2">
               <Link
                 href="/report"
@@ -153,6 +228,12 @@ export function CalculatorPage() {
             <div className="mt-3 space-y-1">
               <KV label={t('stateCard.ghi')} value={`${state.ghiKwhM2Day.toFixed(2)} kWh/m²/day`} />
               <KV label={t('stateCard.peak')} value={`${state.peakSunHours.toFixed(2)} h`} />
+              {state.effectivePerformanceRatio !== undefined && (
+                <KV
+                  label={t('calc.effectivePr')}
+                  value={`${(state.effectivePerformanceRatio * 100).toFixed(1)}%`}
+                />
+              )}
               <KV
                 label={t('stateCard.tariff')}
                 value={`₹${state.tariffMinRs} – ₹${state.tariffMaxRs}`}

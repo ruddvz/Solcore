@@ -1,6 +1,7 @@
 import type { GeographyDistrict, GeographyState, SolarMonthly, SolarResource, StateInfo } from '@/types'
 import { INDIA_GEOGRAPHY } from '@/types'
 import { getStatePolicy, type StatePolicy } from '@/data/statePolicies.generated'
+import { effectivePerformanceRatio } from '@/lib/shading'
 
 const MONTH_KEYS: (keyof SolarMonthly)[] = [
   'jan',
@@ -99,8 +100,10 @@ export function buildStateInfo(
   geo: GeographyState,
   policy: StatePolicy,
   solar: SolarResource,
+  opts?: { shadingLossPct?: number; pinLat?: number; pinLon?: number },
 ): StateInfo {
   const districts = geo.districts.map((d) => ({ id: d.id, name: d.name }))
+  const shading = opts?.shadingLossPct ?? 0
   return {
     id: geo.id,
     name: geo.name,
@@ -119,6 +122,10 @@ export function buildStateInfo(
     districts,
     policyIsFallback: policy.isFallbackPolicy === true,
     solar,
+    shadingLossPct: shading > 0 ? shading : undefined,
+    effectivePerformanceRatio: effectivePerformanceRatio(0.78, shading),
+    pinLat: opts?.pinLat,
+    pinLon: opts?.pinLon,
   }
 }
 
@@ -126,6 +133,7 @@ export function resolveStateForCalculator(
   stateId: string,
   districtId: string,
   solar?: SolarResource | null,
+  opts?: { shadingLossPct?: number; pinLat?: number; pinLon?: number },
 ): StateInfo | null {
   const geo = getGeographyState(stateId)
   const policy = getStatePolicy(stateId)
@@ -133,5 +141,5 @@ export function resolveStateForCalculator(
   const d = getGeographyDistrict(stateId, districtId)
   const lat = d?.lat ?? geo.districts[0]?.lat ?? 22
   const resolvedSolar = solar ?? fallbackSolar(lat)
-  return buildStateInfo(geo, policy, resolvedSolar)
+  return buildStateInfo(geo, policy, resolvedSolar, opts)
 }

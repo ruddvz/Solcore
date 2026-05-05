@@ -75,7 +75,7 @@ export function calculateFinancials(input: {
   const panelWp = 600
   const panelCountApprox = Math.round((systemMwDc * 1_000_000) / panelWp)
 
-  const performanceRatio = 0.78
+  const performanceRatio = input.state.effectivePerformanceRatio ?? 0.78
   const bifacialMult = 1 + tech.bifacialGainPct / 100
 
   /** NASA POWER ANN is average daily GHI (kWh/m²/day) ≈ peak sun hours for modelling */

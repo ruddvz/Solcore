@@ -211,7 +211,13 @@ export function ReportPage() {
             </div>
             <div className="mt-3 space-y-1">
               <KV label={t('report.overview.ghi')} value={`${state.ghiKwhM2Day} kWh/m²/day`} />
-              <KV label={t('report.overview.peakSun')} value={`${state.peakSunHours} h`} />
+              <KV label={t('report.overview.peakSun')} value={`${state.peakSunHours.toFixed(2)} h`} />
+              {state.effectivePerformanceRatio !== undefined && (
+                <KV
+                  label={t('report.overview.effectivePr')}
+                  value={`${(state.effectivePerformanceRatio * 100).toFixed(1)}%`}
+                />
+              )}
               <KV label={t('report.overview.tariff')} value={`₹${fin.tariffMidRs.toFixed(2)}`} />
               <KV label={t('report.overview.subsidyPct')} value={`${state.subsidyPct}%`} />
             </div>

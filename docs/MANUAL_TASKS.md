@@ -91,7 +91,7 @@ The app is `output: 'export'` when **`STATIC_EXPORT=1`**; **NREL** and **`/api/s
 
 14. **NREL / pin-drop**
    - [ ] Add **`NREL_API_KEY`** in Vercel (server-side) so `/api/solar` uses NSRDB-backed PVWatts; optional — NASA POWER remains the fallback without it.
-   - [ ] Pin-drop **Leaflet** map (plan §6.1–6.2) still needs UI work — lat/lon override not in the store yet.
+   - [x] Pin-drop **Leaflet** map + shading slider are in the calculator (plan §6.1–6.2). Optional: **Google Maps Static API** for imagery overlay (needs billing key + integration).
 
 15. **Community**
     - [ ] Forum moderation policy and moderator hiring per plan §6.9.

@@ -77,6 +77,13 @@ export interface StateInfo {
   /** True when tariff/subsidy uses generic placeholders */
   policyIsFallback?: boolean
   solar?: SolarResource
+  /** Phase 2 §6.2 — manual shading loss 0–30% applied to irradiance */
+  shadingLossPct?: number
+  /** Performance ratio after shading (for display; finance uses this) */
+  effectivePerformanceRatio?: number
+  /** Optional pin-drop coordinates (Leaflet) overriding district centroid for solar fetch */
+  pinLat?: number
+  pinLon?: number
 }
 
 export interface TechnologySpec {

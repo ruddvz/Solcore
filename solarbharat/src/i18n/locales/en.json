@@ -79,7 +79,13 @@
     "irradianceSource": "Irradiance data",
     "sourceNrel": "NREL PVWatts / NSRDB (when API key configured)",
     "sourceNasa": "NASA POWER (climatology)",
-    "sourceFallback": "Latitude heuristic (NASA unavailable)"
+    "sourceFallback": "Latitude heuristic (NASA unavailable)",
+    "phase2MapTitle": "Pin location (Phase 2)",
+    "phase2MapHint": "Click or drag the marker for site-specific NASA/NREL irradiance. Leave at district centre if unsure.",
+    "phase2ResetPin": "Use district centre",
+    "phase2Shading": "Estimated shading loss",
+    "phase2ShadingHint": "Trees, buildings, terrain — reduces effective PR (plan §6.2).",
+    "effectivePr": "Effective PR (model)"
   },
   "report": {
     "title": "Your feasibility report",
@@ -115,6 +121,7 @@
       "climate": "Location & climate",
       "ghi": "GHI",
       "peakSun": "Peak sun hours",
+      "effectivePr": "Effective PR (after shading)",
       "tariff": "Tariff (mid)",
       "subsidyPct": "State subsidy",
       "chart40": "40-year cumulative cash flow",
