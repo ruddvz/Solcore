@@ -5,7 +5,20 @@ import { useTranslation } from 'react-i18next'
 
 const ROUTES: {
   href: string
-  key: 'home' | 'calculator' | 'report' | 'contractors' | 'quota' | 'forum' | 'alerts' | 'offline'
+  key:
+    | 'home'
+    | 'calculator'
+    | 'report'
+    | 'contractors'
+    | 'quota'
+    | 'forum'
+    | 'plan'
+    | 'quotes'
+    | 'phase3'
+    | 'reviews'
+    | 'financing'
+    | 'alerts'
+    | 'offline'
 }[] = [
   { href: '/', key: 'home' },
   { href: '/calculator', key: 'calculator' },
@@ -13,6 +26,11 @@ const ROUTES: {
   { href: '/contractors', key: 'contractors' },
   { href: '/quota', key: 'quota' },
   { href: '/forum', key: 'forum' },
+  { href: '/plan', key: 'plan' },
+  { href: '/quotes', key: 'quotes' },
+  { href: '/phase3', key: 'phase3' },
+  { href: '/reviews/submit', key: 'reviews' },
+  { href: '/financing/interest', key: 'financing' },
   { href: '/alerts', key: 'alerts' },
   { href: '/offline', key: 'offline' },
 ]

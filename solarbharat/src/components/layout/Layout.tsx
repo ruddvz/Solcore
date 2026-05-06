@@ -58,6 +58,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Link className="text-white/70 hover:text-white" href="/forum">
               {t('nav.forum')}
             </Link>
+            <Link className="text-white/70 hover:text-white" href="/plan">
+              {t('nav.plan')}
+            </Link>
+            <Link className="text-white/70 hover:text-white" href="/quotes">
+              {t('nav.quotes')}
+            </Link>
+            <Link className="text-white/70 hover:text-white" href="/phase3">
+              {t('nav.phase3')}
+            </Link>
+            <Link className="text-white/70 hover:text-white" href="/reviews/submit">
+              {t('nav.reviews')}
+            </Link>
+            <Link className="text-white/70 hover:text-white" href="/financing/interest">
+              {t('nav.financing')}
+            </Link>
             <Link className="text-white/70 hover:text-white" href="/alerts">
               {t('nav.alerts')}
             </Link>

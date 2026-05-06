@@ -14,5 +14,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/forum`, lastModified: now, changeFrequency: 'weekly', priority: 0.65 },
     { url: `${base}/quota`, lastModified: now, changeFrequency: 'daily', priority: 0.65 },
     { url: `${base}/alerts`, lastModified: now, changeFrequency: 'monthly', priority: 0.45 },
+    { url: `${base}/plan`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${base}/quotes`, lastModified: now, changeFrequency: 'weekly', priority: 0.55 },
+    { url: `${base}/reviews/submit`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${base}/financing/interest`, lastModified: now, changeFrequency: 'monthly', priority: 0.45 },
+    { url: `${base}/phase3`, lastModified: now, changeFrequency: 'monthly', priority: 0.45 },
   ]
 }

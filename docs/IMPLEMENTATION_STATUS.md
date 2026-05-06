@@ -35,13 +35,21 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 | **Public Q&A forum** (plan §6.9): `/forum`, `/forum/new`, `/forum/topic?slug=` | Done — anon insert policies migration; seed topics + replies |
 | **PM-KUSUM quota tracker UI** (plan §6.5): `/quota` | Done — reads `quota_snapshots`; seed migration |
 | **Email alerts signup** (plan §6.10): `/alerts` → `email_alert_subscriptions` | Done — UI only; sending requires worker |
+| **Quote comparison** (§6.6): `/quotes` | Done — client-side table + flags (`src/lib/quotes/compareQuotes.ts`) |
+| **Review intake** (§6.4): `/reviews/submit` → `review_intake` | Done — Supabase direct or `/api/reviews/intake` fallback |
+| **Financing lead intake** (ties to §7.2): `/financing/interest` → `financing_leads` | Done — Supabase direct or `/api/financing/lead` fallback |
+| Roadmap page | Done — `/plan` (`RoadmapPage.tsx`) |
 | Scrapers (automated quota ingest), Resend/email worker, moderation dashboard | **Not** done |
 
 Next engineering steps: Edge Function or cron for quota ingest, Resend + confirm links, forum moderation UI.
 
 ## Phase 3 (plan §7)
 
-Mobile app, NBFC integration, verification network, etc. — **not** started.
+| Item | Status |
+|------|--------|
+| Performance DB, NBFC embed, verification network, OA calc, battery, rooftop, mobile, consultant dash, tariff trends | **Spec pages** — `/phase3` hub + `/phase3/[slug]` describe scope from the plan (no production integrations in-repo) |
+
+Mobile app, NBFC underwriting, SCADA ingestion, etc. remain **external** or multi-repo efforts — see hub pages and `MANUAL_TASKS.md`.
 
 ---
 

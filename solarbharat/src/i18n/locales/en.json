@@ -9,7 +9,12 @@
     "contractors": "Contractors",
     "quota": "Quota",
     "forum": "Forum",
-    "alerts": "Alerts"
+    "alerts": "Alerts",
+    "plan": "Roadmap",
+    "quotes": "Quotes",
+    "phase3": "Phase 3",
+    "reviews": "Reviews",
+    "financing": "Finance lead"
   },
   "lang": {
     "en": "English",
@@ -32,6 +37,11 @@
       "contractors": "Contractors — directory & apply",
       "quota": "PM-KUSUM quota tracker",
       "forum": "Community Q&A",
+      "plan": "Roadmap vs product plan",
+      "quotes": "Quote comparison (standardisation)",
+      "phase3": "Phase 3 feature hub",
+      "reviews": "Submit installation review (intake)",
+      "financing": "Financing interest lead",
       "alerts": "Email alerts signup",
       "offline": "Offline fallback page (PWA)"
     }
@@ -412,6 +422,253 @@
     "nodal": "Nodal",
     "discom": "DISCOM",
     "monthlyGen": "Seasonal generation shape (relative)"
+  },
+  "roadmap": {
+    "title": "Product roadmap",
+    "intro": "What is shipped in code today versus what needs partnerships, compliance review, or heavy backend work. Use this as the north star while we iterate.",
+    "phase1": {
+      "title": "Phase 1 — MVP (live)",
+      "items": [
+        "Next.js app with district-level calculator and six-tab report",
+        "Nationwide states and districts with NASA POWER / NREL irradiance (when keys exist)",
+        "PDF export, SEO, optional PostHog, PWA + GitHub Pages static preview",
+        "Honest financial model with subsidy timing warnings and risk register"
+      ]
+    },
+    "phase2": {
+      "title": "Phase 2 — depth (in progress)",
+      "items": [
+        "Verified contractor directory + application intake (Supabase)",
+        "Leaflet pin map, shading loss on effective PR, forum + quota UI",
+        "Quote comparison tool and review / financing lead intake tables",
+        "Email alerts signup UI — sending requires Resend/worker (manual setup)"
+      ]
+    },
+    "scalePhase": {
+      "title": "Phase 3 — scale (stubs + specs)",
+      "items": [
+        "Performance database, embedded NBFC financing, independent verification",
+        "Open access calculator, battery and rooftop modules, consultant dashboard",
+        "Tariff history, mobile app — see /phase3 for scoped descriptions"
+      ]
+    },
+    "manual": {
+      "title": "Requires humans or external systems",
+      "items": [
+        "GEDA/MNRE list verification, legal review of copy, NBFC partnerships",
+        "Automated quota scrapers, production email + moderation dashboards",
+        "SCADA OEM partnerships and native app store releases"
+      ]
+    },
+    "footer": "Sources of truth: docs/SOLAR_BHARAT_PRODUCT_PLAN.md and docs/MANUAL_TASKS.md."
+  },
+  "quotes": {
+    "title": "Quote comparison",
+    "subtitle": "Normalise EPC quotes into one table — flags are rules-of-thumb; verify ALMM and warranties on invoices.",
+    "modelHint": "Your model total capex",
+    "fromCalculator": "from current calculator session",
+    "colLabel": "Field",
+    "capacityKwp": "Capacity (kWp)",
+    "costPerWp": "Cost (₹/Wp)",
+    "totalCapex": "Total capex",
+    "bestCpp": "Lowest ₹/Wp",
+    "panel": "Panel brand",
+    "almm": "ALMM-listed panels",
+    "inverter": "Inverter brand",
+    "warrantyMod": "Module warranty (years)",
+    "warrantyInv": "Inverter warranty (years)",
+    "codMonths": "COD timeline (months est.)",
+    "penalty": "Liquidated damages / COD penalty clause",
+    "flagsClean": "No automatic flags on this quote.",
+    "addColumn": "Add quote column",
+    "disclaimer": "Comparison does not replace technical due diligence or DISCOM approval.",
+    "flag": {
+      "non_almm": "Panels not marked ALMM — subsidy eligibility risk.",
+      "no_cod_penalty": "No COD penalty clause — schedule risk.",
+      "long_cod_timeline": "COD timeline over 12 months — clarify milestones.",
+      "short_module_warranty": "Module warranty under 12 years — negotiate OEM terms."
+    }
+  },
+  "reviews": {
+    "title": "Installation review (intake)",
+    "subtitle": "Tell us about your EPC experience. Full verification against COD records is a future workflow — today this is intake only.",
+    "email": "Your email",
+    "contractorRef": "Contractor / company name",
+    "contractorPlaceholder": "As on quotation or DISCOM application",
+    "rating": "Overall rating",
+    "body": "What happened?",
+    "codHint": "COD or commissioning hint (optional)",
+    "codPlaceholder": "Month/year or DISCOM reference — helps staff match later",
+    "required": "Email, rating, and story are required.",
+    "success": "Thanks — we recorded your note for moderation.",
+    "sending": "Sending…",
+    "submit": "Submit review",
+    "apiUnavailable": "Could not reach the server. Configure Supabase env vars for static sites, or deploy with API routes.",
+    "disclaimer": "Do not share Aadhaar or bank details here. Abuse may be removed."
+  },
+  "financingLead": {
+    "title": "Financing interest",
+    "subtitle": "Phase 3 embedded lending will need NBFC partners — share intent now so we can prioritise your state.",
+    "email": "Email",
+    "emailRequired": "Email is required.",
+    "phone": "Phone",
+    "state": "State",
+    "district": "District",
+    "optionalState": "Optional",
+    "capacity": "Plant size (kWp)",
+    "notes": "Notes",
+    "success": "Received — we will email when lender pilots open.",
+    "sending": "Sending…",
+    "submit": "Submit interest",
+    "apiUnavailable": "Could not save — add Supabase keys or use a hosted deployment with API routes.",
+    "disclaimer": "Not a loan application. Rates and eligibility sit with regulated lenders."
+  },
+  "phase3": {
+    "title": "Phase 3 features",
+    "intro": "These roadmap items need integrations we cannot fake safely in one repo: inverter APIs, NBFC underwriting, field verification networks, and tariff corpora. Each page lists planned scope so product and engineering stay aligned.",
+    "footer": "Implementations will ship incrementally behind the same design system.",
+    "backHub": "Back to Phase 3 hub",
+    "notFound": "Unknown feature slug.",
+    "detail": {
+      "scope": "Planned scope (from product plan §7)",
+      "performance": {
+        "title": "Performance database",
+        "body": "Opt-in SCADA and inverter API connections so farmers benchmark PR against peers — contractor accountability on profiles.",
+        "note": "Needs OEM API keys, consent flows, and aggregation pipeline — not enabled in static export.",
+        "bullets": [
+          "Registration flow for plant metadata (anon tiers)",
+          "Connect Sungrow / Growatt / Huawei / Fronius where APIs allow",
+          "Daily rollups: generation, PR, peak — aggregated by state and size band",
+          "Badges on contractor profiles tied to fleet performance"
+        ]
+      },
+      "financing": {
+        "title": "Embedded financing",
+        "body": "Single-form NBFC pre-approval inside the report — referral economics only after licensing and partner contracts.",
+        "note": "Requires lender sandbox + KYC rules — form at /financing/interest stores intent only.",
+        "bullets": [
+          "Partner with 1–2 NBFCs or digital lenders",
+          "Income + land ownership + project snapshot → pre-approval letter",
+          "Contractor payouts via escrow once COD milestones hit",
+          "SolarBharat referral fee only where legally compliant"
+        ]
+      },
+      "verification": {
+        "title": "Independent verification",
+        "body": "Freelance engineer network for post-COD site audits — photos, ALMM sticker checks, SCADA handshake.",
+        "note": "Needs credentialing, dispatch, and insurance — operational rollout post-traction.",
+        "bullets": [
+          "Credential vault for freelance engineers",
+          "Booking + pricing Rs.3k–8k per visit",
+          "Structured checklist PDF + photo evidence",
+          "Badge on contractor profile after passing audits"
+        ]
+      },
+      "open-access": {
+        "title": "Open access calculator",
+        "body": "Compare captive PPA vs third-party open-access sale using wheeling, banking, and cross-subsidy charges by state.",
+        "note": "Needs authoritative surcharge tables — UI placeholder until data pipeline exists.",
+        "bullets": [
+          "Tariff bands for HT industrial buyers vs farmer PPA",
+          "Charge schedule inputs per MERC/GERC orders",
+          "Buyer directory (future marketplace)",
+          "Sensitivity on banking holidays and losses"
+        ]
+      },
+      "battery": {
+        "title": "Battery storage modelling",
+        "body": "Hybrid / backup ROI with LFP vs NMC costs, cycles, and peak-shift value.",
+        "note": "Coupled to load profiles — ship after core PV model stabilises.",
+        "bullets": [
+          "Modes: grid-tied export, hybrid, off-grid backup",
+          "LFP vs NMC chemistry presets with RTE and cycle life",
+          "Peak tariff arbitrage where DISCOM TOU exists",
+          "Clear ‘not worth it’ bands for farmers with flat tariffs"
+        ]
+      },
+      "rooftop": {
+        "title": "Rooftop solar module",
+        "body": "Dedicated urban flow: PM Surya Ghar, roof sq ft, DISCOM net metering steps.",
+        "note": "City tariff schedules vary — integrate after pilot DISCOM packs.",
+        "bullets": [
+          "Roof area + structural class inputs",
+          "Net metering calculator vs gross export",
+          "City checklist links",
+          "Google Maps shading overlay when billing keys exist"
+        ]
+      },
+      "mobile": {
+        "title": "Mobile app",
+        "body": "React Native client with offline PDF cache and quota push alerts.",
+        "note": "Requires app store accounts and push infra — separate repo recommended.",
+        "bullets": [
+          "Offline report vault",
+          "Push for quota / tariff digest",
+          "Camera OCR for survey extracts (privacy gated)",
+          "QR share for bankers / CAs"
+        ]
+      },
+      "consultant": {
+        "title": "Consultant dashboard",
+        "body": "B2B workspace for CAs and advisors — branded PDFs, CRM-lite, API hooks.",
+        "note": "Needs auth, billing, and seat management — Phase 3 backend.",
+        "bullets": [
+          "White-label report covers",
+          "Bulk CSV district runs",
+          "Client statuses from applied → commissioned",
+          "Metered API key for SolarBharat data feeds"
+        ]
+      },
+      "tariffs": {
+        "title": "Tariff history & trends",
+        "body": "GERC/KERC/MERC order ingestion with charts — answer ‘where are tariffs heading?’.",
+        "note": "PDF scraping + legal retention policy — research dataset effort.",
+        "bullets": [
+          "Ingest historical tariff orders",
+          "Trend sparklines by state",
+          "Comparison tables for investor-grade views",
+          "Alert before next regulatory filing window"
+        ]
+      }
+    },
+    "cards": {
+      "performance": {
+        "title": "Performance database",
+        "blurb": "Benchmark generation vs peers — inverter APIs."
+      },
+      "financing": {
+        "title": "Embedded financing",
+        "blurb": "NBFC pre-approval inside the report."
+      },
+      "verification": {
+        "title": "Verification service",
+        "blurb": "Post-COD engineer visits + reports."
+      },
+      "open-access": {
+        "title": "Open access calculator",
+        "blurb": "Wheeling + banking vs captive PPA."
+      },
+      "battery": {
+        "title": "Battery modelling",
+        "blurb": "Hybrid ROI and backup hours."
+      },
+      "rooftop": {
+        "title": "Rooftop flow",
+        "blurb": "PM Surya Ghar + net metering."
+      },
+      "mobile": {
+        "title": "Mobile app",
+        "blurb": "Offline reports + alerts."
+      },
+      "consultant": {
+        "title": "Consultant dashboard",
+        "blurb": "Branded reports + API."
+      },
+      "tariffs": {
+        "title": "Tariff trends",
+        "blurb": "Historical regulatory orders."
+      }
+    }
   },
   "footer": {
     "disclaimer": "Estimates only — not financial advice. Tariffs, subsidies, and DISCOM rules change; verify with nodal agency and a qualified consultant before investing."
