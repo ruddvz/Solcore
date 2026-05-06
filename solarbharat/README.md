@@ -28,6 +28,8 @@ Build: `npm run build` · Start: `npm run start`
 
 Copy `.env.example` to `.env.local`. Set **`NEXT_PUBLIC_SITE_URL`** to your canonical URL in production so `sitemap.xml` and metadata resolve correctly.
 
+- **`NEXT_PUBLIC_SUPPORT_EMAIL`** — optional public inbox address shown on **`/contact`** (mailto link).
+
 Optional Phase 2 keys:
 
 - **`NREL_API_KEY`** — NSRDB-backed irradiance (register at [developer.nrel.gov](https://developer.nrel.gov/signup/)).

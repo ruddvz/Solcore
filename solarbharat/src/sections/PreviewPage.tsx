@@ -18,6 +18,9 @@ const ROUTES: {
     | 'reviews'
     | 'financing'
     | 'alerts'
+    | 'terms'
+    | 'privacy'
+    | 'contact'
     | 'offline'
 }[] = [
   { href: '/', key: 'home' },
@@ -32,6 +35,9 @@ const ROUTES: {
   { href: '/reviews/submit', key: 'reviews' },
   { href: '/financing/interest', key: 'financing' },
   { href: '/alerts', key: 'alerts' },
+  { href: '/terms', key: 'terms' },
+  { href: '/privacy', key: 'privacy' },
+  { href: '/contact', key: 'contact' },
   { href: '/offline', key: 'offline' },
 ]
 

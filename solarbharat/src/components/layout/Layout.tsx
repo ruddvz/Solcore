@@ -88,9 +88,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </header>
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8">{children}</main>
       <footer className="border-t border-white/10 bg-sb-surface/40 py-6">
-        <p className="mx-auto max-w-6xl px-4 text-center text-xs text-white/45">
-          {t('footer.disclaimer')}
-        </p>
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 text-center">
+          <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs font-bold">
+            <Link className="text-white/55 hover:text-white" href="/terms">
+              {t('footer.terms')}
+            </Link>
+            <Link className="text-white/55 hover:text-white" href="/privacy">
+              {t('footer.privacy')}
+            </Link>
+            <Link className="text-white/55 hover:text-white" href="/contact">
+              {t('footer.contact')}
+            </Link>
+          </nav>
+          <p className="text-xs text-white/45">{t('footer.disclaimer')}</p>
+        </div>
       </footer>
     </div>
   )

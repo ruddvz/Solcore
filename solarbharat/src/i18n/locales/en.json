@@ -43,6 +43,9 @@
       "reviews": "Submit installation review (intake)",
       "financing": "Financing interest lead",
       "alerts": "Email alerts signup",
+      "terms": "Terms of use (draft)",
+      "privacy": "Privacy policy (draft)",
+      "contact": "Contact / support",
       "offline": "Offline fallback page (PWA)"
     }
   },
@@ -670,7 +673,56 @@
       }
     }
   },
+  "legal": {
+    "terms": {
+      "title": "Terms of use",
+      "lastUpdated": "Draft — May 2026. Have counsel review before relying on this text.",
+      "intro": "SolarBharat provides estimates and educational tools. By using this website you agree to these terms; if you disagree, do not use the service.",
+      "s1h": "No professional advice",
+      "s1p": "Nothing on this site is investment, legal, tax, or engineering advice. Numbers are illustrative. Always verify tariffs, subsidies, DISCOM rules, and structural design with qualified professionals and official sources.",
+      "s2h": "Accuracy and third-party data",
+      "s2p": "We combine open datasets, APIs (e.g. NASA POWER, optional NREL), and user input. Data may be incomplete, delayed, or wrong for your site. You use outputs at your own risk.",
+      "s3h": "Contractors and community content",
+      "s3p": "Directory listings, forum posts, and reviews are informational. SolarBharat does not endorse contractors. Verify empaneled status with nodal agencies before paying deposits.",
+      "s4h": "Acceptable use",
+      "s4p": "Do not misuse the service (scraping that degrades performance, unlawful content, harassment, or attempts to bypass security). We may suspend access that harms the platform or other users.",
+      "s5h": "Limitation of liability",
+      "s5p": "To the maximum extent permitted by law, SolarBharat and its operators are not liable for any indirect or consequential loss arising from use of the site. Some jurisdictions do not allow certain limitations; those limits apply only to the extent permitted.",
+      "s6h": "Changes",
+      "s6p": "We may update these terms. Continued use after changes constitutes acceptance of the revised terms.",
+      "notice": "This draft is for launch preparation only. Engage India-qualified counsel for enforceable terms."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "lastUpdated": "Draft — May 2026. Review with counsel before publication.",
+      "intro": "This policy describes how SolarBharat handles information when you use the website. We aim to collect only what we need to run the product.",
+      "s1h": "What we collect",
+      "s1p": "We may collect information you submit (e.g. calculator inputs, forms for contractors, forum posts, alert signups, review intake) and technical data such as browser type, approximate location from IP, and analytics events if you enable optional analytics.",
+      "s2h": "How we use data",
+      "s2p": "We use data to operate features (reports, directories, community), improve the service, fix bugs, and measure aggregate usage. We do not sell personal data.",
+      "s3h": "Storage and processors",
+      "s3p": "When configured, data may be stored in Supabase (PostgreSQL) and sent through email or analytics providers you enable (e.g. PostHog). Subprocessors depend on your deployment configuration.",
+      "s4h": "Cookies and local storage",
+      "s4p": "We may use cookies or local storage for sessions, preferences, and optional analytics. You can control cookies in your browser; blocking some cookies may limit functionality.",
+      "s5h": "Retention",
+      "s5p": "We retain information as needed to operate the service and meet legal obligations. Forum or intake records may be kept for moderation and safety.",
+      "s6h": "Your choices",
+      "s6p": "Where applicable law grants rights (access, correction, deletion), contact us using the details on the Contact page. We may need to verify requests.",
+      "notice": "Align this policy with your actual hosting stack and counsel before going live."
+    },
+    "contact": {
+      "title": "Contact",
+      "intro": "For product feedback, data corrections, or privacy requests, reach out using the channel below.",
+      "emailHeading": "Support email",
+      "noEmail": "Set NEXT_PUBLIC_SUPPORT_EMAIL in your environment to display a public address here.",
+      "envHint": "Add NEXT_PUBLIC_SUPPORT_EMAIL in Vercel or .env.local (safe to expose — it is only an inbox address).",
+      "responseTime": "We aim to respond when capacity allows; this is not a regulated helpline."
+    }
+  },
   "footer": {
-    "disclaimer": "Estimates only — not financial advice. Tariffs, subsidies, and DISCOM rules change; verify with nodal agency and a qualified consultant before investing."
+    "disclaimer": "Estimates only — not financial advice. Tariffs, subsidies, and DISCOM rules change; verify with nodal agency and a qualified consultant before investing.",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "contact": "Contact"
   }
 }

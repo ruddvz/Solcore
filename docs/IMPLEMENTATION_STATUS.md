@@ -23,6 +23,7 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 | i18n EN + partial HI/GU | Done (extend strings as needed) |
 | Performance / mobile polish | Ongoing — test on real devices |
 | Deploy domain | **Manual** — see `MANUAL_TASKS.md` (Vercel or optional **GitHub Pages** static preview) |
+| Legal surface (draft) | **`/terms`**, **`/privacy`**, **`/contact`** — counsel review required before reliance |
 
 ## Phase 2 (plan §6)
 

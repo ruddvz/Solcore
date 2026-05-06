@@ -62,7 +62,7 @@ The app is `output: 'export'` when **`STATIC_EXPORT=1`**; **NREL** and **`/api/s
 
 8. **Legal**
    - [ ] Have a lawyer review **disclaimers** (“estimates only”, no investment advice) for India-facing financial tools.
-   - [ ] Add published **Terms**, **Privacy**, and **Contact** pages when you go live (not optional for consumer trust).
+   - [x] **Draft** **Terms**, **Privacy**, and **Contact** routes exist (`/terms`, `/privacy`, `/contact`) — replace copy after counsel review. Set **`NEXT_PUBLIC_SUPPORT_EMAIL`** for the contact mailto (see `solarbharat/.env.example`).
 
 9. **Empanelment & suppliers**
    - [ ] **ALMM**: Before quoting panel brands to users, cross-check [MNRE ALMM list](https://mnre.gov.in).
@@ -77,7 +77,7 @@ The app is `output: 'export'` when **`STATIC_EXPORT=1`**; **NREL** and **`/api/s
     - [ ] Optional: create social assets / WhatsApp infographics pointing to the calculator.
 
 11. **Support**
-    - [ ] Decide support email or form for “report looks wrong” feedback.
+    - [ ] Decide production support email and set **`NEXT_PUBLIC_SUPPORT_EMAIL`** (and optionally a CRM/form later). The Contact page reads this env var for the mailto link.
 
 ---
 
