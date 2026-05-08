@@ -1,6 +1,6 @@
 # SolarBharat implementation status (vs product plan)
 
-This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODUCT_PLAN.md`](./SOLAR_BHARAT_PRODUCT_PLAN.md). Full India-scale Phase 2/3 items require backend, scrapers, and partnerships — see [`MANUAL_TASKS.md`](./MANUAL_TASKS.md) for what only humans can do.
+This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODUCT_PLAN.md`](./SOLAR_BHARAT_PRODUCT_PLAN.md). The AI-oriented spec in [`Plan0.md`](./Plan0.md) mirrors the product plan for coding assistants; keep the three docs aligned when behavior changes. Full India-scale Phase 2/3 items require backend, scrapers, and partnerships — see [`MANUAL_TASKS.md`](./MANUAL_TASKS.md) for what only humans can do.
 
 ## Phase 1 MVP (plan §5 + §10.5)
 
