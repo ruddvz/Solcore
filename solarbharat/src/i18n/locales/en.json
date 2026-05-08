@@ -4,6 +4,7 @@
     "tagline": "India's Solar Truth Engine",
     "home": "Home",
     "calculator": "Calculator",
+    "locations": "States",
     "report": "Report",
     "preview": "Preview",
     "contractors": "Contractors",
@@ -122,7 +123,7 @@
   },
   "alerts": {
     "title": "Email alerts",
-    "subtitle": "Subscribe for quota reopenings, tariff digests, or report reminders — requires Supabase + future email worker (plan §6.10).",
+    "subtitle": "Subscribe for quota reopenings, tariff digests, or report reminders. Confirmation email sends when Resend + cron are configured (see docs/IMPLEMENTATION_STATUS.md).",
     "email": "Email",
     "emailRequired": "Email is required.",
     "type": "Alert type",
@@ -132,10 +133,13 @@
     "state": "State",
     "district": "District",
     "optional": "Any state",
-    "success": "Saved — double opt-in email coming soon.",
+    "success": "Saved — check your email to confirm (link expires when you replace the worker).",
     "sending": "Saving…",
     "submit": "Subscribe",
-    "disclaimer": "We will only use your email for SolarBharat alerts; no resale. Confirmation flow not wired yet."
+    "disclaimer": "We will only use your email for SolarBharat alerts; no resale. Confirmation is sent when RESEND_API_KEY and cron are configured.",
+    "confirmOk": "Your email is confirmed — you are subscribed to alerts.",
+    "confirmInvalid": "This confirmation link is invalid or already used.",
+    "confirmError": "Could not confirm — server configuration error."
   },
   "home": {
     "heroTitle": "Honest, district-specific solar feasibility — in seconds.",
@@ -219,6 +223,7 @@
       "cash": "Cash required",
       "subsidy": "Subsidy",
       "loan": "Bank loan (30% of cost after subsidy)",
+      "multiple": "Return multiple (25 yr)",
       "emi": "Monthly EMI"
     },
     "overview": {
@@ -237,13 +242,17 @@
       "tariff": "Tariff (mid)",
       "subsidyPct": "State subsidy",
       "chart40": "40-year cumulative cash flow",
+      "chart40Axis": "Y-axis: cumulative net cash position (₹ crore). Gold line; dashed vertical: Year 11 (loan paid).",
+      "chart40Cum": "Cumulative",
       "mBreakeven": "Breakeven (equity)",
       "mCashBack": "Full upfront recovery",
       "mPostLoan": "Monthly income (Yr 11+)",
+      "mNet25": "25-year net profit",
       "mMultiple": "Return multiple (25 yr)",
       "warnings": "Key warnings",
-      "wCash": "You need ~{{amount}} in cash (equity + 6% operating reserve). Subsidy typically disburses over months — plan working capital.",
+      "wCash": "You need ~{{amountL}} in cash (~{{amount}}) — equity plus 6% operating reserve. Subsidy typically disburses over months; plan working capital.",
       "wPpa": "PPA tariff is locked only for the years stated in your DISCOM / PPA — model assumes mid-tariff; renegotiation risk after lock.",
+      "wPpaLock": "Many feed-in / banking arrangements assume about {{years}} years of tariff visibility — confirm your DISCOM order; renegotiation risk rises after the lock.",
       "wTx": "DISCOM grid approval typically 8–14 weeks — treat as critical path from Day 1.",
       "wDust": "Soiling can cost 8–12% energy if under-cleaned — budget robots or manual washing.",
       "wDustRj": "Rajasthan: budget robot or frequent manual cleaning — dust losses often 8–12% without it."
@@ -251,6 +260,8 @@
     "costs": {
       "donut": "Cost breakdown",
       "table": "Line items",
+      "colItem": "Item",
+      "colAmount": "Amount (₹)",
       "landRow": "Land (owned)",
       "landFree": "₹0 — psychological anchor; you already own the land.",
       "donutPanels": "Panels",
@@ -263,6 +274,9 @@
       "donutOthers": "Others (transformer, SCADA, robot, approvals, contingency)",
       "funding": "Funding stack",
       "govt": "Government subsidy",
+      "govtWithPct": "Govt (subsidy {{pct}}%)",
+      "loanAfterSubsidy": "Loan (30% after subsidy)",
+      "youEquity": "Your equity",
       "loan": "Bank loan",
       "you": "Your equity",
       "reality": "Reality check",
@@ -337,6 +351,8 @@
       "p6b": "COD certificate; subsidy claim pack; LDC activation.",
       "contacts": "Key contacts (verify before use)",
       "nodalLabel": "Nodal agency",
+      "portalLabel": "Nodal portal",
+      "phoneVerify": "Phone numbers change often — confirm the current helpline on the official portal before calling.",
       "discomLabel": "DISCOM",
       "bank": "SBI Agri / branch — Kisan Solar Energy Loan (verify current circular).",
       "docsTitle": "Document checklist",
@@ -358,6 +374,7 @@
       "robots": "Cleaning robots",
       "finance": "Financing partners",
       "verified": "VERIFIED",
+      "ratingAria": "Illustrative rating for {{name}}",
       "epcPlaceholder": "No curated EPC sample list for this state yet — verify contractors against your nodal agency empanelment list.",
       "almm": "ALMM listed — verify on MNRE before purchase.",
       "warranty": "Warranty",
@@ -389,6 +406,7 @@
     "deg": "Degradation / yr",
     "costWp": "Module ₹/Wp (indicative)",
     "bif": "Bifacial gain",
+    "warranty": "Product warranty",
     "verdict": { "best": "Best choice", "good": "Good", "acceptable": "Acceptable" }
   },
   "costLine": {
@@ -737,5 +755,38 @@
     "terms": "Terms",
     "privacy": "Privacy",
     "contact": "Contact"
+  },
+  "plan0": {
+    "hero": {
+      "title": "India's Solar Intelligence Platform",
+      "subtitle": "Honest, district-specific solar feasibility for every Indian landowner"
+    },
+    "calc": {
+      "cta": "Calculate My Solar ROI",
+      "step1": "Select State",
+      "step2": "Your Land",
+      "step3": "Technology"
+    },
+    "report": {
+      "tab": {
+        "overview": "Overview",
+        "costs": "Costs",
+        "model": "25-Year Model",
+        "risk": "Risk Register",
+        "action": "Action Plan",
+        "suppliers": "Suppliers"
+      }
+    },
+    "kpi": {
+      "breakeven": "Breakeven (equity)",
+      "cashback": "Full upfront recovery",
+      "monthly": "Monthly (Yr 11+)",
+      "return": "Return multiple (25 yr)"
+    },
+    "warning": {
+      "cash": "Cash required upfront",
+      "ppa": "PPA tariff lock warning"
+    },
+    "disclaimer": "Estimates only. Always verify with a qualified solar engineer and current DISCOM/scheme guidelines before making financial decisions."
   }
 }

@@ -77,7 +77,7 @@ Always apply these exact tokens. Never deviate.
 
 ## 3. Financial Model — Exact Specification
 
-This is the core engine. Every number must be correct. Lives in `src/lib/calcEngine.ts`.
+This is the core engine. Every number must be correct. Entry: `src/lib/calcEngine.ts` (re-exports the implementation in `src/lib/finance.ts`).
 
 ### Inputs
 | Input | Type | Unit |
@@ -515,6 +515,12 @@ Always use `useTranslation()` for user-facing text. Critical keys:
 }
 ```
 
+Full locale files live in `solarbharat/src/i18n/locales/{en,hi,gu}.json` (same key structure). Regenerate Hindi/Gujarati from English with:
+
+`cd solarbharat && npm run i18n:translate`
+
+Review machine-translated legal copy with counsel before production.
+
 ---
 
 ## 11. SEO & Metadata
@@ -542,7 +548,7 @@ export function generateMetadata({ params }): Metadata {
 
 ## 12. PDF Export
 
-`src/lib/exportPDF.ts` — client-side jsPDF + html2canvas:
+`src/lib/exportPdf.ts` — client-side jsPDF + html2canvas (Plan0 originally named `exportPDF.ts`; repo uses camelCase for tooling compatibility):
 ```typescript
 export async function exportReport(elementId: string, filename: string) {
   const canvas = await html2canvas(document.getElementById(elementId)!, {

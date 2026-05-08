@@ -1,0 +1,53 @@
+name: SolarBharat CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'solarbharat/**'
+      - '.github/workflows/solarbharat-ci.yml'
+  pull_request:
+    paths:
+      - 'solarbharat/**'
+      - '.github/workflows/solarbharat-ci.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: solarbharat
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: solarbharat/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+
+  lighthouse:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: solarbharat/package-lock.json
+      - name: Install & build
+        working-directory: solarbharat
+        run: |
+          npm ci
+          npm run build
+      - name: Start server & Lighthouse (smoke)
+        working-directory: solarbharat
+        run: |
+          npm run start &
+          sleep 5
+          npx --yes lighthouse http://127.0.0.1:3000/ --only-categories=performance --output=json --output-path=./lighthouse-report.json --chrome-flags="--headless --no-sandbox" || true
+          test -f lighthouse-report.json && node -e "const r=require('./lighthouse-report.json'); console.log('Performance score:', r.categories?.performance?.score);" || true

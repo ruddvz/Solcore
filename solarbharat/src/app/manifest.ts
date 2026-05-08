@@ -46,5 +46,12 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: 'maskable',
       },
     ],
+    screenshots: [
+      {
+        src: `${base}/screenshots/mobile.png`,
+        sizes: '390x844',
+        type: 'image/png',
+      },
+    ],
   }
 }

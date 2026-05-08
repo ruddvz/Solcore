@@ -31,3 +31,19 @@
     @apply m-0 min-h-screen bg-sb-bg text-white/90;
   }
 }
+
+@layer components {
+  /** Plan0 §2 — card labels: 11px, weight 700, uppercase, letter-spacing 0.08em */
+  .sb-overline {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  /** Plan0 §2 — body: DM Sans 14–15px */
+  .sb-body {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.55;
+  }
+}

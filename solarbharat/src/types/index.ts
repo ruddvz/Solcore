@@ -84,6 +84,12 @@ export interface StateInfo {
   /** Optional pin-drop coordinates (Leaflet) overriding district centroid for solar fetch */
   pinLat?: number
   pinLon?: number
+  /** Indicative PPA / tariff-lock horizon (years) for disclosure copy — verify locally */
+  ppaLockYearsTypical?: number
+  /** Plan0 Tab 5 — nodal agency public portal (verify before sharing) */
+  nodalPortalUrl?: string
+  /** Short hint when a live helpline is not hardcoded */
+  nodalPhoneHint?: string
 }
 
 export interface TechnologySpec {
@@ -94,6 +100,8 @@ export interface TechnologySpec {
   costPerWpRs: number
   bifacialGainPct: number
   verdict: 'best' | 'good' | 'acceptable'
+  /** Plan0 §3 module warranty (years) */
+  warrantyYears: number
 }
 
 export interface CostLineItem {

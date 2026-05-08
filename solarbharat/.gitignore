@@ -43,3 +43,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# i18n machine-translate cache (npm run i18n:translate)
+scripts/.i18n-translate-cache.json

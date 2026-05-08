@@ -4,6 +4,24 @@ import html2canvas from 'html2canvas'
 const FOOTER_TEXT =
   'SolarBharat.in — Estimates only. Not financial advice. Verify tariff/subsidy with DISCOM & nodal agency.'
 
+const WATERMARK = 'SolarBharat.in — Estimates only'
+
+function applyWatermarkToCanvas(canvas: HTMLCanvasElement) {
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+  const { width, height } = canvas
+  ctx.save()
+  ctx.globalAlpha = 0.09
+  ctx.fillStyle = '#ffffff'
+  ctx.font = `${Math.max(18, Math.round(width / 22))}px system-ui, sans-serif`
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.translate(width / 2, height / 2)
+  ctx.rotate(-Math.PI / 5)
+  ctx.fillText(WATERMARK, 0, 0)
+  ctx.restore()
+}
+
 function appendCanvasToPdf(
   pdf: jsPDF,
   canvas: HTMLCanvasElement,
@@ -50,6 +68,7 @@ export async function exportReportElementToPdf(root: HTMLElement, fileBaseName: 
     windowWidth: root.scrollWidth,
     windowHeight: root.scrollHeight,
   })
+  applyWatermarkToCanvas(canvas)
 
   const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true })
   appendCanvasToPdf(pdf, canvas, {})
@@ -79,6 +98,7 @@ export async function exportTabSequenceToPdf(
       windowWidth: captureEl.scrollWidth,
       windowHeight: captureEl.scrollHeight,
     })
+    applyWatermarkToCanvas(canvas)
     appendCanvasToPdf(pdf, canvas, { addLeadingBlankPage: i > 0 })
   }
 
