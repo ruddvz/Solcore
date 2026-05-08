@@ -60,6 +60,19 @@ export function PreviewPage() {
         </ul>
       </div>
 
+      <div className="rounded-xl border border-white/10 bg-sb-bg/40 p-4">
+        <h2 className="text-sm font-extrabold uppercase tracking-wide text-sb-orange">Phase 2 ops</h2>
+        <p className="mt-2 text-sm text-white/60">
+          Forum moderation UI (requires <code className="text-white/80">MODERATION_SECRET</code> + service role).
+        </p>
+        <Link
+          href="/preview/moderation"
+          className="mt-3 inline-flex rounded-xl border border-sb-orange/40 bg-sb-orange/10 px-4 py-2 text-sm font-bold text-sb-orange hover:border-sb-orange/70"
+        >
+          Open moderation tools →
+        </Link>
+      </div>
+
       <div>
         <h2 className="text-sm font-extrabold uppercase tracking-wide text-white/45">{t('preview.routesTitle')}</h2>
         <ul className="mt-3 space-y-2">

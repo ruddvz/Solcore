@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/send-alert-confirmations",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/quota-ingest",
+      "schedule": "15 6 * * *"
+    }
+  ]
+}

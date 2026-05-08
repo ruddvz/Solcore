@@ -1,6 +1,6 @@
 # SolarBharat — Manual tasks checklist
 
-For **what the codebase already delivers** vs the product plan, see [`IMPLEMENTATION_STATUS.md`](./IMPLEMENTATION_STATUS.md).
+For **what the codebase already delivers** vs the product plan, see [`IMPLEMENTATION_STATUS.md`](./IMPLEMENTATION_STATUS.md). For **Phase 2 cron, Resend, moderation secrets**, see [`OPS_PHASE2.md`](./OPS_PHASE2.md).
 
 Use this list for anything that **cannot** be automated in code or that requires **your** credentials, legal judgment, or ongoing operational discipline. Tick items as you complete them.
 

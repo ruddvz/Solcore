@@ -123,7 +123,7 @@
   },
   "alerts": {
     "title": "Email alerts",
-    "subtitle": "Subscribe for quota reopenings, tariff digests, or report reminders — requires Supabase + future email worker (plan §6.10).",
+    "subtitle": "Subscribe for quota reopenings, tariff digests, or report reminders. Confirmation email sends when Resend + cron are configured (see docs/IMPLEMENTATION_STATUS.md).",
     "email": "Email",
     "emailRequired": "Email is required.",
     "type": "Alert type",
@@ -133,10 +133,13 @@
     "state": "State",
     "district": "District",
     "optional": "Any state",
-    "success": "Saved — double opt-in email coming soon.",
+    "success": "Saved — check your email to confirm (link expires when you replace the worker).",
     "sending": "Saving…",
     "submit": "Subscribe",
-    "disclaimer": "We will only use your email for SolarBharat alerts; no resale. Confirmation flow not wired yet."
+    "disclaimer": "We will only use your email for SolarBharat alerts; no resale. Confirmation is sent when RESEND_API_KEY and cron are configured.",
+    "confirmOk": "Your email is confirmed — you are subscribed to alerts.",
+    "confirmInvalid": "This confirmation link is invalid or already used.",
+    "confirmError": "Could not confirm — server configuration error."
   },
   "home": {
     "heroTitle": "Honest, district-specific solar feasibility — in seconds.",
