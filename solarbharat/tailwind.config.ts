@@ -22,8 +22,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['Segoe UI', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Roboto', 'sans-serif'],
-        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+        sans: ['var(--font-dm)', 'Segoe UI', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Roboto', 'sans-serif'],
+        heading: ['var(--font-syne)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-jb-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
     },
   },

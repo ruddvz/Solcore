@@ -25,7 +25,7 @@ export function HomePage() {
   return (
     <div className="space-y-14">
       <section className="rounded-2xl border border-white/10 bg-gradient-to-br from-sb-surface to-sb-bg p-8 md:p-12">
-        <h1 className="max-w-3xl text-balance font-black tracking-tight text-white [font-size:clamp(28px,5vw,50px)]">
+        <h1 className="font-heading max-w-3xl text-balance font-extrabold tracking-tight text-white [font-size:clamp(28px,5vw,50px)]">
           {t('home.heroTitle')}
         </h1>
         <p className="mt-4 max-w-2xl text-pretty text-base text-white/60">{t('home.heroSubtitle')}</p>
@@ -53,7 +53,7 @@ export function HomePage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-extrabold text-white">{t('home.featuresTitle')}</h2>
+        <h2 className="font-heading text-[22px] font-bold text-white">{t('home.featuresTitle')}</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((f) => (
             <div
@@ -69,7 +69,7 @@ export function HomePage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-extrabold text-white">{t('home.coverageTitle')}</h2>
+        <h2 className="font-heading text-[22px] font-bold text-white">{t('home.coverageTitle')}</h2>
         <p className="mt-2 text-sm text-white/55">
           {t('home.coverageAll', { states: stateCount, districts: districtCount })}
         </p>

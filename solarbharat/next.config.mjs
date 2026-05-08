@@ -10,8 +10,26 @@ const withPWA = withPWAInit({
   disable: process.env.NODE_ENV === 'development' || isStaticExport,
   register: true,
   skipWaiting: true,
+  extendDefaultRuntimeCaching: true,
   fallbacks: {
     document: '/offline',
+  },
+  workboxOptions: {
+    runtimeCaching: [
+      {
+        urlPattern: /^https:\/\/power\.larc\.nasa\.gov\/api\//,
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'nasa-power',
+          expiration: { maxAgeSeconds: 86400 },
+        },
+      },
+      {
+        urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
+        handler: 'StaleWhileRevalidate',
+        options: { cacheName: 'google-fonts' },
+      },
+    ],
   },
 })
 

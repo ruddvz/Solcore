@@ -11,15 +11,15 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
+  ReferenceLine,
 } from 'recharts'
 import { useCalculatorStore } from '@/store/calculatorStore'
 import { getTechnology } from '@/data/technologies'
-import { formatCr, formatInr, formatUnitsLakh } from '@/lib/format'
+import { formatCr, formatInr, formatRsLakh, formatUnitsLakh } from '@/lib/format'
 import { Card } from '@/components/ui/Card'
 import { Pill } from '@/components/ui/Pill'
 import { TabBar } from '@/components/ui/TabBar'
 import { KV } from '@/components/ui/KV'
-import { LineChartSvg } from '@/components/charts/LineChartSvg'
 import { DonutSvg } from '@/components/charts/DonutSvg'
 import { FundingStack } from '@/components/ui/FundingStack'
 import {
@@ -29,26 +29,148 @@ import {
   PANEL_MANUFACTURERS,
   ROBOT_SYSTEMS,
 } from '@/data/suppliers'
-import type { RiskLevel, StateInfo } from '@/types'
+import type { RiskLevel, StateInfo, YearlyRow } from '@/types'
 import { exportReportElementToPdf, exportTabSequenceToPdf } from '@/lib/exportPdf'
 
 type TabId = 'overview' | 'costs' | 'model' | 'risks' | 'action' | 'suppliers'
 
-const RISK_ROWS: { risk: string; impact: string; mitigation: string; level: RiskLevel }[] = [
-  { risk: 'r1', impact: 'r1i', mitigation: 'r1m', level: 'HIGH' },
-  { risk: 'r2', impact: 'r2i', mitigation: 'r2m', level: 'MED' },
-  { risk: 'r3', impact: 'r3i', mitigation: 'r3m', level: 'MED' },
-  { risk: 'r4', impact: 'r4i', mitigation: 'r4m', level: 'MED' },
-  { risk: 'r5', impact: 'r5i', mitigation: 'r5m', level: 'HIGH' },
-  { risk: 'r6', impact: 'r6i', mitigation: 'r6m', level: 'MED' },
-  { risk: 'r7', impact: 'r7i', mitigation: 'r7m', level: 'LOW' },
-  { risk: 'r8', impact: 'r8i', mitigation: 'r8m', level: 'LOW' },
+const RISK_ROWS: { risk: string; impact: string; mitigation: string }[] = [
+  { risk: 'r1', impact: 'r1i', mitigation: 'r1m' },
+  { risk: 'r2', impact: 'r2i', mitigation: 'r2m' },
+  { risk: 'r3', impact: 'r3i', mitigation: 'r3m' },
+  { risk: 'r4', impact: 'r4i', mitigation: 'r4m' },
+  { risk: 'r5', impact: 'r5i', mitigation: 'r5m' },
+  { risk: 'r6', impact: 'r6i', mitigation: 'r6m' },
+  { risk: 'r7', impact: 'r7i', mitigation: 'r7m' },
+  { risk: 'r8', impact: 'r8i', mitigation: 'r8m' },
 ]
+
+function planRiskLevel(stateId: string, index: number): RiskLevel {
+  if (index === 0 || index === 1) return 'HIGH'
+  if (index === 2) {
+    return [
+      'rajasthan',
+      'madhya-pradesh',
+      'uttar-pradesh',
+      'bihar',
+      'chhattisgarh',
+      'jharkhand',
+    ].includes(stateId)
+      ? 'HIGH'
+      : 'MED'
+  }
+  if (index === 4) return stateId === 'rajasthan' ? 'HIGH' : 'MED'
+  if (index === 5) return stateId === 'maharashtra' || stateId === 'karnataka' ? 'HIGH' : 'MED'
+  if (index === 3 || index === 6 || index === 7) return 'MED'
+  return 'MED'
+}
 
 function levelStyle(level: RiskLevel) {
   if (level === 'HIGH') return 'bg-sb-red/20 text-sb-red'
   if (level === 'MED') return 'bg-sb-orange/15 text-sb-orange'
   return 'bg-white/10 text-white/55'
+}
+
+function StarRating({ value, label }: { value: number; label: string }) {
+  const full = Math.min(5, Math.max(0, Math.round(value)))
+  return (
+    <span className="inline-flex items-center gap-1.5" aria-label={label}>
+      <span className="text-sb-gold">
+        {'★'.repeat(full)}
+        <span className="text-white/20">{'★'.repeat(5 - full)}</span>
+      </span>
+      <span className="font-mono text-[11px] text-white/50">{value.toFixed(1)}</span>
+    </span>
+  )
+}
+
+type ModelSortKey = 'year' | 'unitsLakh' | 'grossRevenueRs' | 'omRs' | 'emiRs' | 'netProfitRs' | 'cumulativeRs'
+
+function ModelYearTable({
+  yearly,
+  footerLabel,
+  footerValue,
+}: {
+  yearly: YearlyRow[]
+  footerLabel: string
+  footerValue: string
+}) {
+  const { t } = useTranslation()
+  const [sortKey, setSortKey] = useState<ModelSortKey>('year')
+  const [sortDesc, setSortDesc] = useState(false)
+
+  const onHeader = (k: ModelSortKey) => {
+    if (k === sortKey) setSortDesc((d) => !d)
+    else {
+      setSortKey(k)
+      setSortDesc(false)
+    }
+  }
+
+  const sorted = useMemo(() => {
+    const arr = [...yearly]
+    const mul = sortDesc ? -1 : 1
+    arr.sort((a, b) => {
+      const av = a[sortKey]
+      const bv = b[sortKey]
+      if (av === bv) return 0
+      return av < bv ? -1 * mul : 1 * mul
+    })
+    return arr
+  }, [yearly, sortKey, sortDesc])
+
+  const th = (k: ModelSortKey, label: string) => (
+    <th
+      scope="col"
+      className="cursor-pointer py-2 pr-2 select-none hover:text-white/90"
+      onClick={() => onHeader(k)}
+    >
+      {label}
+      {sortKey === k ? (sortDesc ? ' ▼' : ' ▲') : ''}
+    </th>
+  )
+
+  return (
+    <table className="w-full text-left text-[12px]">
+      <thead>
+        <tr className="border-b border-white/10 text-[10px] uppercase text-white/40">
+          {th('year', t('report.model.colYear'))}
+          {th('unitsLakh', t('report.model.colUnits'))}
+          {th('grossRevenueRs', t('report.model.colGross'))}
+          {th('omRs', t('report.model.colOm'))}
+          {th('emiRs', t('report.model.colEmi'))}
+          {th('netProfitRs', t('report.model.colNet'))}
+          {th('cumulativeRs', t('report.model.colCum'))}
+        </tr>
+      </thead>
+      <tbody>
+        {sorted.map((r) => (
+          <tr
+            key={r.year}
+            className={`border-b border-white/5 ${
+              r.year === 11 ? 'bg-sb-accent font-semibold text-white' : ''
+            }`}
+          >
+            <td className="py-1.5 pr-2 font-mono font-bold">{r.year}</td>
+            <td className="py-1.5 pr-2 font-mono">{r.unitsLakh}</td>
+            <td className="py-1.5 pr-2 font-mono">{formatInr(r.grossRevenueRs)}</td>
+            <td className="py-1.5 pr-2 font-mono">{formatInr(r.omRs)}</td>
+            <td className="py-1.5 pr-2 font-mono">{formatInr(r.emiRs)}</td>
+            <td className="py-1.5 pr-2 font-mono text-sb-green">{formatInr(r.netProfitRs)}</td>
+            <td className="py-1.5 font-mono text-white/80">{formatInr(r.cumulativeRs)}</td>
+          </tr>
+        ))}
+        <tr className="bg-white/5 font-extrabold">
+          <td className="py-2 pr-2" colSpan={5}>
+            {footerLabel}
+          </td>
+          <td className="py-2 font-mono text-sb-gold" colSpan={2}>
+            ₹{footerValue}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  )
 }
 
 export function ReportPage() {
@@ -97,11 +219,15 @@ export function ReportPage() {
 
   const donutSegments = useMemo(() => {
     if (!fin) return []
-    const colors = ['#fbbf24', '#22c55e', '#0ea5e9', '#8b5cf6', '#f97316', '#6b7280']
-    return fin.costLines.map((c, i) => ({
-      value: c.amountRs,
-      color: colors[i % colors.length],
+    return fin.donutSegments.map((s) => ({
+      value: s.amountRs,
+      color: s.color,
     }))
+  }, [fin])
+
+  const chart40Data = useMemo(() => {
+    if (!fin) return []
+    return fin.cumulative40.map((d) => ({ year: d.year, cumulativeCr: d.cumulativeRs / 1e7 }))
   }, [fin])
 
   if (!state || !fin) {
@@ -116,8 +242,6 @@ export function ReportPage() {
       </Card>
     )
   }
-
-  const line40 = fin.cumulative40.map((d) => ({ x: d.year, y: d.cumulativeRs }))
 
   const pdfBaseName = `SolarBharat-${state.name}-${district?.name ?? 'district'}-${tech.label}`
 
@@ -179,20 +303,21 @@ export function ReportPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-7">
         <Pill value={formatUnitsLakh(fin.year1UnitsLakh)} label={t('report.pills.y1')} />
         <Pill value={formatCr(fin.totalCapexRs)} label={t('report.pills.capex')} />
         <Pill value={formatCr(fin.totalCashRequiredRs)} label={t('report.pills.cash')} />
         <Pill value={formatCr(fin.subsidyAmountRs)} label={t('report.pills.subsidy')} />
         <Pill value={formatCr(fin.loanAmountRs)} label={t('report.pills.loan')} />
         <Pill value={formatInr(fin.monthlyEmiRs)} label={t('report.pills.emi')} />
+        <Pill value={`${fin.returnMultiple25}×`} label={t('report.pills.multiple')} />
       </div>
 
       <TabBar tabs={[...tabs]} active={tab} onChange={(id) => setTab(id as TabId)} />
 
       <div ref={pdfCaptureRef} className="space-y-6">
       {tab === 'overview' && (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2" data-report-section="overview">
           <Card>
             <div className="text-xs font-extrabold uppercase text-white/45">
               {t('report.overview.system')}
@@ -202,6 +327,8 @@ export function ReportPage() {
               <KV label={t('report.overview.mwDc')} value={`${fin.systemMwDc} MW`} />
               <KV label={t('report.overview.kwp')} value={formatInr(fin.systemKwp)} />
               <KV label={t('report.overview.panels')} value={formatInr(fin.panelCountApprox)} />
+              <KV label={t('report.overview.inverters')} value={formatInr(fin.inverterCountApprox)} />
+              <KV label={t('report.overview.techBadge')} value={t(`calc.verdict.${tech.verdict}`)} />
               <KV label={t('report.overview.dcac')} value={fin.dcAcRatio.toFixed(2)} />
             </div>
           </Card>
@@ -229,9 +356,35 @@ export function ReportPage() {
             <div className="text-xs font-extrabold uppercase text-white/45">
               {t('report.overview.chart40')}
             </div>
-            <div className="mt-4">
-              <LineChartSvg data={line40} />
+            <div className="mt-4 h-72 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chart40Data}>
+                  <CartesianGrid stroke="rgba(255,255,255,0.08)" />
+                  <XAxis dataKey="year" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                  <YAxis
+                    tick={{ fill: '#94a3b8', fontSize: 11 }}
+                    tickFormatter={(v) => `₹${v}`}
+                    label={{ value: 'Cr', angle: -90, position: 'insideLeft', fill: '#64748b', fontSize: 10 }}
+                  />
+                  <Tooltip
+                    contentStyle={{ background: '#0d1a2e', border: '1px solid rgba(255,255,255,0.1)' }}
+                    labelStyle={{ color: '#fff' }}
+                    formatter={(v) => {
+                      const n = typeof v === 'number' ? v : Number(v)
+                      return [`₹${(n * 1e7).toLocaleString('en-IN')}`, t('report.overview.chart40Cum')]
+                    }}
+                  />
+                  <Line type="monotone" dataKey="cumulativeCr" stroke="#fbbf24" strokeWidth={2} dot={false} />
+                  <ReferenceLine
+                    x={11}
+                    stroke="rgba(255,255,255,0.35)"
+                    strokeDasharray="4 4"
+                    label={{ value: 'Yr 11', fill: '#94a3b8', fontSize: 10 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
+            <p className="mt-2 text-xs text-white/45">{t('report.overview.chart40Axis')}</p>
           </Card>
 
           <Card>
@@ -249,8 +402,8 @@ export function ReportPage() {
               value={`₹${formatInr(fin.postLoanMonthlyIncomeRs)} / mo`}
             />
             <KV
-              label={t('report.overview.mMultiple')}
-              value={`${fin.returnMultiple25}×`}
+              label={t('report.overview.mNet25')}
+              value={formatCr(fin.netProfit25YrsRs)}
               variant="warn"
             />
           </Card>
@@ -260,17 +413,28 @@ export function ReportPage() {
               {t('report.overview.warnings')}
             </div>
             <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-white/70">
-              <li>{t('report.overview.wCash', { amount: `₹${formatInr(fin.totalCashRequiredRs)}` })}</li>
-              <li>{t('report.overview.wPpa')}</li>
+              <li>
+                {t('report.overview.wCash', {
+                  amountL: formatRsLakh(fin.totalCashRequiredRs),
+                  amount: `₹${formatInr(fin.totalCashRequiredRs)}`,
+                })}
+              </li>
+              <li>
+                {t('report.overview.wPpaLock', { years: state.ppaLockYearsTypical ?? 25 })}
+              </li>
               <li>{t('report.overview.wTx')}</li>
-              <li>{t('report.overview.wDust')}</li>
+              <li>
+                {state.id === 'rajasthan'
+                  ? t('report.overview.wDustRj')
+                  : t('report.overview.wDust')}
+              </li>
             </ul>
           </Card>
         </div>
       )}
 
       {tab === 'costs' && (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2" data-report-section="costs">
           <Card>
             <div className="text-xs font-extrabold uppercase text-white/45">
               {t('report.costs.donut')}
@@ -278,6 +442,17 @@ export function ReportPage() {
             <div className="mt-4">
               <DonutSvg segments={donutSegments} />
             </div>
+            {fin.donutSegments.length > 0 ? (
+              <ul className="mt-4 grid gap-2 text-[11px] text-white/65 sm:grid-cols-2">
+                {fin.donutSegments.map((s) => (
+                  <li key={s.key} className="flex items-center gap-2">
+                    <span className="h-2 w-2 shrink-0 rounded-sm" style={{ backgroundColor: s.color }} />
+                    <span className="font-bold text-white/80">{t(s.labelKey)}</span>
+                    <span className="ml-auto font-mono text-white/55">₹{formatInr(s.amountRs)}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </Card>
           <Card>
             <div className="text-xs font-extrabold uppercase text-white/45">
@@ -286,9 +461,13 @@ export function ReportPage() {
             <div className="mt-4">
               <FundingStack
                 parts={[
-                  { label: t('report.costs.govt'), amountRs: fin.subsidyAmountRs, color: '#22c55e' },
-                  { label: t('report.costs.loan'), amountRs: fin.loanAmountRs, color: '#0ea5e9' },
-                  { label: t('report.costs.you'), amountRs: fin.cashEquityRs, color: '#f97316' },
+                  {
+                    label: t('report.costs.govtWithPct', { pct: state.subsidyPct }),
+                    amountRs: fin.subsidyAmountRs,
+                    color: '#22c55e',
+                  },
+                  { label: t('report.costs.loanAfterSubsidy'), amountRs: fin.loanAmountRs, color: '#0ea5e9' },
+                  { label: t('report.costs.youEquity'), amountRs: fin.cashEquityRs, color: '#f97316' },
                 ]}
               />
               <div className="mt-4 space-y-1 text-xs text-white/55">
@@ -314,8 +493,8 @@ export function ReportPage() {
               <table className="w-full text-left text-[12.5px]">
                 <thead>
                   <tr className="border-b border-white/10 text-[11px] uppercase text-white/40">
-                    <th className="py-2 pr-4">Item</th>
-                    <th className="py-2 text-right">Amount (₹)</th>
+                    <th className="py-2 pr-4">{t('report.costs.colItem')}</th>
+                    <th className="py-2 text-right">{t('report.costs.colAmount')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -365,7 +544,7 @@ export function ReportPage() {
       )}
 
       {tab === 'model' && (
-        <div className="space-y-4">
+        <div className="space-y-4" data-report-section="model">
           <Card>
             <div className="text-xs font-extrabold uppercase text-white/45">
               {t('report.model.chart')}
@@ -381,10 +560,16 @@ export function ReportPage() {
                     labelStyle={{ color: '#fff' }}
                     formatter={(v) => {
                       const n = typeof v === 'number' ? v : Number(v)
-                      return [`₹${(n * 1e7).toLocaleString('en-IN')}`, 'Cumulative']
+                      return [`₹${(n * 1e7).toLocaleString('en-IN')}`, t('report.overview.chart40Cum')]
                     }}
                   />
-                  <Line type="monotone" dataKey="cumulativeCr" stroke="#fbbf24" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="cumulativeCr" stroke="#22c55e" strokeWidth={2} dot={false} />
+                  <ReferenceLine
+                    x={11}
+                    stroke="rgba(255,255,255,0.35)"
+                    strokeDasharray="4 4"
+                    label={{ value: 'Yr 11', fill: '#94a3b8', fontSize: 10 }}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -396,48 +581,18 @@ export function ReportPage() {
               {t('report.model.table')}
             </div>
             <div className="mt-3 overflow-x-auto">
-              <table className="w-full text-left text-[12px]">
-                <thead>
-                  <tr className="border-b border-white/10 text-[10px] uppercase text-white/40">
-                    <th className="py-2 pr-2">{t('report.model.colYear')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colUnits')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colGross')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colCost')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colNet')}</th>
-                    <th className="py-2">{t('report.model.colCum')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {fin.yearly.map((r) => (
-                    <tr
-                      key={r.year}
-                      className={`border-b border-white/5 ${r.year === 11 ? 'bg-sb-gold/10' : ''}`}
-                    >
-                      <td className="py-1.5 pr-2 font-mono font-bold">{r.year}</td>
-                      <td className="py-1.5 pr-2 font-mono">{r.unitsLakh}</td>
-                      <td className="py-1.5 pr-2 font-mono">{formatInr(r.grossRevenueRs)}</td>
-                      <td className="py-1.5 pr-2 font-mono">{formatInr(r.omPlusEmiRs)}</td>
-                      <td className="py-1.5 pr-2 font-mono text-sb-green">{formatInr(r.netProfitRs)}</td>
-                      <td className="py-1.5 font-mono text-white/80">{formatInr(r.cumulativeRs)}</td>
-                    </tr>
-                  ))}
-                  <tr className="bg-white/5 font-extrabold">
-                    <td className="py-2 pr-2" colSpan={4}>
-                      {t('report.model.footer')}
-                    </td>
-                    <td className="py-2 font-mono text-sb-gold" colSpan={2}>
-                      ₹{formatInr(fin.netProfit25YrsRs)}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <ModelYearTable
+                yearly={fin.yearly}
+                footerLabel={t('report.model.footer')}
+                footerValue={formatInr(fin.netProfit25YrsRs)}
+              />
             </div>
           </Card>
         </div>
       )}
 
       {tab === 'risks' && (
-        <Card>
+        <Card data-report-section="risks">
           <div className="text-xs font-extrabold uppercase text-white/45">
             {t('report.risks.title')}
           </div>
@@ -447,21 +602,24 @@ export function ReportPage() {
             <div className="text-[10px] font-extrabold uppercase text-white/35">Mitigation</div>
           </div>
           <div className="mt-2 space-y-3">
-            {RISK_ROWS.map((row) => (
+            {RISK_ROWS.map((row, idx) => {
+              const level = planRiskLevel(state.id, idx)
+              return (
               <div
                 key={row.risk}
                 className="grid gap-2 rounded-lg border border-white/10 bg-sb-bg/40 p-3 md:grid-cols-3"
               >
                 <div>
-                  <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-extrabold ${levelStyle(row.level)}`}>
-                    {row.level}
+                  <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-extrabold ${levelStyle(level)}`}>
+                    {level}
                   </span>
                   <div className="mt-2 text-sm font-bold text-white">{t(`report.risks.${row.risk}`)}</div>
                 </div>
                 <div className="text-sm text-white/65">{t(`report.risks.${row.impact}`)}</div>
                 <div className="text-sm text-white/65">{t(`report.risks.${row.mitigation}`)}</div>
               </div>
-            ))}
+              )
+            })}
           </div>
         </Card>
       )}
@@ -489,7 +647,7 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
   ] as const
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-report-section="action">
       <Card>
         <div className="text-xs font-extrabold uppercase text-white/45">{t('report.action.title')}</div>
         <div className="mt-4 space-y-3">
@@ -520,9 +678,26 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
         </div>
         <div className="mt-3 space-y-2 text-sm text-white/75">
           <div>
-            <span className="font-bold text-white">{t('report.action.nodalLabel')}:</span> {state.nodalAgency}{' '}
-            (verify current helpline on official portal)
+            <span className="font-bold text-white">{t('report.action.nodalLabel')}:</span> {state.nodalAgency}
           </div>
+          {state.nodalPortalUrl ? (
+            <div>
+              <span className="font-bold text-white">{t('report.action.portalLabel')}:</span>{' '}
+              <a
+                href={state.nodalPortalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sb-blue underline-offset-2 hover:underline"
+              >
+                {state.nodalPortalUrl.replace(/^https?:\/\//i, '')}
+              </a>
+            </div>
+          ) : null}
+          {state.nodalPhoneHint ? (
+            <p className="text-xs text-white/50">{state.nodalPhoneHint}</p>
+          ) : (
+            <p className="text-xs text-white/45">{t('report.action.phoneVerify')}</p>
+          )}
           <div>
             <span className="font-bold text-white">{t('report.action.discomLabel')}:</span> {state.discom}
           </div>
@@ -603,7 +778,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
   const epcs = getEpcListForState(stateId)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-report-section="suppliers">
       <Card>
         <div className="text-xs font-extrabold uppercase text-white/45">{t('report.suppliers.epc')}</div>
         {epcs.length === 0 ? (
@@ -613,13 +788,19 @@ function SuppliersTab({ stateId }: { stateId: string }) {
           {epcs.map((e) => (
             <li
               key={e.name}
-              className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-white/10 bg-sb-bg/50 px-3 py-2"
+              className="flex flex-col gap-2 rounded-lg border border-white/10 bg-sb-bg/50 px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
             >
-              <span className="font-bold text-white">{e.name}</span>
-              <span className="rounded bg-sb-green/20 px-2 py-0.5 text-[10px] font-extrabold text-sb-green">
-                {t('report.suppliers.verified')}
-              </span>
-              <a className="text-xs text-sb-blue hover:underline" href={e.url} target="_blank" rel="noreferrer">
+              <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+                <span className="font-bold text-white">{e.name}</span>
+                <StarRating
+                  value={e.rating}
+                  label={t('report.suppliers.ratingAria', { name: e.name })}
+                />
+                <span className="w-fit rounded bg-sb-green/20 px-2 py-0.5 text-[10px] font-extrabold text-sb-green">
+                  {t('report.suppliers.verified')}
+                </span>
+              </div>
+              <a className="shrink-0 text-xs text-sb-blue hover:underline" href={e.url} target="_blank" rel="noreferrer">
                 {e.url.replace('https://', '')}
               </a>
             </li>
@@ -632,14 +813,19 @@ function SuppliersTab({ stateId }: { stateId: string }) {
         <p className="mt-1 text-xs text-white/45">{t('report.suppliers.almm')}</p>
         <ul className="mt-3 space-y-2 text-sm">
           {PANEL_MANUFACTURERS.map((p) => (
-            <li key={p.name} className="flex flex-wrap justify-between gap-2 border-b border-white/5 py-2">
+            <li key={p.name} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 py-2">
               <span className="font-bold text-white">{p.name}</span>
               <span className="text-white/55">
                 {t(p.locationKey)} · {t(p.techKey)}
               </span>
-              <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold text-white/60">
-                {p.tag}
-              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded bg-sb-gold/20 px-2 py-0.5 text-[10px] font-extrabold uppercase text-sb-gold">
+                  ALMM
+                </span>
+                <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold text-white/60">
+                  {p.tag}
+                </span>
+              </div>
             </li>
           ))}
         </ul>
