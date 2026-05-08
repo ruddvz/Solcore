@@ -16,7 +16,7 @@ export function TabBar({
             key={t.id}
             type="button"
             onClick={() => onChange(t.id)}
-            className={`rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-wide transition ${
+            className={`rounded-xl px-3 py-2 text-[11px] font-bold uppercase tracking-[0.08em] transition ${
               is
                 ? 'bg-sb-gold text-sb-bg'
                 : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'

@@ -24,11 +24,11 @@ export function HomePage() {
   const { t } = useTranslation()
   return (
     <div className="space-y-14">
-      <section className="rounded-2xl border border-white/10 bg-gradient-to-br from-sb-surface to-sb-bg p-8 md:p-12">
-        <h1 className="font-heading max-w-3xl text-balance font-extrabold tracking-tight text-white [font-size:clamp(28px,5vw,50px)]">
+      <section className="rounded-[20px] border border-white/10 bg-gradient-to-br from-sb-surface to-sb-bg p-8 md:p-12">
+        <h1 className="font-heading max-w-3xl text-balance font-extrabold tracking-tight text-white [font-size:clamp(28px,5vw,50px)] leading-[1.1]">
           {t('home.heroTitle')}
         </h1>
-        <p className="mt-4 max-w-2xl text-pretty text-base text-white/60">{t('home.heroSubtitle')}</p>
+        <p className="sb-body mt-4 max-w-2xl text-pretty text-white/60">{t('home.heroSubtitle')}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             href="/calculator"
@@ -61,8 +61,8 @@ export function HomePage() {
               className="rounded-xl border border-white/10 bg-sb-surface/60 p-4 transition hover:border-sb-gold/30"
             >
               <div className="text-2xl">{f.icon}</div>
-              <div className="mt-2 text-sm font-extrabold text-white">{t(`home.${f.t}`)}</div>
-              <p className="mt-1 text-sm text-white/55">{t(`home.${f.d}`)}</p>
+              <div className="mt-2 font-heading text-[15px] font-bold leading-snug text-white">{t(`home.${f.t}`)}</div>
+              <p className="mt-1 text-[14px] leading-relaxed text-white/55">{t(`home.${f.d}`)}</p>
             </div>
           ))}
         </div>
@@ -70,7 +70,7 @@ export function HomePage() {
 
       <section>
         <h2 className="font-heading text-[22px] font-bold text-white">{t('home.coverageTitle')}</h2>
-        <p className="mt-2 text-sm text-white/55">
+        <p className="sb-body mt-2 text-white/55">
           {t('home.coverageAll', { states: stateCount, districts: districtCount })}
         </p>
         <div className="mt-4 max-h-80 overflow-y-auto rounded-xl border border-white/10 bg-sb-surface/50 p-4">

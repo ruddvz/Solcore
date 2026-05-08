@@ -6,7 +6,7 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 
 | Area | Notes |
 |------|--------|
-| §2 Design tokens | CSS variables in `solarbharat/src/app/globals.css` + Tailwind `sb.*` |
+| §2 Design tokens | CSS variables in `globals.css` + Tailwind `sb.*`; shared `.sb-overline` / `.sb-body`; 12px radii on controls, 20px hero containers |
 | §3 Financial model | `solarbharat/src/lib/finance.ts` — exported via `src/lib/calcEngine.ts` per spec path |
 | §5 `/api/solar` | NREL → NASA → heuristic; `Cache-Control` on success |
 | §6 PWA | `next-pwa`, manifest + icons + `screenshots/mobile.png`, `/offline` |

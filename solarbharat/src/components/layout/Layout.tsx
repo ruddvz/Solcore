@@ -7,13 +7,13 @@ import { withBasePath } from '@/lib/publicBasePath'
 export function LanguageSwitcher() {
   const { i18n } = useTranslation()
   return (
-    <div className="flex items-center gap-1 rounded-lg border border-white/10 bg-sb-bg p-1">
+    <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-sb-bg p-1">
       {(['en', 'hi', 'gu'] as const).map((lng) => (
         <button
           key={lng}
           type="button"
           onClick={() => void i18n.changeLanguage(lng)}
-          className={`rounded-md px-2 py-1 text-[11px] font-bold uppercase ${
+          className={`rounded-lg px-2 py-1 text-[11px] font-bold uppercase tracking-[0.08em] ${
             i18n.language.startsWith(lng)
               ? 'bg-sb-gold text-sb-bg'
               : 'text-white/55 hover:text-white'
@@ -43,7 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </span>
             </span>
           </Link>
-          <nav className="flex items-center gap-3 text-sm font-bold">
+          <nav className="flex max-w-[70vw] flex-wrap items-center justify-end gap-x-3 gap-y-2 text-sm font-bold md:max-w-none">
             <Link className="text-white/70 hover:text-white" href={withBasePath('/')}>
               {t('nav.home')}
             </Link>

@@ -131,9 +131,9 @@ function ModelYearTable({
   )
 
   return (
-    <table className="w-full text-left text-[12px]">
+    <table className="w-full text-left text-[12.5px]">
       <thead>
-        <tr className="border-b border-white/10 text-[10px] uppercase text-white/40">
+        <tr className="border-b border-white/10 sb-overline text-white/40">
           {th('year', t('report.model.colYear'))}
           {th('unitsLakh', t('report.model.colUnits'))}
           {th('grossRevenueRs', t('report.model.colGross'))}
@@ -272,7 +272,7 @@ export function ReportPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white">{t('report.title')}</h1>
+          <h1 className="font-heading text-2xl font-bold tracking-tight text-white">{t('report.title')}</h1>
           <p className="mt-1 text-sm text-white/55">
             {district?.name}, {state.name} · {tech.label}
           </p>
@@ -319,7 +319,7 @@ export function ReportPage() {
       {tab === 'overview' && (
         <div className="grid gap-4 lg:grid-cols-2" data-report-section="overview">
           <Card>
-            <div className="text-xs font-extrabold uppercase text-white/45">
+            <div className="sb-overline text-white/45">
               {t('report.overview.system')}
             </div>
             <div className="mt-3 space-y-1">
@@ -333,7 +333,7 @@ export function ReportPage() {
             </div>
           </Card>
           <Card accent="blue">
-            <div className="text-xs font-extrabold uppercase text-white/45">
+            <div className="sb-overline text-white/45">
               {t('report.overview.climate')}
             </div>
             <div className="mt-3 space-y-1">
@@ -348,16 +348,16 @@ export function ReportPage() {
               <KV label={t('report.overview.tariff')} value={`₹${fin.tariffMidRs.toFixed(2)}`} />
               <KV label={t('report.overview.subsidyPct')} value={`${state.subsidyPct}%`} />
             </div>
-            <p className="mt-3 text-xs text-white/50">{state.monsoonNote}</p>
-            <p className="mt-1 text-xs text-white/50">{state.gridQuality}</p>
+            <p className="mt-3 text-[14px] leading-relaxed text-white/50">{state.monsoonNote}</p>
+            <p className="mt-1 text-[14px] leading-relaxed text-white/50">{state.gridQuality}</p>
           </Card>
 
           <Card className="lg:col-span-2">
-            <div className="text-xs font-extrabold uppercase text-white/45">
+            <div className="sb-overline text-white/45">
               {t('report.overview.chart40')}
             </div>
-            <div className="mt-4 h-72 w-full">
-              <ResponsiveContainer width="100%" height="100%">
+            <div className="mt-4 w-full min-w-0">
+              <ResponsiveContainer width="100%" height={288} minWidth={0}>
                 <LineChart data={chart40Data}>
                   <CartesianGrid stroke="rgba(255,255,255,0.08)" />
                   <XAxis dataKey="year" tick={{ fill: '#94a3b8', fontSize: 11 }} />
@@ -384,7 +384,7 @@ export function ReportPage() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <p className="mt-2 text-xs text-white/45">{t('report.overview.chart40Axis')}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-white/45">{t('report.overview.chart40Axis')}</p>
           </Card>
 
           <Card>
@@ -409,7 +409,7 @@ export function ReportPage() {
           </Card>
 
           <Card accent="green">
-            <div className="text-xs font-extrabold uppercase text-sb-orange">
+            <div className="sb-overline text-sb-orange">
               {t('report.overview.warnings')}
             </div>
             <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-white/70">
@@ -436,7 +436,7 @@ export function ReportPage() {
       {tab === 'costs' && (
         <div className="grid gap-4 lg:grid-cols-2" data-report-section="costs">
           <Card>
-            <div className="text-xs font-extrabold uppercase text-white/45">
+            <div className="sb-overline text-white/45">
               {t('report.costs.donut')}
             </div>
             <div className="mt-4">
@@ -455,7 +455,7 @@ export function ReportPage() {
             ) : null}
           </Card>
           <Card>
-            <div className="text-xs font-extrabold uppercase text-white/45">
+            <div className="sb-overline text-white/45">
               {t('report.costs.funding')}
             </div>
             <div className="mt-4">
@@ -470,7 +470,7 @@ export function ReportPage() {
                   { label: t('report.costs.youEquity'), amountRs: fin.cashEquityRs, color: '#f97316' },
                 ]}
               />
-              <div className="mt-4 space-y-1 text-xs text-white/55">
+              <div className="mt-4 space-y-1 text-[14px] leading-snug text-white/55">
                 <div>
                   {t('report.costs.govt')}: <b className="text-white">₹{formatInr(fin.subsidyAmountRs)}</b>
                 </div>
@@ -486,13 +486,13 @@ export function ReportPage() {
           </Card>
 
           <Card className="lg:col-span-2">
-            <div className="text-xs font-extrabold uppercase text-white/45">
+            <div className="sb-overline text-white/45">
               {t('report.costs.table')}
             </div>
             <div className="mt-3 overflow-x-auto">
               <table className="w-full text-left text-[12.5px]">
                 <thead>
-                  <tr className="border-b border-white/10 text-[11px] uppercase text-white/40">
+                  <tr className="border-b border-white/10 sb-overline text-white/40">
                     <th className="py-2 pr-4">{t('report.costs.colItem')}</th>
                     <th className="py-2 text-right">{t('report.costs.colAmount')}</th>
                   </tr>
@@ -519,18 +519,18 @@ export function ReportPage() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-2 text-xs text-white/45">{t('report.costs.landFree')}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-white/45">{t('report.costs.landFree')}</p>
           </Card>
 
           <Card className="lg:col-span-2" accent="green">
-            <div className="text-xs font-extrabold uppercase text-white/45">
+            <div className="sb-overline text-white/45">
               {t('report.costs.reality')}
             </div>
             <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-white/70">
               <li>{t('report.costs.subsidyDelay')}</li>
               <li>{t('report.costs.reserve')}</li>
             </ul>
-            <div className="mt-4 text-xs font-extrabold uppercase text-white/45">
+            <div className="mt-4 sb-overline text-white/45">
               {t('report.costs.benefits')}
             </div>
             <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-white/60">
@@ -546,11 +546,11 @@ export function ReportPage() {
       {tab === 'model' && (
         <div className="space-y-4" data-report-section="model">
           <Card>
-            <div className="text-xs font-extrabold uppercase text-white/45">
+            <div className="sb-overline text-white/45">
               {t('report.model.chart')}
             </div>
-            <div className="mt-4 h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
+            <div className="mt-4 w-full min-w-0">
+              <ResponsiveContainer width="100%" height={256} minWidth={0}>
                 <LineChart data={modelChartData}>
                   <CartesianGrid stroke="rgba(255,255,255,0.08)" />
                   <XAxis dataKey="year" tick={{ fill: '#94a3b8', fontSize: 11 }} />
@@ -573,11 +573,11 @@ export function ReportPage() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <p className="mt-2 text-xs text-white/45">{t('report.model.note')}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-white/45">{t('report.model.note')}</p>
           </Card>
 
           <Card>
-            <div className="text-xs font-extrabold uppercase text-white/45">
+            <div className="sb-overline text-white/45">
               {t('report.model.table')}
             </div>
             <div className="mt-3 overflow-x-auto">
@@ -593,13 +593,13 @@ export function ReportPage() {
 
       {tab === 'risks' && (
         <Card data-report-section="risks">
-          <div className="text-xs font-extrabold uppercase text-white/45">
+          <div className="sb-overline text-white/45">
             {t('report.risks.title')}
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
-            <div className="text-[10px] font-extrabold uppercase text-white/35">Risk</div>
-            <div className="text-[10px] font-extrabold uppercase text-white/35">Impact</div>
-            <div className="text-[10px] font-extrabold uppercase text-white/35">Mitigation</div>
+            <div className="sb-overline text-white/35">Risk</div>
+            <div className="sb-overline text-white/35">Impact</div>
+            <div className="sb-overline text-white/35">Mitigation</div>
           </div>
           <div className="mt-2 space-y-3">
             {RISK_ROWS.map((row, idx) => {
@@ -607,7 +607,7 @@ export function ReportPage() {
               return (
               <div
                 key={row.risk}
-                className="grid gap-2 rounded-lg border border-white/10 bg-sb-bg/40 p-3 md:grid-cols-3"
+                className="grid gap-2 rounded-xl border border-white/10 bg-sb-bg/40 p-3 md:grid-cols-3"
               >
                 <div>
                   <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-extrabold ${levelStyle(level)}`}>
@@ -649,11 +649,11 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
   return (
     <div className="space-y-4" data-report-section="action">
       <Card>
-        <div className="text-xs font-extrabold uppercase text-white/45">{t('report.action.title')}</div>
+        <div className="sb-overline text-white/45">{t('report.action.title')}</div>
         <div className="mt-4 space-y-3">
           {phases.map((ph) => (
             <div key={ph.title} className={`rounded-xl border p-4 ${ph.tone}`}>
-              <div className="text-xs font-extrabold uppercase text-sb-gold">
+              <div className="sb-overline text-sb-gold">
                 {t(`report.action.${ph.title}`)}
               </div>
               <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-white/70">
@@ -673,7 +673,7 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
       </Card>
 
       <Card accent="blue">
-        <div className="text-xs font-extrabold uppercase text-white/45">
+        <div className="sb-overline text-white/45">
           {t('report.action.contacts')}
         </div>
         <div className="mt-3 space-y-2 text-sm text-white/75">
@@ -694,9 +694,9 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
             </div>
           ) : null}
           {state.nodalPhoneHint ? (
-            <p className="text-xs text-white/50">{state.nodalPhoneHint}</p>
+            <p className="text-[14px] leading-relaxed text-white/50">{state.nodalPhoneHint}</p>
           ) : (
-            <p className="text-xs text-white/45">{t('report.action.phoneVerify')}</p>
+            <p className="text-[14px] leading-relaxed text-white/45">{t('report.action.phoneVerify')}</p>
           )}
           <div>
             <span className="font-bold text-white">{t('report.action.discomLabel')}:</span> {state.discom}
@@ -708,7 +708,7 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
       </Card>
 
       <Card>
-        <div className="text-xs font-extrabold uppercase text-white/45">
+        <div className="sb-overline text-white/45">
           {t('report.action.docsTitle')}
         </div>
         <ul className="mt-3 space-y-2">
@@ -737,7 +737,7 @@ function AgrivoltaicsSection({ stateId }: { stateId: string }) {
     stateId === 'gujarat' ? 'cropsGj' : stateId === 'rajasthan' ? 'cropsRj' : 'cropsDef'
   return (
     <Card accent="green">
-      <div className="text-xs font-extrabold uppercase text-sb-greenMuted">
+      <div className="sb-overline text-sb-greenMuted">
         {t('report.agri.title')}
       </div>
       <div className="mt-3 grid gap-4 md:grid-cols-2">
@@ -780,7 +780,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
   return (
     <div className="space-y-4" data-report-section="suppliers">
       <Card>
-        <div className="text-xs font-extrabold uppercase text-white/45">{t('report.suppliers.epc')}</div>
+        <div className="sb-overline text-white/45">{t('report.suppliers.epc')}</div>
         {epcs.length === 0 ? (
           <p className="mt-2 text-sm text-white/55">{t('report.suppliers.epcPlaceholder')}</p>
         ) : null}
@@ -788,7 +788,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
           {epcs.map((e) => (
             <li
               key={e.name}
-              className="flex flex-col gap-2 rounded-lg border border-white/10 bg-sb-bg/50 px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
+              className="flex flex-col gap-2 rounded-xl border border-white/10 bg-sb-bg/50 px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
             >
               <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
                 <span className="font-bold text-white">{e.name}</span>
@@ -809,8 +809,8 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card>
-        <div className="text-xs font-extrabold uppercase text-white/45">{t('report.suppliers.panels')}</div>
-        <p className="mt-1 text-xs text-white/45">{t('report.suppliers.almm')}</p>
+        <div className="sb-overline text-white/45">{t('report.suppliers.panels')}</div>
+        <p className="mt-1 text-[14px] leading-relaxed text-white/45">{t('report.suppliers.almm')}</p>
         <ul className="mt-3 space-y-2 text-sm">
           {PANEL_MANUFACTURERS.map((p) => (
             <li key={p.name} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 py-2">
@@ -832,7 +832,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card>
-        <div className="text-xs font-extrabold uppercase text-white/45">{t('report.suppliers.inverters')}</div>
+        <div className="sb-overline text-white/45">{t('report.suppliers.inverters')}</div>
         <ul className="mt-3 space-y-2">
           {INVERTER_BRANDS.map((inv) => (
             <li key={inv.name} className="flex flex-wrap justify-between gap-2 text-sm">
@@ -847,10 +847,10 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card>
-        <div className="text-xs font-extrabold uppercase text-white/45">{t('report.suppliers.robots')}</div>
+        <div className="sb-overline text-white/45">{t('report.suppliers.robots')}</div>
         <ul className="mt-3 space-y-2">
           {ROBOT_SYSTEMS.map((r) => (
-            <li key={r.name} className="rounded-lg border border-white/10 p-3">
+            <li key={r.name} className="rounded-xl border border-white/10 p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="font-bold text-white">{r.name}</span>
                 {r.rec && (
@@ -859,7 +859,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
                   </span>
                 )}
               </div>
-              <div className="mt-1 text-xs text-white/55">
+              <div className="mt-1 text-[14px] leading-snug text-white/55">
                 {t(r.capitalKey)} · {t(r.runKey)}
               </div>
             </li>
@@ -868,7 +868,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card accent="green">
-        <div className="text-xs font-extrabold uppercase text-white/45">{t('report.suppliers.finance')}</div>
+        <div className="sb-overline text-white/45">{t('report.suppliers.finance')}</div>
         <ul className="mt-3 space-y-2 text-sm">
           {FINANCING_PARTNERS.map((f) => (
             <li key={f.bankKey} className="flex flex-wrap justify-between gap-2 border-b border-white/5 py-2">
