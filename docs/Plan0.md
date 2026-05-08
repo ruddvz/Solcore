@@ -542,7 +542,7 @@ export function generateMetadata({ params }): Metadata {
 
 ## 12. PDF Export
 
-`src/lib/exportPDF.ts` — client-side jsPDF + html2canvas:
+`src/lib/exportPdf.ts` — client-side jsPDF + html2canvas (Plan0 originally named `exportPDF.ts`; repo uses camelCase for tooling compatibility):
 ```typescript
 export async function exportReport(elementId: string, filename: string) {
   const canvas = await html2canvas(document.getElementById(elementId)!, {
