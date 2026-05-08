@@ -2,6 +2,7 @@ import type { GeographyDistrict, GeographyState, SolarMonthly, SolarResource, St
 import { INDIA_GEOGRAPHY } from '@/types'
 import { getStatePolicy, type StatePolicy } from '@/data/statePolicies.generated'
 import { getTypicalPpaLockYears } from '@/data/ppaLockTypical'
+import { NODAL_PORTALS } from '@/data/nodalPortals'
 import { effectivePerformanceRatio } from '@/lib/shading'
 
 const MONTH_KEYS: (keyof SolarMonthly)[] = [
@@ -28,6 +29,35 @@ export function getGeographyDistrict(
   districtId: string,
 ): GeographyDistrict | undefined {
   return getGeographyState(stateId)?.districts.find((d) => d.id === districtId)
+}
+
+/** Plan0 §14 — normalize tokens for resilient district matching (IDs, slugs, names). */
+export function normalizeLocationToken(raw: string): string {
+  return raw
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\s_]+/g, '-')
+}
+
+/**
+ * Resolve a district id from an exact id, slug-like id, or display name.
+ */
+export function resolveDistrictId(
+  stateId: string,
+  districtKey: string | null | undefined,
+): string | undefined {
+  if (!districtKey) return undefined
+  const geo = getGeographyState(stateId)
+  if (!geo) return undefined
+  const compact = districtKey.trim()
+  if (geo.districts.some((d) => d.id === compact)) return compact
+  const n = normalizeLocationToken(compact)
+  const byId = geo.districts.find((d) => normalizeLocationToken(d.id) === n)
+  if (byId) return byId.id
+  const byName = geo.districts.find((d) => normalizeLocationToken(d.name) === n)
+  return byName?.id
 }
 
 export function listGeographyStates(): GeographyState[] {
@@ -105,6 +135,7 @@ export function buildStateInfo(
 ): StateInfo {
   const districts = geo.districts.map((d) => ({ id: d.id, name: d.name }))
   const shading = opts?.shadingLossPct ?? 0
+  const nodal = NODAL_PORTALS[geo.id]
   return {
     id: geo.id,
     name: geo.name,
@@ -128,6 +159,8 @@ export function buildStateInfo(
     pinLat: opts?.pinLat,
     pinLon: opts?.pinLon,
     ppaLockYearsTypical: getTypicalPpaLockYears(geo.id),
+    nodalPortalUrl: nodal?.url,
+    nodalPhoneHint: nodal?.phoneHint,
   }
 }
 

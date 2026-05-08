@@ -2,6 +2,23 @@
 
 This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODUCT_PLAN.md`](./SOLAR_BHARAT_PRODUCT_PLAN.md). The AI-oriented spec in [`Plan0.md`](./Plan0.md) mirrors the product plan for coding assistants; keep the three docs aligned when behavior changes. Full India-scale Phase 2/3 items require backend, scrapers, and partnerships — see [`MANUAL_TASKS.md`](./MANUAL_TASKS.md) for what only humans can do.
 
+### Plan0 (AI implementation guide) — in-repo coverage
+
+| Area | Notes |
+|------|--------|
+| §2 Design tokens | CSS variables in `solarbharat/src/app/globals.css` + Tailwind `sb.*` |
+| §3 Financial model | `solarbharat/src/lib/finance.ts` — exported via `src/lib/calcEngine.ts` per spec path |
+| §5 `/api/solar` | NREL → NASA → heuristic; `Cache-Control` on success |
+| §6 PWA | `next-pwa`, manifest + icons + `screenshots/mobile.png`, `/offline` |
+| §7 Report 6 tabs | Overview (40yr gold chart, KPIs, warnings), costs, model (sortable table), risks, action (nodal portal links + checklist), suppliers (ALMM + ratings) |
+| §8 Routing | All listed routes present under `src/app/` |
+| §9 Store | `store/calculatorStore.ts` + `hooks/useStore.ts` alias |
+| §10 i18n | EN full; HI/GU extended for calculator + `tech.warranty`; `plan0.*` mirror keys in EN |
+| §11 SEO | Per-route metadata, sitemap (states/districts + optional Supabase URLs), `/locations/*` |
+| §12 PDF | jsPDF + html2canvas + diagonal watermark; `data-report-section` on tabs |
+| §13 Supabase | Migrations under `solarbharat/supabase/migrations/` |
+| §15–16 | Performance/Lighthouse: measure on deploy; manual checklist in Plan0 |
+
 ## Phase 1 MVP (plan §5 + §10.5)
 
 | Item | Status |

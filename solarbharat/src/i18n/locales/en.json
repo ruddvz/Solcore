@@ -257,6 +257,8 @@
     "costs": {
       "donut": "Cost breakdown",
       "table": "Line items",
+      "colItem": "Item",
+      "colAmount": "Amount (₹)",
       "landRow": "Land (owned)",
       "landFree": "₹0 — psychological anchor; you already own the land.",
       "donutPanels": "Panels",
@@ -346,6 +348,8 @@
       "p6b": "COD certificate; subsidy claim pack; LDC activation.",
       "contacts": "Key contacts (verify before use)",
       "nodalLabel": "Nodal agency",
+      "portalLabel": "Nodal portal",
+      "phoneVerify": "Phone numbers change often — confirm the current helpline on the official portal before calling.",
       "discomLabel": "DISCOM",
       "bank": "SBI Agri / branch — Kisan Solar Energy Loan (verify current circular).",
       "docsTitle": "Document checklist",
@@ -367,6 +371,7 @@
       "robots": "Cleaning robots",
       "finance": "Financing partners",
       "verified": "VERIFIED",
+      "ratingAria": "Illustrative rating for {{name}}",
       "epcPlaceholder": "No curated EPC sample list for this state yet — verify contractors against your nodal agency empanelment list.",
       "almm": "ALMM listed — verify on MNRE before purchase.",
       "warranty": "Warranty",
@@ -398,6 +403,7 @@
     "deg": "Degradation / yr",
     "costWp": "Module ₹/Wp (indicative)",
     "bif": "Bifacial gain",
+    "warranty": "Product warranty",
     "verdict": { "best": "Best choice", "good": "Good", "acceptable": "Acceptable" }
   },
   "costLine": {
@@ -746,5 +752,38 @@
     "terms": "Terms",
     "privacy": "Privacy",
     "contact": "Contact"
+  },
+  "plan0": {
+    "hero": {
+      "title": "India's Solar Intelligence Platform",
+      "subtitle": "Honest, district-specific solar feasibility for every Indian landowner"
+    },
+    "calc": {
+      "cta": "Calculate My Solar ROI",
+      "step1": "Select State",
+      "step2": "Your Land",
+      "step3": "Technology"
+    },
+    "report": {
+      "tab": {
+        "overview": "Overview",
+        "costs": "Costs",
+        "model": "25-Year Model",
+        "risk": "Risk Register",
+        "action": "Action Plan",
+        "suppliers": "Suppliers"
+      }
+    },
+    "kpi": {
+      "breakeven": "Breakeven (equity)",
+      "cashback": "Full upfront recovery",
+      "monthly": "Monthly (Yr 11+)",
+      "return": "Return multiple (25 yr)"
+    },
+    "warning": {
+      "cash": "Cash required upfront",
+      "ppa": "PPA tariff lock warning"
+    },
+    "disclaimer": "Estimates only. Always verify with a qualified solar engineer and current DISCOM/scheme guidelines before making financial decisions."
   }
 }

@@ -77,7 +77,7 @@ Always apply these exact tokens. Never deviate.
 
 ## 3. Financial Model — Exact Specification
 
-This is the core engine. Every number must be correct. Lives in `src/lib/calcEngine.ts`.
+This is the core engine. Every number must be correct. Entry: `src/lib/calcEngine.ts` (re-exports the implementation in `src/lib/finance.ts`).
 
 ### Inputs
 | Input | Type | Unit |

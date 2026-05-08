@@ -38,6 +38,9 @@ export function TechCard({
             <span>
               {t('tech.bif')}: <b className="text-white/80">+{tech.bifacialGainPct}%</b>
             </span>
+            <span className="col-span-2">
+              {t('tech.warranty')}: <b className="text-white/80">{tech.warrantyYears} yrs</b>
+            </span>
           </div>
         </div>
         <span

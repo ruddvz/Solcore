@@ -71,6 +71,19 @@ function levelStyle(level: RiskLevel) {
   return 'bg-white/10 text-white/55'
 }
 
+function StarRating({ value, label }: { value: number; label: string }) {
+  const full = Math.min(5, Math.max(0, Math.round(value)))
+  return (
+    <span className="inline-flex items-center gap-1.5" aria-label={label}>
+      <span className="text-sb-gold">
+        {'★'.repeat(full)}
+        <span className="text-white/20">{'★'.repeat(5 - full)}</span>
+      </span>
+      <span className="font-mono text-[11px] text-white/50">{value.toFixed(1)}</span>
+    </span>
+  )
+}
+
 type ModelSortKey = 'year' | 'unitsLakh' | 'grossRevenueRs' | 'omRs' | 'emiRs' | 'netProfitRs' | 'cumulativeRs'
 
 function ModelYearTable({
@@ -480,8 +493,8 @@ export function ReportPage() {
               <table className="w-full text-left text-[12.5px]">
                 <thead>
                   <tr className="border-b border-white/10 text-[11px] uppercase text-white/40">
-                    <th className="py-2 pr-4">Item</th>
-                    <th className="py-2 text-right">Amount (₹)</th>
+                    <th className="py-2 pr-4">{t('report.costs.colItem')}</th>
+                    <th className="py-2 text-right">{t('report.costs.colAmount')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -547,7 +560,7 @@ export function ReportPage() {
                     labelStyle={{ color: '#fff' }}
                     formatter={(v) => {
                       const n = typeof v === 'number' ? v : Number(v)
-                      return [`₹${(n * 1e7).toLocaleString('en-IN')}`, 'Cumulative']
+                      return [`₹${(n * 1e7).toLocaleString('en-IN')}`, t('report.overview.chart40Cum')]
                     }}
                   />
                   <Line type="monotone" dataKey="cumulativeCr" stroke="#22c55e" strokeWidth={2} dot={false} />
@@ -665,9 +678,26 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
         </div>
         <div className="mt-3 space-y-2 text-sm text-white/75">
           <div>
-            <span className="font-bold text-white">{t('report.action.nodalLabel')}:</span> {state.nodalAgency}{' '}
-            (verify current helpline on official portal)
+            <span className="font-bold text-white">{t('report.action.nodalLabel')}:</span> {state.nodalAgency}
           </div>
+          {state.nodalPortalUrl ? (
+            <div>
+              <span className="font-bold text-white">{t('report.action.portalLabel')}:</span>{' '}
+              <a
+                href={state.nodalPortalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sb-blue underline-offset-2 hover:underline"
+              >
+                {state.nodalPortalUrl.replace(/^https?:\/\//i, '')}
+              </a>
+            </div>
+          ) : null}
+          {state.nodalPhoneHint ? (
+            <p className="text-xs text-white/50">{state.nodalPhoneHint}</p>
+          ) : (
+            <p className="text-xs text-white/45">{t('report.action.phoneVerify')}</p>
+          )}
           <div>
             <span className="font-bold text-white">{t('report.action.discomLabel')}:</span> {state.discom}
           </div>
@@ -758,13 +788,19 @@ function SuppliersTab({ stateId }: { stateId: string }) {
           {epcs.map((e) => (
             <li
               key={e.name}
-              className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-white/10 bg-sb-bg/50 px-3 py-2"
+              className="flex flex-col gap-2 rounded-lg border border-white/10 bg-sb-bg/50 px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
             >
-              <span className="font-bold text-white">{e.name}</span>
-              <span className="rounded bg-sb-green/20 px-2 py-0.5 text-[10px] font-extrabold text-sb-green">
-                {t('report.suppliers.verified')}
-              </span>
-              <a className="text-xs text-sb-blue hover:underline" href={e.url} target="_blank" rel="noreferrer">
+              <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+                <span className="font-bold text-white">{e.name}</span>
+                <StarRating
+                  value={e.rating}
+                  label={t('report.suppliers.ratingAria', { name: e.name })}
+                />
+                <span className="w-fit rounded bg-sb-green/20 px-2 py-0.5 text-[10px] font-extrabold text-sb-green">
+                  {t('report.suppliers.verified')}
+                </span>
+              </div>
+              <a className="shrink-0 text-xs text-sb-blue hover:underline" href={e.url} target="_blank" rel="noreferrer">
                 {e.url.replace('https://', '')}
               </a>
             </li>
@@ -777,14 +813,19 @@ function SuppliersTab({ stateId }: { stateId: string }) {
         <p className="mt-1 text-xs text-white/45">{t('report.suppliers.almm')}</p>
         <ul className="mt-3 space-y-2 text-sm">
           {PANEL_MANUFACTURERS.map((p) => (
-            <li key={p.name} className="flex flex-wrap justify-between gap-2 border-b border-white/5 py-2">
+            <li key={p.name} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 py-2">
               <span className="font-bold text-white">{p.name}</span>
               <span className="text-white/55">
                 {t(p.locationKey)} · {t(p.techKey)}
               </span>
-              <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold text-white/60">
-                {p.tag}
-              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded bg-sb-gold/20 px-2 py-0.5 text-[10px] font-extrabold uppercase text-sb-gold">
+                  ALMM
+                </span>
+                <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold text-white/60">
+                  {p.tag}
+                </span>
+              </div>
             </li>
           ))}
         </ul>

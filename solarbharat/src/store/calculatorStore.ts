@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import type { LandUnit, SolarResource, StateInfo } from '@/types'
 import { listGeographyStates, resolveStateForCalculator } from '@/lib/region'
 import { fetchSolarClient } from '@/lib/clientSolar'
-import { calculateFinancials } from '@/lib/finance'
+import { calculateFinancials } from '@/lib/calcEngine'
 import type { FinancialResult } from '@/types'
 
 const GEO_STATES = listGeographyStates()
@@ -17,7 +17,7 @@ function solarCacheKey(
   return `${stateId}::${districtId}::${p}`
 }
 
-interface CalculatorState {
+export interface CalculatorState {
   stateId: string
   districtId: string
   landValue: number

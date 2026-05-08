@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useCalculatorStore } from '@/store/calculatorStore'
-import { listGeographyStates, coordsForLocation, getGeographyDistrict } from '@/lib/region'
+import { listGeographyStates, coordsForLocation, getGeographyDistrict, resolveDistrictId } from '@/lib/region'
 import { TECHNOLOGIES } from '@/data/technologies'
 import { landToAcres } from '@/lib/finance'
 import type { LandUnit } from '@/types'
@@ -58,9 +58,12 @@ export function CalculatorPage({
     if (!geo) return
     hydratedFromUrl.current = true
     setStateId(initialStateId)
-    if (initialDistrictId && geo.districts.some((d) => d.id === initialDistrictId)) {
-      setDistrictId(initialDistrictId)
-    }
+    const rid =
+      resolveDistrictId(initialStateId, initialDistrictId) ??
+      (initialDistrictId && geo.districts.some((d) => d.id === initialDistrictId)
+        ? initialDistrictId
+        : undefined)
+    if (rid) setDistrictId(rid)
   }, [initialStateId, initialDistrictId, setStateId, setDistrictId])
 
   const state = getResolvedState()

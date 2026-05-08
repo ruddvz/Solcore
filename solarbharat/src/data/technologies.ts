@@ -9,6 +9,7 @@ export const TECHNOLOGIES: TechnologySpec[] = [
     costPerWpRs: 38,
     bifacialGainPct: 12,
     verdict: 'best',
+    warrantyYears: 30,
   },
   {
     id: 'perc_bifacial',
@@ -18,6 +19,7 @@ export const TECHNOLOGIES: TechnologySpec[] = [
     costPerWpRs: 36,
     bifacialGainPct: 8,
     verdict: 'good',
+    warrantyYears: 25,
   },
   {
     id: 'perc_mono',
@@ -27,6 +29,7 @@ export const TECHNOLOGIES: TechnologySpec[] = [
     costPerWpRs: 34,
     bifacialGainPct: 0,
     verdict: 'acceptable',
+    warrantyYears: 25,
   },
 ]
 
