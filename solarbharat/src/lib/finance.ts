@@ -155,6 +155,8 @@ export function calculateFinancials(input: {
   const omPerKwpY1 = 4500
   const yearly: FinancialResult['yearly'] = []
   let cumulative = -totalCashRequiredRs
+  /** Plan0 §3 — breakeven vs yourCash (equity only); separate from full upfront recovery */
+  let profitSumRs = 0
   let breakevenYear: number | null = null
   let cashRecoveryYear: number | null = null
 
@@ -168,6 +170,7 @@ export function calculateFinancials(input: {
     const emiRs = y <= 10 ? monthlyEmiRs * 12 : 0
     const omPlusEmiRs = omRs + emiRs
     const netProfitRs = grossRevenueRs - omPlusEmiRs
+    profitSumRs += netProfitRs
     cumulative += netProfitRs
     yearly.push({
       year: y,
@@ -179,7 +182,7 @@ export function calculateFinancials(input: {
       netProfitRs,
       cumulativeRs: cumulative,
     })
-    if (breakevenYear === null && cumulative >= 0) breakevenYear = y
+    if (breakevenYear === null && profitSumRs >= cashEquityRs) breakevenYear = y
     if (cashRecoveryYear === null && cumulative >= 0) cashRecoveryYear = y
   }
 
