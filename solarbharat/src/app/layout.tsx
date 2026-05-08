@@ -1,7 +1,26 @@
 import type { Metadata, Viewport } from 'next'
+import { DM_Sans, JetBrains_Mono, Syne } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/Providers'
 import { Layout } from '@/components/layout/Layout'
+
+const fontSyne = Syne({
+  subsets: ['latin'],
+  variable: '--font-syne',
+  weight: ['700', '800'],
+})
+
+const fontDmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm',
+  weight: ['400', '500', '700'],
+})
+
+const fontJetbrains = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jb-mono',
+  weight: ['400', '700'],
+})
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '')
 const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || '').replace(/\/$/, '')
@@ -48,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${fontSyne.variable} ${fontDmSans.variable} ${fontJetbrains.variable}`}>
       <head>
         <link
           rel="manifest"

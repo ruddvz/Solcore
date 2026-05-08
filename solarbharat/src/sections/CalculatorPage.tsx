@@ -81,6 +81,9 @@ export function CalculatorPage() {
           <p className="mt-1 text-sm text-white/55">
             {t('calc.equiv', { acres: acresEquiv.toFixed(2) })}
           </p>
+          {landUnit === 'bigha' ? (
+            <p className="mt-1 text-xs text-white/40">{t('calc.bighaNote')}</p>
+          ) : null}
           {(solarLoading || solarError) && (
             <p className="mt-2 text-xs text-sb-orange">
               {solarLoading ? t('calc.solarLoading') : solarError}

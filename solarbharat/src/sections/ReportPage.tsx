@@ -11,6 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
+  ReferenceLine,
 } from 'recharts'
 import { useCalculatorStore } from '@/store/calculatorStore'
 import { getTechnology } from '@/data/technologies'
@@ -34,16 +35,35 @@ import { exportReportElementToPdf, exportTabSequenceToPdf } from '@/lib/exportPd
 
 type TabId = 'overview' | 'costs' | 'model' | 'risks' | 'action' | 'suppliers'
 
-const RISK_ROWS: { risk: string; impact: string; mitigation: string; level: RiskLevel }[] = [
-  { risk: 'r1', impact: 'r1i', mitigation: 'r1m', level: 'HIGH' },
-  { risk: 'r2', impact: 'r2i', mitigation: 'r2m', level: 'MED' },
-  { risk: 'r3', impact: 'r3i', mitigation: 'r3m', level: 'MED' },
-  { risk: 'r4', impact: 'r4i', mitigation: 'r4m', level: 'MED' },
-  { risk: 'r5', impact: 'r5i', mitigation: 'r5m', level: 'HIGH' },
-  { risk: 'r6', impact: 'r6i', mitigation: 'r6m', level: 'MED' },
-  { risk: 'r7', impact: 'r7i', mitigation: 'r7m', level: 'LOW' },
-  { risk: 'r8', impact: 'r8i', mitigation: 'r8m', level: 'LOW' },
+const RISK_ROWS: { risk: string; impact: string; mitigation: string }[] = [
+  { risk: 'r1', impact: 'r1i', mitigation: 'r1m' },
+  { risk: 'r2', impact: 'r2i', mitigation: 'r2m' },
+  { risk: 'r3', impact: 'r3i', mitigation: 'r3m' },
+  { risk: 'r4', impact: 'r4i', mitigation: 'r4m' },
+  { risk: 'r5', impact: 'r5i', mitigation: 'r5m' },
+  { risk: 'r6', impact: 'r6i', mitigation: 'r6m' },
+  { risk: 'r7', impact: 'r7i', mitigation: 'r7m' },
+  { risk: 'r8', impact: 'r8i', mitigation: 'r8m' },
 ]
+
+function planRiskLevel(stateId: string, index: number): RiskLevel {
+  if (index === 0 || index === 1) return 'HIGH'
+  if (index === 2) {
+    return [
+      'rajasthan',
+      'madhya-pradesh',
+      'uttar-pradesh',
+      'bihar',
+      'chhattisgarh',
+      'jharkhand',
+    ].includes(stateId)
+      ? 'HIGH'
+      : 'MED'
+  }
+  if (index === 4) return stateId === 'rajasthan' ? 'HIGH' : 'MED'
+  if (index === 3 || index === 5 || index === 6 || index === 7) return 'MED'
+  return 'MED'
+}
 
 function levelStyle(level: RiskLevel) {
   if (level === 'HIGH') return 'bg-sb-red/20 text-sb-red'
@@ -97,10 +117,9 @@ export function ReportPage() {
 
   const donutSegments = useMemo(() => {
     if (!fin) return []
-    const colors = ['#fbbf24', '#22c55e', '#0ea5e9', '#8b5cf6', '#f97316', '#6b7280']
-    return fin.costLines.map((c, i) => ({
-      value: c.amountRs,
-      color: colors[i % colors.length],
+    return fin.donutSegments.map((s) => ({
+      value: s.amountRs,
+      color: s.color,
     }))
   }, [fin])
 
@@ -192,7 +211,7 @@ export function ReportPage() {
 
       <div ref={pdfCaptureRef} className="space-y-6">
       {tab === 'overview' && (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2" data-report-section="overview">
           <Card>
             <div className="text-xs font-extrabold uppercase text-white/45">
               {t('report.overview.system')}
@@ -202,6 +221,8 @@ export function ReportPage() {
               <KV label={t('report.overview.mwDc')} value={`${fin.systemMwDc} MW`} />
               <KV label={t('report.overview.kwp')} value={formatInr(fin.systemKwp)} />
               <KV label={t('report.overview.panels')} value={formatInr(fin.panelCountApprox)} />
+              <KV label={t('report.overview.inverters')} value={formatInr(fin.inverterCountApprox)} />
+              <KV label={t('report.overview.techBadge')} value={t(`calc.verdict.${tech.verdict}`)} />
               <KV label={t('report.overview.dcac')} value={fin.dcAcRatio.toFixed(2)} />
             </div>
           </Card>
@@ -230,7 +251,7 @@ export function ReportPage() {
               {t('report.overview.chart40')}
             </div>
             <div className="mt-4">
-              <LineChartSvg data={line40} />
+              <LineChartSvg data={line40} referenceYear={11} />
             </div>
           </Card>
 
@@ -263,14 +284,18 @@ export function ReportPage() {
               <li>{t('report.overview.wCash', { amount: `₹${formatInr(fin.totalCashRequiredRs)}` })}</li>
               <li>{t('report.overview.wPpa')}</li>
               <li>{t('report.overview.wTx')}</li>
-              <li>{t('report.overview.wDust')}</li>
+              <li>
+                {state.id === 'rajasthan'
+                  ? t('report.overview.wDustRj')
+                  : t('report.overview.wDust')}
+              </li>
             </ul>
           </Card>
         </div>
       )}
 
       {tab === 'costs' && (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2" data-report-section="costs">
           <Card>
             <div className="text-xs font-extrabold uppercase text-white/45">
               {t('report.costs.donut')}
@@ -278,6 +303,17 @@ export function ReportPage() {
             <div className="mt-4">
               <DonutSvg segments={donutSegments} />
             </div>
+            {fin.donutSegments.length > 0 ? (
+              <ul className="mt-4 grid gap-2 text-[11px] text-white/65 sm:grid-cols-2">
+                {fin.donutSegments.map((s) => (
+                  <li key={s.key} className="flex items-center gap-2">
+                    <span className="h-2 w-2 shrink-0 rounded-sm" style={{ backgroundColor: s.color }} />
+                    <span className="font-bold text-white/80">{t(s.labelKey)}</span>
+                    <span className="ml-auto font-mono text-white/55">₹{formatInr(s.amountRs)}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </Card>
           <Card>
             <div className="text-xs font-extrabold uppercase text-white/45">
@@ -365,7 +401,7 @@ export function ReportPage() {
       )}
 
       {tab === 'model' && (
-        <div className="space-y-4">
+        <div className="space-y-4" data-report-section="model">
           <Card>
             <div className="text-xs font-extrabold uppercase text-white/45">
               {t('report.model.chart')}
@@ -384,7 +420,13 @@ export function ReportPage() {
                       return [`₹${(n * 1e7).toLocaleString('en-IN')}`, 'Cumulative']
                     }}
                   />
-                  <Line type="monotone" dataKey="cumulativeCr" stroke="#fbbf24" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="cumulativeCr" stroke="#22c55e" strokeWidth={2} dot={false} />
+                  <ReferenceLine
+                    x={11}
+                    stroke="rgba(255,255,255,0.35)"
+                    strokeDasharray="4 4"
+                    label={{ value: 'Yr 11', fill: '#94a3b8', fontSize: 10 }}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -402,7 +444,8 @@ export function ReportPage() {
                     <th className="py-2 pr-2">{t('report.model.colYear')}</th>
                     <th className="py-2 pr-2">{t('report.model.colUnits')}</th>
                     <th className="py-2 pr-2">{t('report.model.colGross')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colCost')}</th>
+                    <th className="py-2 pr-2">{t('report.model.colOm')}</th>
+                    <th className="py-2 pr-2">{t('report.model.colEmi')}</th>
                     <th className="py-2 pr-2">{t('report.model.colNet')}</th>
                     <th className="py-2">{t('report.model.colCum')}</th>
                   </tr>
@@ -411,18 +454,21 @@ export function ReportPage() {
                   {fin.yearly.map((r) => (
                     <tr
                       key={r.year}
-                      className={`border-b border-white/5 ${r.year === 11 ? 'bg-sb-gold/10' : ''}`}
+                      className={`border-b border-white/5 ${
+                        r.year === 11 ? 'bg-sb-accent font-semibold text-white' : ''
+                      }`}
                     >
                       <td className="py-1.5 pr-2 font-mono font-bold">{r.year}</td>
                       <td className="py-1.5 pr-2 font-mono">{r.unitsLakh}</td>
                       <td className="py-1.5 pr-2 font-mono">{formatInr(r.grossRevenueRs)}</td>
-                      <td className="py-1.5 pr-2 font-mono">{formatInr(r.omPlusEmiRs)}</td>
+                      <td className="py-1.5 pr-2 font-mono">{formatInr(r.omRs)}</td>
+                      <td className="py-1.5 pr-2 font-mono">{formatInr(r.emiRs)}</td>
                       <td className="py-1.5 pr-2 font-mono text-sb-green">{formatInr(r.netProfitRs)}</td>
                       <td className="py-1.5 font-mono text-white/80">{formatInr(r.cumulativeRs)}</td>
                     </tr>
                   ))}
                   <tr className="bg-white/5 font-extrabold">
-                    <td className="py-2 pr-2" colSpan={4}>
+                    <td className="py-2 pr-2" colSpan={5}>
                       {t('report.model.footer')}
                     </td>
                     <td className="py-2 font-mono text-sb-gold" colSpan={2}>
@@ -437,7 +483,7 @@ export function ReportPage() {
       )}
 
       {tab === 'risks' && (
-        <Card>
+        <Card data-report-section="risks">
           <div className="text-xs font-extrabold uppercase text-white/45">
             {t('report.risks.title')}
           </div>
@@ -447,21 +493,24 @@ export function ReportPage() {
             <div className="text-[10px] font-extrabold uppercase text-white/35">Mitigation</div>
           </div>
           <div className="mt-2 space-y-3">
-            {RISK_ROWS.map((row) => (
+            {RISK_ROWS.map((row, idx) => {
+              const level = planRiskLevel(state.id, idx)
+              return (
               <div
                 key={row.risk}
                 className="grid gap-2 rounded-lg border border-white/10 bg-sb-bg/40 p-3 md:grid-cols-3"
               >
                 <div>
-                  <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-extrabold ${levelStyle(row.level)}`}>
-                    {row.level}
+                  <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-extrabold ${levelStyle(level)}`}>
+                    {level}
                   </span>
                   <div className="mt-2 text-sm font-bold text-white">{t(`report.risks.${row.risk}`)}</div>
                 </div>
                 <div className="text-sm text-white/65">{t(`report.risks.${row.impact}`)}</div>
                 <div className="text-sm text-white/65">{t(`report.risks.${row.mitigation}`)}</div>
               </div>
-            ))}
+              )
+            })}
           </div>
         </Card>
       )}
@@ -489,7 +538,7 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
   ] as const
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-report-section="action">
       <Card>
         <div className="text-xs font-extrabold uppercase text-white/45">{t('report.action.title')}</div>
         <div className="mt-4 space-y-3">
@@ -603,7 +652,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
   const epcs = getEpcListForState(stateId)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-report-section="suppliers">
       <Card>
         <div className="text-xs font-extrabold uppercase text-white/45">{t('report.suppliers.epc')}</div>
         {epcs.length === 0 ? (

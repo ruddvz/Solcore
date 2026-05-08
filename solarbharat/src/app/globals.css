@@ -3,6 +3,27 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --c-bg: #0a0f1e;
+    --c-surface: #0d1a2e;
+    --c-surface2: #0f2040;
+    --c-green-bg: #071a0e;
+    --c-gold: #fbbf24;
+    --c-gold-dk: #f59e0b;
+    --c-green: #22c55e;
+    --c-green-dk: #16a34a;
+    --c-green-lt: #86efac;
+    --c-orange: #f97316;
+    --c-red: #ef4444;
+    --c-blue: #0ea5e9;
+    --c-purple: #8b5cf6;
+    --c-grey: #6b7280;
+    --c-txt: #ffffff;
+    --c-txt-dim: rgba(255, 255, 255, 0.55);
+    --c-txt-sub: rgba(255, 255, 255, 0.35);
+    --c-bdr: rgba(255, 255, 255, 0.06);
+    --c-bdr-gold: rgba(251, 191, 36, 0.2);
+  }
   html {
     @apply antialiased;
   }

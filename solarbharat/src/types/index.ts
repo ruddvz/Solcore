@@ -107,9 +107,19 @@ export interface YearlyRow {
   year: number
   unitsLakh: number
   grossRevenueRs: number
+  omRs: number
+  emiRs: number
   omPlusEmiRs: number
   netProfitRs: number
   cumulativeRs: number
+}
+
+/** Plan0 Tab 2 — donut segment (table uses full `costLines`) */
+export interface DonutSegment {
+  key: string
+  labelKey: string
+  amountRs: number
+  color: string
 }
 
 export interface FinancialResult {
@@ -117,10 +127,12 @@ export interface FinancialResult {
   systemMwDc: number
   systemKwp: number
   panelCountApprox: number
+  inverterCountApprox: number
   dcAcRatio: number
   year1UnitsLakh: number
   totalCapexRs: number
   costLines: CostLineItem[]
+  donutSegments: DonutSegment[]
   subsidyAmountRs: number
   loanAmountRs: number
   cashEquityRs: number

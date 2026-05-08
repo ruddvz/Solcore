@@ -51,5 +51,7 @@ async function writePng(name, size, maskable) {
 
 await mkdir(outDir, { recursive: true })
 await writePng('icon-192.png', 192, false)
+await writePng('icon-192-maskable.png', 192, true)
+await writePng('icon-384.png', 384, false)
 await writePng('icon-512.png', 512, false)
 await writePng('icon-512-maskable.png', 512, true)

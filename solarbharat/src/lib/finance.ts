@@ -1,25 +1,22 @@
-import type { FinancialResult, LandUnit, StateInfo, TechnologySpec } from '@/types'
+import type { CostLineItem, FinancialResult, LandUnit, StateInfo, TechnologySpec } from '@/types'
 import { getTechnology } from '@/data/technologies'
 
-type CostLineItem = FinancialResult['costLines'][number]
+/** Plan0 §3 — conservative performance ratio (not marketing 0.85) */
+const PR = 0.78
 
-/** Convert land input to acres (approximate pan-India friendly factors). */
-export function landToAcres(value: number, unit: LandUnit): number {
-  switch (unit) {
-    case 'acre':
-      return value
-    case 'hectare':
-      return value * 2.47105
-    case 'guntha':
-      return value / 40
-    case 'bigha':
-      return value * 0.4
-    default:
-      return value
-  }
+/** Plan0 §3 — area × factor = acres (standard Indian bigha note in UI) */
+const UNIT_TO_ACRES: Record<LandUnit, number> = {
+  acre: 1,
+  bigha: 0.6198,
+  guntha: 0.025,
+  hectare: 2.4711,
 }
 
-/** Ground-mount rule from product plan: 0.2 MW AC per acre. */
+export function landToAcres(value: number, unit: LandUnit): number {
+  return value * UNIT_TO_ACRES[unit]
+}
+
+/** Plan0 §3 — ground-mount: 0.2 MW AC per acre */
 export function acresToMwAc(acres: number): number {
   return acres * 0.2
 }
@@ -30,33 +27,83 @@ function pmt(ratePerPeriod: number, nper: number, pv: number): number {
   return (pv * ratePerPeriod * x) / (x - 1)
 }
 
-function degradationFactor(tech: TechnologySpec, yearIndex1Based: number): number {
+function degradationFactor(tech: TechnologySpec, year: number): number {
   const r = tech.degradationPctPerYear / 100
-  return (1 - r) ** (yearIndex1Based - 1)
+  return (1 - r) ** (year - 1)
 }
 
-/** Build capex and split into display categories (order matches plan). */
-function buildCostLines(totalCapexRs: number): FinancialResult['costLines'] {
-  const splits: { key: string; labelKey: string; pct: number; category: CostLineItem['category'] }[] = [
-    { key: 'panels', labelKey: 'costLine.panels', pct: 0.32, category: 'hardware' },
-    { key: 'inverters', labelKey: 'costLine.inverters', pct: 0.1, category: 'hardware' },
-    { key: 'mounting', labelKey: 'costLine.mounting', pct: 0.14, category: 'hardware' },
-    { key: 'transformer', labelKey: 'costLine.transformer', pct: 0.08, category: 'hardware' },
-    { key: 'civil', labelKey: 'costLine.civil', pct: 0.07, category: 'hardware' },
-    { key: 'grid', labelKey: 'costLine.grid', pct: 0.06, category: 'hardware' },
-    { key: 'cables', labelKey: 'costLine.cables', pct: 0.04, category: 'hardware' },
-    { key: 'scada', labelKey: 'costLine.scada', pct: 0.02, category: 'hardware' },
-    { key: 'robot', labelKey: 'costLine.robot', pct: 0.03, category: 'hardware' },
-    { key: 'epc', labelKey: 'costLine.epc', pct: 0.08, category: 'soft' },
-    { key: 'approvals', labelKey: 'costLine.approvals', pct: 0.03, category: 'soft' },
-    { key: 'contingency', labelKey: 'costLine.contingency', pct: 0.03, category: 'other' },
+/** Plan0 §3 — explicit capex stack; EPC + contingency on hardware subtotal */
+function buildPlanCostLines(capacityKWp: number, tech: TechnologySpec): {
+  lines: CostLineItem[]
+  totalCapexRs: number
+} {
+  const w = capacityKWp
+  const panels = w * tech.costPerWpRs * 1000
+  const inverters = w * 8000
+  const mounting = w * 6500
+  const transformer = w > 500 ? 1_500_000 : w * 2500
+  const civil = w * 3500
+  const gridConnect = Math.max(w * 1500, 300_000)
+  const cables = w * 2000
+  const scada = w * 1200
+  const robot = w >= 1000 ? 900_000 : 0
+  const approvals = Math.max(w * 500, 100_000)
+  const subtotal =
+    panels +
+    inverters +
+    mounting +
+    transformer +
+    civil +
+    gridConnect +
+    cables +
+    scada +
+    robot +
+    approvals
+  const epc = subtotal * 0.08
+  const contingency = subtotal * 0.03
+
+  const lines: CostLineItem[] = [
+    { key: 'panels', labelKey: 'costLine.panels', amountRs: Math.round(panels), category: 'hardware' },
+    { key: 'inverters', labelKey: 'costLine.inverters', amountRs: Math.round(inverters), category: 'hardware' },
+    { key: 'mounting', labelKey: 'costLine.mounting', amountRs: Math.round(mounting), category: 'hardware' },
+    {
+      key: 'transformer',
+      labelKey: 'costLine.transformer',
+      amountRs: Math.round(transformer),
+      category: 'hardware',
+    },
+    { key: 'civil', labelKey: 'costLine.civil', amountRs: Math.round(civil), category: 'hardware' },
+    { key: 'grid', labelKey: 'costLine.grid', amountRs: Math.round(gridConnect), category: 'hardware' },
+    { key: 'cables', labelKey: 'costLine.cables', amountRs: Math.round(cables), category: 'hardware' },
+    { key: 'scada', labelKey: 'costLine.scada', amountRs: Math.round(scada), category: 'hardware' },
+    { key: 'robot', labelKey: 'costLine.robot', amountRs: Math.round(robot), category: 'hardware' },
+    { key: 'approvals', labelKey: 'costLine.approvals', amountRs: Math.round(approvals), category: 'soft' },
+    { key: 'epc', labelKey: 'costLine.epc', amountRs: Math.round(epc), category: 'soft' },
+    { key: 'contingency', labelKey: 'costLine.contingency', amountRs: Math.round(contingency), category: 'other' },
   ]
-  return splits.map((s) => ({
-    key: s.key,
-    labelKey: s.labelKey,
-    amountRs: Math.round(totalCapexRs * s.pct),
-    category: s.category,
-  }))
+  const totalCapexRs = lines.reduce((s, l) => s + l.amountRs, 0)
+  return { lines, totalCapexRs }
+}
+
+/** Plan0 Tab 2 donut — 8 labelled segments */
+function buildDonutSegments(lines: CostLineItem[]): FinancialResult['donutSegments'] {
+  const by = (k: string) => lines.find((l) => l.key === k)?.amountRs ?? 0
+  const others =
+    by('transformer') +
+    by('scada') +
+    by('robot') +
+    by('approvals') +
+    by('contingency')
+  return [
+    { key: 'donutPanels', labelKey: 'report.costs.donutPanels', amountRs: by('panels'), color: '#fbbf24' },
+    { key: 'donutInverters', labelKey: 'report.costs.donutInverters', amountRs: by('inverters'), color: '#22c55e' },
+    { key: 'donutMounting', labelKey: 'report.costs.donutMounting', amountRs: by('mounting'), color: '#0ea5e9' },
+    { key: 'donutCivil', labelKey: 'report.costs.donutCivil', amountRs: by('civil'), color: '#8b5cf6' },
+    { key: 'donutGrid', labelKey: 'report.costs.donutGrid', amountRs: by('grid'), color: '#f97316' },
+    { key: 'donutCables', labelKey: 'report.costs.donutCables', amountRs: by('cables'), color: '#6b7280' },
+    { key: 'donutEpc', labelKey: 'report.costs.donutEpc', amountRs: by('epc'), color: '#f59e0b' },
+    { key: 'donutOthers', labelKey: 'report.costs.donutOthers', amountRs: others, color: '#16a34a' },
+  ]
 }
 
 export function calculateFinancials(input: {
@@ -68,36 +115,35 @@ export function calculateFinancials(input: {
   const tech = getTechnology(input.technologyId)
   const acres = landToAcres(input.landValue, input.landUnit)
   const systemMwAc = acresToMwAc(acres)
-  const systemKwp = systemMwAc * 1000
+  const systemKwp = Math.round(systemMwAc * 1000)
 
-  const dcAcRatio = 1.25
-  const systemMwDc = systemMwAc * dcAcRatio
-  const panelWp = 600
-  const panelCountApprox = Math.round((systemMwDc * 1_000_000) / panelWp)
+  const panelWp = 560
+  const panelCountApprox = Math.round((systemKwp * 1000) / panelWp)
+  const systemKwDc = (panelCountApprox * panelWp) / 1000
+  const systemMwDc = systemKwDc / 1000
+  const dcAcRatio = systemKwp > 0 ? systemKwDc / systemKwp : 0
 
-  const performanceRatio = input.state.effectivePerformanceRatio ?? 0.78
+  const inverterCountApprox = Math.ceil(systemKwp / 100)
+
+  const pr =
+    input.state.effectivePerformanceRatio !== undefined
+      ? input.state.effectivePerformanceRatio
+      : PR
   const bifacialMult = 1 + tech.bifacialGainPct / 100
 
-  /** NASA POWER ANN is average daily GHI (kWh/m²/day) ≈ peak sun hours for modelling */
-  const peakSun = input.state.peakSunHours
-
-  const specificYieldKwhPerKwp = peakSun * 365 * performanceRatio * bifacialMult
-
-  const year1Kwh = systemKwp * specificYieldKwhPerKwp
+  const ghi = input.state.ghiKwhM2Day
+  const year1Kwh = systemKwp * ghi * 365 * pr * bifacialMult
   const year1UnitsLakh = year1Kwh / 100_000
 
   const tariffMidRs = (input.state.tariffMinRs + input.state.tariffMaxRs) / 2
 
-  const capexPerWpRs = tech.costPerWpRs * 1.85 + 20
-  const totalCapexRs = Math.round(systemKwp * capexPerWpRs)
-
-  const costLines = buildCostLines(totalCapexRs)
+  const { lines: costLines, totalCapexRs } = buildPlanCostLines(systemKwp, tech)
+  const donutSegments = buildDonutSegments(costLines)
 
   const subsidyAmountRs = Math.round(totalCapexRs * (input.state.subsidyPct / 100))
-  const loanFraction = 0.3
-  const loanAmountRs = Math.round(totalCapexRs * loanFraction)
-  const developerShare = Math.max(0, 1 - input.state.subsidyPct / 100 - loanFraction)
-  const cashEquityRs = Math.round(totalCapexRs * developerShare)
+  const afterSubsidyRs = Math.max(0, totalCapexRs - subsidyAmountRs)
+  const loanAmountRs = Math.round(afterSubsidyRs * 0.3)
+  const cashEquityRs = Math.max(0, totalCapexRs - subsidyAmountRs - loanAmountRs)
   const operatingReserveRs = Math.round(totalCapexRs * 0.06)
   const totalCashRequiredRs = cashEquityRs + operatingReserveRs
 
@@ -117,8 +163,8 @@ export function calculateFinancials(input: {
     const unitsKwh = year1Kwh * deg
     const unitsLakh = unitsKwh / 100_000
     const grossRevenueRs = Math.round(unitsKwh * tariffMidRs)
-    const omRate = y >= 6 ? 1.15 : 1
-    const omRs = Math.round(systemKwp * omPerKwpY1 * omRate)
+    const omMultiplier = 1.15 ** Math.floor((y - 1) / 5)
+    const omRs = Math.round(systemKwp * omPerKwpY1 * omMultiplier)
     const emiRs = y <= 10 ? monthlyEmiRs * 12 : 0
     const omPlusEmiRs = omRs + emiRs
     const netProfitRs = grossRevenueRs - omPlusEmiRs
@@ -127,6 +173,8 @@ export function calculateFinancials(input: {
       year: y,
       unitsLakh: Math.round(unitsLakh * 100) / 100,
       grossRevenueRs,
+      omRs,
+      emiRs,
       omPlusEmiRs,
       netProfitRs,
       cumulativeRs: cumulative,
@@ -145,8 +193,8 @@ export function calculateFinancials(input: {
     const deg = degradationFactor(tech, y)
     const unitsKwh = year1Kwh * deg
     const grossRevenueRs = Math.round(unitsKwh * tariffMidRs)
-    const omRate = y >= 6 ? 1.15 : 1
-    const omRs = Math.round(systemKwp * omPerKwpY1 * omRate)
+    const omMultiplier = 1.15 ** Math.floor((y - 1) / 5)
+    const omRs = Math.round(systemKwp * omPerKwpY1 * omMultiplier)
     const emiRs = y <= 10 ? monthlyEmiRs * 12 : 0
     const net = grossRevenueRs - omRs - emiRs
     cum40 += net
@@ -158,25 +206,27 @@ export function calculateFinancials(input: {
     const deg = degradationFactor(tech, y)
     const unitsKwh = year1Kwh * deg
     const grossRevenueRs = Math.round(unitsKwh * tariffMidRs)
-    const omRate = y >= 6 ? 1.15 : 1
-    const omRs = Math.round(systemKwp * omPerKwpY1 * omRate)
+    const omMultiplier = 1.15 ** Math.floor((y - 1) / 5)
+    const omRs = Math.round(systemKwp * omPerKwpY1 * omMultiplier)
     const emiRs = y <= 10 ? monthlyEmiRs * 12 : 0
     net40 += grossRevenueRs - omRs - emiRs
   }
   const netProfit40YrsRs = net40
 
   const returnMultiple25 =
-    totalCashRequiredRs > 0 ? netProfit25YrsRs / totalCashRequiredRs : 0
+    cashEquityRs > 0 ? Math.round((netProfit25YrsRs / cashEquityRs) * 100) / 100 : 0
 
   return {
     systemMwAc: Math.round(systemMwAc * 1000) / 1000,
     systemMwDc: Math.round(systemMwDc * 1000) / 1000,
-    systemKwp: Math.round(systemKwp),
+    systemKwp,
     panelCountApprox,
-    dcAcRatio,
+    inverterCountApprox,
+    dcAcRatio: Math.round(dcAcRatio * 100) / 100,
     year1UnitsLakh: Math.round(year1UnitsLakh * 100) / 100,
     totalCapexRs,
     costLines,
+    donutSegments,
     subsidyAmountRs,
     loanAmountRs,
     cashEquityRs,
@@ -190,8 +240,8 @@ export function calculateFinancials(input: {
     postLoanMonthlyIncomeRs,
     netProfit25YrsRs,
     netProfit40YrsRs,
-    returnMultiple25: Math.round(returnMultiple25 * 100) / 100,
+    returnMultiple25,
     tariffMidRs,
-    performanceRatio,
+    performanceRatio: pr,
   }
 }
