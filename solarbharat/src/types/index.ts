@@ -84,6 +84,8 @@ export interface StateInfo {
   /** Optional pin-drop coordinates (Leaflet) overriding district centroid for solar fetch */
   pinLat?: number
   pinLon?: number
+  /** Indicative PPA / tariff-lock horizon (years) for disclosure copy — verify locally */
+  ppaLockYearsTypical?: number
 }
 
 export interface TechnologySpec {

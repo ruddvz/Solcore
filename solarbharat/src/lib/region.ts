@@ -1,6 +1,7 @@
 import type { GeographyDistrict, GeographyState, SolarMonthly, SolarResource, StateInfo } from '@/types'
 import { INDIA_GEOGRAPHY } from '@/types'
 import { getStatePolicy, type StatePolicy } from '@/data/statePolicies.generated'
+import { getTypicalPpaLockYears } from '@/data/ppaLockTypical'
 import { effectivePerformanceRatio } from '@/lib/shading'
 
 const MONTH_KEYS: (keyof SolarMonthly)[] = [
@@ -126,6 +127,7 @@ export function buildStateInfo(
     effectivePerformanceRatio: effectivePerformanceRatio(0.78, shading),
     pinLat: opts?.pinLat,
     pinLon: opts?.pinLon,
+    ppaLockYearsTypical: getTypicalPpaLockYears(geo.id),
   }
 }
 

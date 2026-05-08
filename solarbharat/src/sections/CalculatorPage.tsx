@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useCalculatorStore } from '@/store/calculatorStore'
@@ -17,7 +17,15 @@ import { PinMapPanel } from '@/components/map/PinMapPanel'
 
 const GEO_STATES = listGeographyStates()
 
-export function CalculatorPage() {
+type CalculatorPageProps = {
+  initialStateId?: string | null
+  initialDistrictId?: string | null
+}
+
+export function CalculatorPage({
+  initialStateId = null,
+  initialDistrictId = null,
+}: CalculatorPageProps) {
   const { t } = useTranslation()
   const {
     stateId,
@@ -41,6 +49,19 @@ export function CalculatorPage() {
     shadingLossPct,
     setShadingLossPct,
   } = useCalculatorStore()
+
+  const hydratedFromUrl = useRef(false)
+  useLayoutEffect(() => {
+    if (hydratedFromUrl.current) return
+    if (!initialStateId) return
+    const geo = GEO_STATES.find((s) => s.id === initialStateId)
+    if (!geo) return
+    hydratedFromUrl.current = true
+    setStateId(initialStateId)
+    if (initialDistrictId && geo.districts.some((d) => d.id === initialDistrictId)) {
+      setDistrictId(initialDistrictId)
+    }
+  }, [initialStateId, initialDistrictId, setStateId, setDistrictId])
 
   const state = getResolvedState()
   const geoState = GEO_STATES.find((s) => s.id === stateId)

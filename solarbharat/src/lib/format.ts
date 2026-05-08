@@ -14,3 +14,9 @@ export function formatCr(n: number): string {
 export function formatUnitsLakh(n: number): string {
   return `${n.toFixed(2)} Lakh units`
 }
+
+/** Cash in ₹ lakh (1L = ₹1,00,000) — Plan0 disclosure style */
+export function formatRsLakh(n: number): string {
+  const lakhs = n / 1e5
+  return `₹${lakhs.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}L`
+}

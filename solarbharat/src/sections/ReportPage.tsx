@@ -15,12 +15,11 @@ import {
 } from 'recharts'
 import { useCalculatorStore } from '@/store/calculatorStore'
 import { getTechnology } from '@/data/technologies'
-import { formatCr, formatInr, formatUnitsLakh } from '@/lib/format'
+import { formatCr, formatInr, formatRsLakh, formatUnitsLakh } from '@/lib/format'
 import { Card } from '@/components/ui/Card'
 import { Pill } from '@/components/ui/Pill'
 import { TabBar } from '@/components/ui/TabBar'
 import { KV } from '@/components/ui/KV'
-import { LineChartSvg } from '@/components/charts/LineChartSvg'
 import { DonutSvg } from '@/components/charts/DonutSvg'
 import { FundingStack } from '@/components/ui/FundingStack'
 import {
@@ -30,7 +29,7 @@ import {
   PANEL_MANUFACTURERS,
   ROBOT_SYSTEMS,
 } from '@/data/suppliers'
-import type { RiskLevel, StateInfo } from '@/types'
+import type { RiskLevel, StateInfo, YearlyRow } from '@/types'
 import { exportReportElementToPdf, exportTabSequenceToPdf } from '@/lib/exportPdf'
 
 type TabId = 'overview' | 'costs' | 'model' | 'risks' | 'action' | 'suppliers'
@@ -61,7 +60,8 @@ function planRiskLevel(stateId: string, index: number): RiskLevel {
       : 'MED'
   }
   if (index === 4) return stateId === 'rajasthan' ? 'HIGH' : 'MED'
-  if (index === 3 || index === 5 || index === 6 || index === 7) return 'MED'
+  if (index === 5) return stateId === 'maharashtra' || stateId === 'karnataka' ? 'HIGH' : 'MED'
+  if (index === 3 || index === 6 || index === 7) return 'MED'
   return 'MED'
 }
 
@@ -69,6 +69,95 @@ function levelStyle(level: RiskLevel) {
   if (level === 'HIGH') return 'bg-sb-red/20 text-sb-red'
   if (level === 'MED') return 'bg-sb-orange/15 text-sb-orange'
   return 'bg-white/10 text-white/55'
+}
+
+type ModelSortKey = 'year' | 'unitsLakh' | 'grossRevenueRs' | 'omRs' | 'emiRs' | 'netProfitRs' | 'cumulativeRs'
+
+function ModelYearTable({
+  yearly,
+  footerLabel,
+  footerValue,
+}: {
+  yearly: YearlyRow[]
+  footerLabel: string
+  footerValue: string
+}) {
+  const { t } = useTranslation()
+  const [sortKey, setSortKey] = useState<ModelSortKey>('year')
+  const [sortDesc, setSortDesc] = useState(false)
+
+  const onHeader = (k: ModelSortKey) => {
+    if (k === sortKey) setSortDesc((d) => !d)
+    else {
+      setSortKey(k)
+      setSortDesc(false)
+    }
+  }
+
+  const sorted = useMemo(() => {
+    const arr = [...yearly]
+    const mul = sortDesc ? -1 : 1
+    arr.sort((a, b) => {
+      const av = a[sortKey]
+      const bv = b[sortKey]
+      if (av === bv) return 0
+      return av < bv ? -1 * mul : 1 * mul
+    })
+    return arr
+  }, [yearly, sortKey, sortDesc])
+
+  const th = (k: ModelSortKey, label: string) => (
+    <th
+      scope="col"
+      className="cursor-pointer py-2 pr-2 select-none hover:text-white/90"
+      onClick={() => onHeader(k)}
+    >
+      {label}
+      {sortKey === k ? (sortDesc ? ' ▼' : ' ▲') : ''}
+    </th>
+  )
+
+  return (
+    <table className="w-full text-left text-[12px]">
+      <thead>
+        <tr className="border-b border-white/10 text-[10px] uppercase text-white/40">
+          {th('year', t('report.model.colYear'))}
+          {th('unitsLakh', t('report.model.colUnits'))}
+          {th('grossRevenueRs', t('report.model.colGross'))}
+          {th('omRs', t('report.model.colOm'))}
+          {th('emiRs', t('report.model.colEmi'))}
+          {th('netProfitRs', t('report.model.colNet'))}
+          {th('cumulativeRs', t('report.model.colCum'))}
+        </tr>
+      </thead>
+      <tbody>
+        {sorted.map((r) => (
+          <tr
+            key={r.year}
+            className={`border-b border-white/5 ${
+              r.year === 11 ? 'bg-sb-accent font-semibold text-white' : ''
+            }`}
+          >
+            <td className="py-1.5 pr-2 font-mono font-bold">{r.year}</td>
+            <td className="py-1.5 pr-2 font-mono">{r.unitsLakh}</td>
+            <td className="py-1.5 pr-2 font-mono">{formatInr(r.grossRevenueRs)}</td>
+            <td className="py-1.5 pr-2 font-mono">{formatInr(r.omRs)}</td>
+            <td className="py-1.5 pr-2 font-mono">{formatInr(r.emiRs)}</td>
+            <td className="py-1.5 pr-2 font-mono text-sb-green">{formatInr(r.netProfitRs)}</td>
+            <td className="py-1.5 font-mono text-white/80">{formatInr(r.cumulativeRs)}</td>
+          </tr>
+        ))}
+        <tr className="bg-white/5 font-extrabold">
+          <td className="py-2 pr-2" colSpan={5}>
+            {footerLabel}
+          </td>
+          <td className="py-2 font-mono text-sb-gold" colSpan={2}>
+            ₹{footerValue}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  )
 }
 
 export function ReportPage() {
@@ -123,6 +212,11 @@ export function ReportPage() {
     }))
   }, [fin])
 
+  const chart40Data = useMemo(() => {
+    if (!fin) return []
+    return fin.cumulative40.map((d) => ({ year: d.year, cumulativeCr: d.cumulativeRs / 1e7 }))
+  }, [fin])
+
   if (!state || !fin) {
     return (
       <Card>
@@ -135,8 +229,6 @@ export function ReportPage() {
       </Card>
     )
   }
-
-  const line40 = fin.cumulative40.map((d) => ({ x: d.year, y: d.cumulativeRs }))
 
   const pdfBaseName = `SolarBharat-${state.name}-${district?.name ?? 'district'}-${tech.label}`
 
@@ -198,13 +290,14 @@ export function ReportPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-7">
         <Pill value={formatUnitsLakh(fin.year1UnitsLakh)} label={t('report.pills.y1')} />
         <Pill value={formatCr(fin.totalCapexRs)} label={t('report.pills.capex')} />
         <Pill value={formatCr(fin.totalCashRequiredRs)} label={t('report.pills.cash')} />
         <Pill value={formatCr(fin.subsidyAmountRs)} label={t('report.pills.subsidy')} />
         <Pill value={formatCr(fin.loanAmountRs)} label={t('report.pills.loan')} />
         <Pill value={formatInr(fin.monthlyEmiRs)} label={t('report.pills.emi')} />
+        <Pill value={`${fin.returnMultiple25}×`} label={t('report.pills.multiple')} />
       </div>
 
       <TabBar tabs={[...tabs]} active={tab} onChange={(id) => setTab(id as TabId)} />
@@ -250,9 +343,35 @@ export function ReportPage() {
             <div className="text-xs font-extrabold uppercase text-white/45">
               {t('report.overview.chart40')}
             </div>
-            <div className="mt-4">
-              <LineChartSvg data={line40} referenceYear={11} />
+            <div className="mt-4 h-72 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chart40Data}>
+                  <CartesianGrid stroke="rgba(255,255,255,0.08)" />
+                  <XAxis dataKey="year" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                  <YAxis
+                    tick={{ fill: '#94a3b8', fontSize: 11 }}
+                    tickFormatter={(v) => `₹${v}`}
+                    label={{ value: 'Cr', angle: -90, position: 'insideLeft', fill: '#64748b', fontSize: 10 }}
+                  />
+                  <Tooltip
+                    contentStyle={{ background: '#0d1a2e', border: '1px solid rgba(255,255,255,0.1)' }}
+                    labelStyle={{ color: '#fff' }}
+                    formatter={(v) => {
+                      const n = typeof v === 'number' ? v : Number(v)
+                      return [`₹${(n * 1e7).toLocaleString('en-IN')}`, t('report.overview.chart40Cum')]
+                    }}
+                  />
+                  <Line type="monotone" dataKey="cumulativeCr" stroke="#fbbf24" strokeWidth={2} dot={false} />
+                  <ReferenceLine
+                    x={11}
+                    stroke="rgba(255,255,255,0.35)"
+                    strokeDasharray="4 4"
+                    label={{ value: 'Yr 11', fill: '#94a3b8', fontSize: 10 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
+            <p className="mt-2 text-xs text-white/45">{t('report.overview.chart40Axis')}</p>
           </Card>
 
           <Card>
@@ -270,8 +389,8 @@ export function ReportPage() {
               value={`₹${formatInr(fin.postLoanMonthlyIncomeRs)} / mo`}
             />
             <KV
-              label={t('report.overview.mMultiple')}
-              value={`${fin.returnMultiple25}×`}
+              label={t('report.overview.mNet25')}
+              value={formatCr(fin.netProfit25YrsRs)}
               variant="warn"
             />
           </Card>
@@ -281,8 +400,15 @@ export function ReportPage() {
               {t('report.overview.warnings')}
             </div>
             <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-white/70">
-              <li>{t('report.overview.wCash', { amount: `₹${formatInr(fin.totalCashRequiredRs)}` })}</li>
-              <li>{t('report.overview.wPpa')}</li>
+              <li>
+                {t('report.overview.wCash', {
+                  amountL: formatRsLakh(fin.totalCashRequiredRs),
+                  amount: `₹${formatInr(fin.totalCashRequiredRs)}`,
+                })}
+              </li>
+              <li>
+                {t('report.overview.wPpaLock', { years: state.ppaLockYearsTypical ?? 25 })}
+              </li>
               <li>{t('report.overview.wTx')}</li>
               <li>
                 {state.id === 'rajasthan'
@@ -322,9 +448,13 @@ export function ReportPage() {
             <div className="mt-4">
               <FundingStack
                 parts={[
-                  { label: t('report.costs.govt'), amountRs: fin.subsidyAmountRs, color: '#22c55e' },
-                  { label: t('report.costs.loan'), amountRs: fin.loanAmountRs, color: '#0ea5e9' },
-                  { label: t('report.costs.you'), amountRs: fin.cashEquityRs, color: '#f97316' },
+                  {
+                    label: t('report.costs.govtWithPct', { pct: state.subsidyPct }),
+                    amountRs: fin.subsidyAmountRs,
+                    color: '#22c55e',
+                  },
+                  { label: t('report.costs.loanAfterSubsidy'), amountRs: fin.loanAmountRs, color: '#0ea5e9' },
+                  { label: t('report.costs.youEquity'), amountRs: fin.cashEquityRs, color: '#f97316' },
                 ]}
               />
               <div className="mt-4 space-y-1 text-xs text-white/55">
@@ -438,45 +568,11 @@ export function ReportPage() {
               {t('report.model.table')}
             </div>
             <div className="mt-3 overflow-x-auto">
-              <table className="w-full text-left text-[12px]">
-                <thead>
-                  <tr className="border-b border-white/10 text-[10px] uppercase text-white/40">
-                    <th className="py-2 pr-2">{t('report.model.colYear')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colUnits')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colGross')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colOm')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colEmi')}</th>
-                    <th className="py-2 pr-2">{t('report.model.colNet')}</th>
-                    <th className="py-2">{t('report.model.colCum')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {fin.yearly.map((r) => (
-                    <tr
-                      key={r.year}
-                      className={`border-b border-white/5 ${
-                        r.year === 11 ? 'bg-sb-accent font-semibold text-white' : ''
-                      }`}
-                    >
-                      <td className="py-1.5 pr-2 font-mono font-bold">{r.year}</td>
-                      <td className="py-1.5 pr-2 font-mono">{r.unitsLakh}</td>
-                      <td className="py-1.5 pr-2 font-mono">{formatInr(r.grossRevenueRs)}</td>
-                      <td className="py-1.5 pr-2 font-mono">{formatInr(r.omRs)}</td>
-                      <td className="py-1.5 pr-2 font-mono">{formatInr(r.emiRs)}</td>
-                      <td className="py-1.5 pr-2 font-mono text-sb-green">{formatInr(r.netProfitRs)}</td>
-                      <td className="py-1.5 font-mono text-white/80">{formatInr(r.cumulativeRs)}</td>
-                    </tr>
-                  ))}
-                  <tr className="bg-white/5 font-extrabold">
-                    <td className="py-2 pr-2" colSpan={5}>
-                      {t('report.model.footer')}
-                    </td>
-                    <td className="py-2 font-mono text-sb-gold" colSpan={2}>
-                      ₹{formatInr(fin.netProfit25YrsRs)}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <ModelYearTable
+                yearly={fin.yearly}
+                footerLabel={t('report.model.footer')}
+                footerValue={formatInr(fin.netProfit25YrsRs)}
+              />
             </div>
           </Card>
         </div>
