@@ -10,7 +10,8 @@
     "generate:data": "node scripts/build-geography.mjs && node scripts/generate-state-policies.mjs",
     "generate:pwa-icons": "node scripts/generate-pwa-icons.mjs",
     "generate:pwa-screenshot": "node scripts/generate-pwa-screenshot.mjs",
-    "export:github-pages": "node scripts/run-static-export.mjs"
+    "export:github-pages": "node scripts/run-static-export.mjs",
+    "i18n:translate": "node scripts/machine-translate-i18n.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",
@@ -26,6 +27,7 @@
     "react-i18next": "^17.0.6",
     "react-leaflet": "^4.2.1",
     "recharts": "^3.8.1",
+    "resend": "^4.8.0",
     "zustand": "^5.0.13"
   },
   "devDependencies": {

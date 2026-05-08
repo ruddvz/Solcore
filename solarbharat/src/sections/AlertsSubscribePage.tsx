@@ -29,6 +29,14 @@ export function AlertsSubscribePage() {
     setDistrictId(st?.districts[0]?.id ?? '')
   }, [stateId])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const c = new URLSearchParams(window.location.search).get('confirm')
+    if (c === 'ok') setMsg({ ok: true, text: t('alerts.confirmOk') })
+    if (c === 'invalid') setMsg({ ok: false, text: t('alerts.confirmInvalid') })
+    if (c === 'error') setMsg({ ok: false, text: t('alerts.confirmError') })
+  }, [t])
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
     setMsg(null)

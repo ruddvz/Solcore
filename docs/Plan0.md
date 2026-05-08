@@ -515,6 +515,12 @@ Always use `useTranslation()` for user-facing text. Critical keys:
 }
 ```
 
+Full locale files live in `solarbharat/src/i18n/locales/{en,hi,gu}.json` (same key structure). Regenerate Hindi/Gujarati from English with:
+
+`cd solarbharat && npm run i18n:translate`
+
+Review machine-translated legal copy with counsel before production.
+
 ---
 
 ## 11. SEO & Metadata
