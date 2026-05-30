@@ -16,7 +16,6 @@ import {
 import { useCalculatorStore } from '@/store/calculatorStore'
 import { getTechnology } from '@/data/technologies'
 import { formatCr, formatInr, formatRsLakh, formatUnitsLakh } from '@/lib/format'
-import { withBasePath } from '@/lib/publicBasePath'
 import { Card } from '@/components/ui/Card'
 import { Pill } from '@/components/ui/Pill'
 import { TabBar } from '@/components/ui/TabBar'
@@ -223,8 +222,9 @@ export function ReportPage() {
     return fin.donutSegments.map((s) => ({
       value: s.amountRs,
       color: s.color,
+      label: t(s.labelKey),
     }))
-  }, [fin])
+  }, [fin, t])
 
   const chart40Data = useMemo(() => {
     if (!fin) return []
@@ -237,7 +237,7 @@ export function ReportPage() {
         <p className="text-white/70">
           Adjust your land area in the calculator (must be greater than zero).
         </p>
-        <Link className="mt-4 inline-block font-bold text-sb-gold" href={withBasePath('/calculator')}>
+        <Link className="mt-4 inline-block font-bold text-sb-gold" href="/calculator">
           ← {t('nav.calculator')}
         </Link>
       </Card>
@@ -296,7 +296,7 @@ export function ReportPage() {
             {pdfBusy ? t('report.pdf.downloading') : t('report.pdf.fullReport')}
           </button>
           <Link
-            href={withBasePath('/calculator')}
+            href="/calculator"
             className="shrink-0 rounded-xl border border-white/15 px-4 py-2 text-sm font-bold text-white/75 hover:border-white/30"
           >
             ← {t('report.back')}
@@ -441,7 +441,7 @@ export function ReportPage() {
               {t('report.costs.donut')}
             </div>
             <div className="mt-4">
-              <DonutSvg segments={donutSegments} />
+              <DonutSvg segments={donutSegments} ariaLabel={t('report.costs.donutAria')} />
             </div>
             {fin.donutSegments.length > 0 ? (
               <ul className="mt-4 grid gap-2 text-[11px] text-white/65 sm:grid-cols-2">

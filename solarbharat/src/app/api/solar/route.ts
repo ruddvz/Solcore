@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { guardSolarGet } from '@/lib/apiGuards'
 import { coordsForLocation, fallbackSolar } from '@/lib/region'
 import { fetchNasaPowerClimatology } from '@/lib/nasaPowerSolar'
 import { fetchNrelPvwattsSolar } from '@/lib/nrelSolar'
@@ -22,6 +23,9 @@ function jsonCached(data: unknown) {
 }
 
 export async function GET(req: Request) {
+  const limited = guardSolarGet(req)
+  if (limited) return limited
+
   const { searchParams } = new URL(req.url)
   const stateId = searchParams.get('stateId')
   const districtId = searchParams.get('districtId')

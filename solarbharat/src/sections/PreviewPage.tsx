@@ -80,7 +80,7 @@ export function PreviewPage() {
           {ROUTES.map((r) => (
             <li key={r.href}>
               <Link
-                href={r.href}
+                href={withBasePath(r.href)}
                 className="inline-flex w-full max-w-md items-center justify-between rounded-xl border border-white/10 bg-sb-bg px-4 py-3 text-sm font-bold text-white transition hover:border-sb-gold/40 hover:text-sb-gold"
               >
                 <span>{t(`preview.link.${r.key}`)}</span>

@@ -7,6 +7,9 @@ import { withBasePath } from '@/lib/publicBasePath'
 import { listGeographyStates, getGeographyState } from '@/lib/region'
 import { Card } from '@/components/ui/Card'
 import { Select } from '@/components/ui/Select'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { Button } from '@/components/ui/Button'
+import { FormField, FormStatus, inputClass } from '@/components/ui/FormField'
 
 export function FinancingInterestPage() {
   const { t } = useTranslation()
@@ -39,8 +42,7 @@ export function FinancingInterestPage() {
       return
     }
 
-    const cap =
-      capacityKwp.trim() === '' ? null : Number(capacityKwp.replace(/,/g, ''))
+    const cap = capacityKwp.trim() === '' ? null : Number(capacityKwp.replace(/,/g, ''))
     const row = {
       email: em,
       phone: phone.trim() || null,
@@ -95,37 +97,46 @@ export function FinancingInterestPage() {
 
   return (
     <div className="mx-auto max-w-xl space-y-8">
-      <div>
-        <h1 className="text-2xl font-black text-white">{t('financingLead.title')}</h1>
-        <p className="mt-2 text-sm text-white/55">{t('financingLead.subtitle')}</p>
-      </div>
+      <PageHeader title={t('financingLead.title')} subtitle={t('financingLead.subtitle')} />
 
       <Card>
-        <form onSubmit={(e) => void onSubmit(e)} className="space-y-4">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('financingLead.email')} *</span>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('financingLead.phone')}</span>
-            <input
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
+        <form onSubmit={(e) => void onSubmit(e)} className="space-y-4" noValidate>
+          <FormField label={t('financingLead.email')} required>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                type="email"
+                required
+                autoComplete="email"
+                aria-describedby={describedBy}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <FormField label={t('financingLead.phone')}>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                type="tel"
+                autoComplete="tel"
+                aria-describedby={describedBy}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
           <Select
             id="fin-state"
             label={t('financingLead.state')}
             value={stateId}
             onChange={setStateId}
-            options={[{ value: '', label: t('financingLead.optionalState') }, ...states.map((s) => ({ value: s.id, label: s.name }))]}
+            options={[
+              { value: '', label: t('financingLead.optionalState') },
+              ...states.map((s) => ({ value: s.id, label: s.name })),
+            ]}
           />
           <Select
             id="fin-district"
@@ -138,40 +149,40 @@ export function FinancingInterestPage() {
                 : [{ value: '', label: '—' }]
             }
           />
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('financingLead.capacity')}</span>
-            <input
-              type="text"
-              inputMode="decimal"
-              value={capacityKwp}
-              onChange={(e) => setCapacityKwp(e.target.value)}
-              placeholder="500"
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('financingLead.notes')}</span>
-            <textarea
-              rows={3}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full rounded-xl bg-gradient-to-r from-sb-gold to-sb-orange px-4 py-3 text-sm font-black text-sb-bg disabled:opacity-50"
-          >
+          <FormField label={t('financingLead.capacity')} hint={t('financingLead.capacityHint')}>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                type="text"
+                inputMode="decimal"
+                aria-describedby={describedBy}
+                value={capacityKwp}
+                onChange={(e) => setCapacityKwp(e.target.value)}
+                placeholder="500"
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <FormField label={t('financingLead.notes')}>
+            {({ id, describedBy }) => (
+              <textarea
+                id={id}
+                rows={3}
+                aria-describedby={describedBy}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className={`${inputClass} min-h-[88px]`}
+              />
+            )}
+          </FormField>
+          <Button type="submit" disabled={busy} busy={busy} className="w-full">
             {busy ? t('financingLead.sending') : t('financingLead.submit')}
-          </button>
+          </Button>
         </form>
       </Card>
 
-      {msg && (
-        <p className={`text-sm ${msg.ok ? 'text-sb-greenMuted' : 'text-sb-orange'}`}>{msg.text}</p>
-      )}
-      <p className="text-xs text-white/40">{t('financingLead.disclaimer')}</p>
+      {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
+      <p className="text-sm text-white/50">{t('financingLead.disclaimer')}</p>
     </div>
   )
 }
