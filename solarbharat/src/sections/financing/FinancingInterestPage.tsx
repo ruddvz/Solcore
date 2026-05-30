@@ -42,7 +42,8 @@ export function FinancingInterestPage() {
       return
     }
 
-    const cap = capacityKwp.trim() === '' ? null : Number(capacityKwp.replace(/,/g, ''))
+    const cap =
+      capacityKwp.trim() === '' ? null : Number(capacityKwp.replace(/,/g, ''))
     const row = {
       email: em,
       phone: phone.trim() || null,
@@ -72,12 +73,12 @@ export function FinancingInterestPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: row.email,
-          phone: row.phone ?? '',
-          stateId: row.state_id ?? '',
-          districtId: row.district_id ?? '',
+          email: em,
+          phone: row.phone,
+          stateId: row.state_id,
+          districtId: row.district_id,
           capacityKwp: row.capacity_kwp,
-          notes: row.notes ?? '',
+          notes: row.notes,
         }),
       })
       const data = (await res.json().catch(() => ({}))) as { error?: string }
@@ -107,7 +108,6 @@ export function FinancingInterestPage() {
                 id={id}
                 type="email"
                 required
-                autoComplete="email"
                 aria-describedby={describedBy}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -119,8 +119,6 @@ export function FinancingInterestPage() {
             {({ id, describedBy }) => (
               <input
                 id={id}
-                type="tel"
-                autoComplete="tel"
                 aria-describedby={describedBy}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
@@ -171,7 +169,7 @@ export function FinancingInterestPage() {
                 aria-describedby={describedBy}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className={`${inputClass} min-h-[88px]`}
+                className={inputClass}
               />
             )}
           </FormField>

@@ -222,9 +222,8 @@ export function ReportPage() {
     return fin.donutSegments.map((s) => ({
       value: s.amountRs,
       color: s.color,
-      label: t(s.labelKey),
     }))
-  }, [fin, t])
+  }, [fin])
 
   const chart40Data = useMemo(() => {
     if (!fin) return []
@@ -441,7 +440,7 @@ export function ReportPage() {
               {t('report.costs.donut')}
             </div>
             <div className="mt-4">
-              <DonutSvg segments={donutSegments} ariaLabel={t('report.costs.donutAria')} />
+              <DonutSvg segments={donutSegments} ariaLabel={t('report.tabs.donut')} />
             </div>
             {fin.donutSegments.length > 0 ? (
               <ul className="mt-4 grid gap-2 text-[11px] text-white/65 sm:grid-cols-2">
