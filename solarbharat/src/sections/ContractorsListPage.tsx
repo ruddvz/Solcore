@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import type { DirectoryContractor } from '@/lib/contractors/types'
 import { fetchPublicContractors } from '@/lib/contractors/publicListing'
 import { listGeographyStates } from '@/lib/region'
+import { withBasePath } from '@/lib/publicBasePath'
 import { Card } from '@/components/ui/Card'
 import { Select } from '@/components/ui/Select'
 
@@ -73,7 +74,10 @@ export function ContractorsListPage() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         {filtered.map((c) => (
-          <Link key={c.id} href={`/contractors/company?slug=${encodeURIComponent(c.slug)}`}>
+          <Link
+            key={c.id}
+            href={`${withBasePath('/contractors/company')}?slug=${encodeURIComponent(c.slug)}`}
+          >
             <Card className="h-full transition hover:border-sb-gold/35">
               <div className="flex items-start justify-between gap-2">
                 <div className="font-extrabold text-white">{c.companyName}</div>

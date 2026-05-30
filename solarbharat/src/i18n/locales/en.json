@@ -203,6 +203,7 @@
   },
   "report": {
     "title": "Your feasibility report",
+    "emptyLand": "Adjust your land area in the calculator (must be greater than zero).",
     "back": "Back to calculator",
     "tabs": {
       "overview": "Overview",

@@ -67,12 +67,12 @@ export function PinMap({ center, marker, onMarkerChange, ariaLabel }: PinMapProp
         key={key}
         center={center}
         zoom={10}
-        zoomControl={false}
+        zoomControl
         scrollWheelZoom={false}
-        doubleClickZoom={false}
-        touchZoom={false}
+        doubleClickZoom
+        touchZoom
         boxZoom={false}
-        keyboard={false}
+        keyboard
         className="h-full w-full [&_.leaflet-control-zoom]:hidden [&_.leaflet-control-attribution]:text-[10px]"
         style={{ background: '#0d1a2e' }}
       >

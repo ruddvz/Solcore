@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useCalculatorStore } from '@/store/calculatorStore'
 import { listGeographyStates, coordsForLocation, getGeographyDistrict, resolveDistrictId } from '@/lib/region'
+import { withBasePath } from '@/lib/publicBasePath'
 import { TECHNOLOGIES } from '@/data/technologies'
 import { landToAcres } from '@/lib/finance'
 import type { LandUnit } from '@/types'
@@ -231,7 +232,7 @@ export function CalculatorPage({
 
             <div className="flex flex-wrap gap-3 pt-2">
               <Link
-                href="/report"
+                href={withBasePath('/report')}
                 className="rounded-xl bg-sb-gold px-5 py-2.5 text-sm font-extrabold text-sb-bg hover:bg-sb-goldDark"
               >
                 {t('calc.generate')}

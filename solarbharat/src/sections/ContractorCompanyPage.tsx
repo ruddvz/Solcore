@@ -8,6 +8,7 @@ import type { DirectoryContractor } from '@/lib/contractors/types'
 import { fetchContractorBySlug } from '@/lib/contractors/publicListing'
 import { listGeographyStates } from '@/lib/region'
 import { Card } from '@/components/ui/Card'
+import { withBasePath } from '@/lib/publicBasePath'
 
 export function ContractorCompanyPage() {
   const { t } = useTranslation()
@@ -48,7 +49,7 @@ export function ContractorCompanyPage() {
   if (!contractor) {
     return (
       <div className="space-y-4 py-8">
-        <Link href="/contractors" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+        <Link href={withBasePath('/contractors')} className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
           ← {t('contractors.backToDirectory')}
         </Link>
         <p className="text-white/70">{t('contractors.companyNotFound')}</p>
@@ -62,7 +63,7 @@ export function ContractorCompanyPage() {
   return (
     <div className="space-y-8">
       <div>
-        <Link href="/contractors" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+        <Link href={withBasePath('/contractors')} className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
           ← {t('contractors.backToDirectory')}
         </Link>
         <div className="mt-4 flex flex-wrap items-start justify-between gap-3">

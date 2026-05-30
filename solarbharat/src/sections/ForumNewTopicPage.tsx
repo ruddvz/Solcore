@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { createForumTopic } from '@/lib/community/mutations'
 import { listGeographyStates } from '@/lib/region'
+import { withBasePath } from '@/lib/publicBasePath'
 import { Card } from '@/components/ui/Card'
 import { Select } from '@/components/ui/Select'
 
@@ -41,13 +42,13 @@ export function ForumNewTopicPage() {
       setMsg({ ok: false, text: res.message })
       return
     }
-    window.location.href = `/forum/topic?slug=${encodeURIComponent(res.slug)}`
+    window.location.href = `${withBasePath('/forum/topic')}?slug=${encodeURIComponent(res.slug)}`
   }
 
   return (
     <div className="mx-auto max-w-xl space-y-8">
       <div>
-        <Link href="/forum" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+        <Link href={withBasePath('/forum')} className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
           ← {t('forum.back')}
         </Link>
         <h1 className="mt-4 text-2xl font-black text-white">{t('forum.newTitle')}</h1>

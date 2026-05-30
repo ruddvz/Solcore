@@ -20,7 +20,7 @@ export function Select({
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-xl border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
+        className="min-h-[44px] w-full rounded-xl border border-white/15 bg-sb-bg px-3 py-2.5 text-base text-white outline-none ring-sb-gold/40 focus-visible:ring-2"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value} className="bg-sb-bg text-white">

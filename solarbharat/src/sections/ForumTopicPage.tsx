@@ -9,9 +9,16 @@ import { fetchForumTopicBySlug, fetchForumPosts } from '@/lib/community/publicDa
 import { createForumPost } from '@/lib/community/mutations'
 import { listGeographyStates } from '@/lib/region'
 import { Card } from '@/components/ui/Card'
+import { withBasePath } from '@/lib/publicBasePath'
+
+function categoryLabel(t: (k: string) => string, slug: string) {
+  const key = `forum.category.${slug}`
+  const label = t(key)
+  return label === key ? slug : label
+}
 
 export function ForumTopicPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const searchParams = useSearchParams()
   const slug = searchParams.get('slug') ?? ''
   const [loading, setLoading] = useState(true)
@@ -68,13 +75,17 @@ export function ForumTopicPage() {
     id ? states.find((s) => s.id === id)?.name ?? id : null
 
   if (loading) {
-    return <div className="py-16 text-center text-sm text-white/45">{t('forum.loading')}</div>
+    return (
+      <div className="py-16 text-center text-base text-white/50" role="status">
+        {t('forum.loading')}
+      </div>
+    )
   }
 
   if (!topic) {
     return (
       <div className="space-y-4">
-        <Link href="/forum" className="text-xs font-bold text-sb-gold">
+        <Link href={withBasePath('/forum')} className="text-xs font-bold text-sb-gold">
           ← {t('forum.back')}
         </Link>
         <p className="text-white/70">{t('forum.notFound')}</p>
@@ -84,39 +95,42 @@ export function ForumTopicPage() {
 
   return (
     <div className="space-y-8">
-      <Link href="/forum" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+      <Link href={withBasePath('/forum')} className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
         ← {t('forum.back')}
       </Link>
 
       <div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase text-white/55">
-            {topic.category}
+            {categoryLabel(t, topic.category)}
           </span>
           {stateName(topic.stateId) && (
-            <span className="text-xs text-white/45">{stateName(topic.stateId)}</span>
+            <span className="text-xs text-white/50">{stateName(topic.stateId)}</span>
           )}
         </div>
-        <h1 className="mt-3 text-2xl font-black text-white">{topic.title}</h1>
-        <div className="mt-4 rounded-xl border border-white/10 bg-sb-surface/50 p-4 text-sm leading-relaxed text-white/80">
+        <h1 className="mt-3 font-heading text-2xl font-extrabold text-white">{topic.title}</h1>
+        <div className="mt-4 rounded-xl border border-white/10 bg-sb-surface/50 p-4 text-base leading-relaxed text-white/80">
           {topic.bodyMd}
         </div>
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-sm font-extrabold uppercase text-white/45">{t('forum.replies')}</h2>
+        <h2 className="sb-overline text-white/50">{t('forum.replies')}</h2>
+        {posts.length === 0 ? (
+          <p className="text-base text-white/50">{t('forum.noReplies')}</p>
+        ) : null}
         {posts.map((p) => (
           <Card key={p.id}>
             <div className="flex items-start justify-between gap-2">
-              <p className="text-sm leading-relaxed text-white/80">{p.bodyMd}</p>
+              <p className="text-base leading-relaxed text-white/80">{p.bodyMd}</p>
               {p.isVerifiedAnswer && (
                 <span className="shrink-0 rounded bg-sb-green/20 px-2 py-0.5 text-[10px] font-bold uppercase text-sb-greenMuted">
                   {t('forum.verified')}
                 </span>
               )}
             </div>
-            <p className="mt-2 text-[10px] text-white/35">
-              {new Date(p.createdAt).toLocaleString()}
+            <p className="mt-2 text-xs text-white/45">
+              {new Date(p.createdAt).toLocaleString(i18n.language)}
             </p>
           </Card>
         ))}
@@ -124,20 +138,26 @@ export function ForumTopicPage() {
 
       <Card>
         <form onSubmit={(e) => void onReply(e)} className="space-y-3">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('forum.yourReply')}</span>
+          <label className="flex flex-col gap-1.5" htmlFor="forum-reply">
+            <span className="text-[11px] font-bold uppercase text-white/50">{t('forum.yourReply')}</span>
             <textarea
+              id="forum-reply"
               rows={4}
               value={reply}
               onChange={(e) => setReply(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
+              className="min-h-[88px] w-full rounded-xl border border-white/15 bg-sb-bg px-3 py-2.5 text-base text-white outline-none ring-sb-gold/40 focus-visible:ring-2"
             />
           </label>
-          {msg && <p className="text-sm text-sb-orange">{msg}</p>}
+          {msg ? (
+            <p className="text-sm text-sb-orange" role="alert">
+              {msg}
+            </p>
+          ) : null}
           <button
             type="submit"
             disabled={busy}
-            className="rounded-xl bg-sb-gold px-5 py-2.5 text-sm font-extrabold text-sb-bg hover:bg-sb-goldDark disabled:opacity-50"
+            aria-busy={busy}
+            className="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl bg-sb-gold px-5 py-2.5 text-base font-extrabold text-sb-bg hover:bg-sb-goldDark disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
           >
             {busy ? t('forum.posting') : t('forum.reply')}
           </button>

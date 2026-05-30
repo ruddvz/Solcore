@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { withBasePath } from '@/lib/publicBasePath'
 import { useTranslation } from 'react-i18next'
 
 const VALID = new Set([
@@ -25,7 +26,7 @@ export function Phase3FeaturePage({ slug }: Props) {
     return (
       <div className="space-y-4">
         <p className="text-white/70">{t('phase3.notFound')}</p>
-        <Link href="/phase3" className="text-sm font-bold text-sb-gold hover:text-sb-goldDark">
+        <Link href={withBasePath('/phase3')} className="text-sm font-bold text-sb-gold hover:text-sb-goldDark">
           ← {t('phase3.backHub')}
         </Link>
       </div>
@@ -37,7 +38,7 @@ export function Phase3FeaturePage({ slug }: Props) {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <div>
-        <Link href="/phase3" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+        <Link href={withBasePath('/phase3')} className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
           ← {t('phase3.backHub')}
         </Link>
         <h1 className="mt-4 text-3xl font-black text-white">{t(`phase3.detail.${slug}.title`)}</h1>

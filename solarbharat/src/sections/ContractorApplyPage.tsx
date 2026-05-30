@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { createSupabaseBrowserClient } from '@/lib/supabase/client'
 import { listGeographyStates, getGeographyState } from '@/lib/region'
+import { withBasePath } from '@/lib/publicBasePath'
 import { Card } from '@/components/ui/Card'
 import { Select } from '@/components/ui/Select'
 
@@ -70,7 +71,7 @@ export function ContractorApplyPage() {
   return (
     <div className="mx-auto max-w-xl space-y-8">
       <div>
-        <Link href="/contractors" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+        <Link href={withBasePath('/contractors')} className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
           ← {t('contractors.backToDirectory')}
         </Link>
         <h1 className="mt-4 text-2xl font-black text-white">{t('contractors.applyTitle')}</h1>
