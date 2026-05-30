@@ -8,10 +8,18 @@ import type { ForumTopicRow, ForumPostRow } from '@/lib/community/types'
 import { fetchForumTopicBySlug, fetchForumPosts } from '@/lib/community/publicData'
 import { createForumPost } from '@/lib/community/mutations'
 import { listGeographyStates } from '@/lib/region'
+import { withBasePath } from '@/lib/publicBasePath'
 import { Card } from '@/components/ui/Card'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { Button } from '@/components/ui/Button'
+import { FormField, inputClass } from '@/components/ui/FormField'
+import { SkeletonCard } from '@/components/ui/Skeleton'
+
+const backLinkClass =
+  'text-xs font-bold text-sb-gold hover:text-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold rounded'
 
 export function ForumTopicPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const searchParams = useSearchParams()
   const slug = searchParams.get('slug') ?? ''
   const [loading, setLoading] = useState(true)
@@ -21,6 +29,12 @@ export function ForumTopicPage() {
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
   const states = listGeographyStates()
+
+  const locale = i18n.language?.startsWith('hi')
+    ? 'hi-IN'
+    : i18n.language?.startsWith('gu')
+      ? 'gu-IN'
+      : 'en-IN'
 
   useEffect(() => {
     let c = false
@@ -67,14 +81,25 @@ export function ForumTopicPage() {
   const stateName = (id: string | null) =>
     id ? states.find((s) => s.id === id)?.name ?? id : null
 
+  const categoryLabel = (category: string) => {
+    const key = `forum.category.${category}`
+    const label = t(key)
+    return label === key ? category : label
+  }
+
   if (loading) {
-    return <div className="py-16 text-center text-sm text-white/45">{t('forum.loading')}</div>
+    return (
+      <div className="space-y-8">
+        <p className="sr-only">{t('forum.loading')}</p>
+        <SkeletonCard />
+      </div>
+    )
   }
 
   if (!topic) {
     return (
       <div className="space-y-4">
-        <Link href="/forum" className="text-xs font-bold text-sb-gold">
+        <Link href={withBasePath('/forum')} className={backLinkClass}>
           ← {t('forum.back')}
         </Link>
         <p className="text-white/70">{t('forum.notFound')}</p>
@@ -84,20 +109,20 @@ export function ForumTopicPage() {
 
   return (
     <div className="space-y-8">
-      <Link href="/forum" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+      <Link href={withBasePath('/forum')} className={backLinkClass}>
         ← {t('forum.back')}
       </Link>
 
       <div>
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase text-white/55">
-            {topic.category}
+            {categoryLabel(topic.category)}
           </span>
           {stateName(topic.stateId) && (
             <span className="text-xs text-white/45">{stateName(topic.stateId)}</span>
           )}
         </div>
-        <h1 className="mt-3 text-2xl font-black text-white">{topic.title}</h1>
+        <PageHeader title={topic.title} />
         <div className="mt-4 rounded-xl border border-white/10 bg-sb-surface/50 p-4 text-sm leading-relaxed text-white/80">
           {topic.bodyMd}
         </div>
@@ -116,31 +141,38 @@ export function ForumTopicPage() {
               )}
             </div>
             <p className="mt-2 text-[10px] text-white/35">
-              {new Date(p.createdAt).toLocaleString()}
+              {new Date(p.createdAt).toLocaleString(locale, {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+              })}
             </p>
           </Card>
         ))}
       </div>
 
       <Card>
-        <form onSubmit={(e) => void onReply(e)} className="space-y-3">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('forum.yourReply')}</span>
-            <textarea
-              rows={4}
-              value={reply}
-              onChange={(e) => setReply(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          {msg && <p className="text-sm text-sb-orange">{msg}</p>}
-          <button
-            type="submit"
-            disabled={busy}
-            className="rounded-xl bg-sb-gold px-5 py-2.5 text-sm font-extrabold text-sb-bg hover:bg-sb-goldDark disabled:opacity-50"
-          >
+        <form onSubmit={(e) => void onReply(e)} className="space-y-3" noValidate>
+          <FormField label={t('forum.yourReply')} required>
+            {({ id, describedBy }) => (
+              <textarea
+                id={id}
+                rows={4}
+                required
+                aria-describedby={describedBy}
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          {msg && (
+            <p className="text-sm text-sb-orange" role="alert">
+              {msg}
+            </p>
+          )}
+          <Button type="submit" disabled={busy} busy={busy} className="w-full">
             {busy ? t('forum.posting') : t('forum.reply')}
-          </button>
+          </Button>
         </form>
       </Card>
     </div>

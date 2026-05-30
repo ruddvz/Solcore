@@ -1,9 +1,11 @@
 export function DonutSvg({
   segments,
   size = 200,
+  ariaLabel,
 }: {
-  segments: { value: number; color: string }[]
+  segments: { value: number; color: string; label?: string }[]
   size?: number
+  ariaLabel: string
 }) {
   const total = segments.reduce((s, x) => s + x.value, 0) || 1
   const cx = size / 2
@@ -28,13 +30,43 @@ export function DonutSvg({
       `A ${inner} ${inner} 0 ${large} 0 ${cx + inner * Math.cos(angle)} ${cy + inner * Math.sin(angle)}`,
       'Z',
     ].join(' ')
-    arcs.push(<path key={idx} d={d} fill={seg.color} stroke="rgba(0,0,0,0.25)" strokeWidth="1" />)
+    arcs.push(
+      <path
+        key={idx}
+        d={d}
+        fill={seg.color}
+        stroke="rgba(0,0,0,0.25)"
+        strokeWidth="1"
+        aria-hidden
+      />,
+    )
     angle += a
   })
+
+  const pct = (v: number) => `${Math.round((v / total) * 100)}%`
+
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="mx-auto">
-      {arcs}
-      <circle cx={cx} cy={cy} r={inner * 0.92} fill="#0a0f1e" opacity={0.92} />
-    </svg>
+    <figure className="mx-auto">
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        className="mx-auto"
+        role="img"
+        aria-label={ariaLabel}
+      >
+        {arcs}
+        <circle cx={cx} cy={cy} r={inner * 0.92} fill="#0a0f1e" opacity={0.92} aria-hidden />
+      </svg>
+      <figcaption className="sr-only">
+        <ul>
+          {segments.map((seg, i) => (
+            <li key={i}>
+              {seg.label ?? `Segment ${i + 1}`}: {pct(seg.value)}
+            </li>
+          ))}
+        </ul>
+      </figcaption>
+    </figure>
   )
 }

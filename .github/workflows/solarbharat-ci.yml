@@ -5,11 +5,15 @@ on:
     branches: [main]
     paths:
       - 'solarbharat/**'
+      - 'docs/**'
       - '.github/workflows/solarbharat-ci.yml'
+      - '.github/workflows/deploy-github-pages.yml'
   pull_request:
     paths:
       - 'solarbharat/**'
+      - 'docs/**'
       - '.github/workflows/solarbharat-ci.yml'
+      - '.github/workflows/deploy-github-pages.yml'
 
 jobs:
   build:
@@ -27,6 +31,32 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
+
+  static-export:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: solarbharat
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: solarbharat/package-lock.json
+      - name: GitHub Pages base path (smoke)
+        run: |
+          REPO="${{ github.event.repository.name }}"
+          OWNER="${{ github.repository_owner }}"
+          echo "NEXT_PUBLIC_BASE_PATH=/${REPO}" >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_SITE_URL=https://${OWNER}.github.io/${REPO}" >> "$GITHUB_ENV"
+      - run: npm ci
+      - name: Static export
+        env:
+          STATIC_EXPORT: '1'
+        run: npm run export:github-pages
+      - name: Verify out/
+        run: test -f out/index.html
 
   lighthouse:
     needs: build

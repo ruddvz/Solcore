@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
+import { withBasePath } from '@/lib/publicBasePath'
 
 const SLUGS = [
   'performance',
@@ -28,7 +29,7 @@ export function Phase3HubPage() {
         {SLUGS.map((slug) => (
           <li key={slug}>
             <Link
-              href={`/phase3/${slug}`}
+              href={withBasePath(`/phase3/${slug}`)}
               className="flex flex-col rounded-2xl border border-white/10 bg-sb-surface/40 px-5 py-4 transition hover:border-sb-gold/35 hover:text-sb-gold"
             >
               <span className="font-extrabold text-white">{t(`phase3.cards.${slug}.title`)}</span>

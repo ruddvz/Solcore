@@ -1,6 +1,11 @@
 'use client'
 
 import { useCallback, useState } from 'react'
+import { withBasePath } from '@/lib/publicBasePath'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { Button } from '@/components/ui/Button'
+import { FormField, FormStatus, inputClass } from '@/components/ui/FormField'
+import { Card } from '@/components/ui/Card'
 
 type TopicRow = {
   id: string
@@ -21,7 +26,7 @@ export function ModerationToolsPage() {
     setError(null)
     setBusy(true)
     try {
-      const res = await fetch('/api/admin/forum', {
+      const res = await fetch(withBasePath('/api/admin/forum'), {
         headers: { Authorization: `Bearer ${secret}` },
       })
       const data = (await res.json()) as { topics?: TopicRow[]; error?: string }
@@ -43,7 +48,7 @@ export function ModerationToolsPage() {
     setBusy(true)
     setError(null)
     try {
-      const res = await fetch('/api/admin/forum', {
+      const res = await fetch(withBasePath('/api/admin/forum'), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${secret}`,
@@ -63,63 +68,65 @@ export function ModerationToolsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="font-heading text-2xl font-bold text-white">Forum moderation (Phase 2)</h1>
-        <p className="mt-2 text-sm text-white/55">
-          Uses <code className="text-sb-gold">MODERATION_SECRET</code> and{' '}
-          <code className="text-sb-gold">SUPABASE_SERVICE_ROLE_KEY</code> on the server. Never expose the
-          service key in the browser — this page only sends the moderation bearer token.
-        </p>
-      </div>
+    <div className="mx-auto max-w-3xl space-y-8">
+      <PageHeader
+        title="Forum moderation"
+        subtitle="Uses MODERATION_SECRET and SUPABASE_SERVICE_ROLE_KEY on the server. Never expose the service key in the browser — this page only sends the moderation bearer token."
+      />
 
-      <div className="rounded-xl border border-white/10 bg-sb-surface/80 p-4">
-        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-white/45">
-          Moderation secret
-        </label>
-        <input
-          type="password"
-          value={secret}
-          onChange={(e) => setSecret(e.target.value)}
-          className="mt-2 w-full rounded-xl border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-          autoComplete="off"
-        />
-        <button
+      <Card>
+        <FormField
+          label="Moderation secret"
+          hint="Set ENABLE_MODERATION_UI=1 on the server to reach this page in production."
+        >
+          {({ id, describedBy }) => (
+            <input
+              id={id}
+              type="password"
+              autoComplete="off"
+              aria-describedby={describedBy}
+              value={secret}
+              onChange={(e) => setSecret(e.target.value)}
+              className={inputClass}
+            />
+          )}
+        </FormField>
+        <Button
           type="button"
           disabled={busy || !secret}
+          busy={busy}
           onClick={() => void load()}
-          className="mt-3 rounded-xl bg-sb-gold px-4 py-2 text-sm font-extrabold text-sb-bg disabled:opacity-50"
+          className="mt-4"
         >
           {busy ? 'Loading…' : 'Load topics'}
-        </button>
-      </div>
+        </Button>
+      </Card>
 
-      {error ? <p className="text-sm text-sb-orange">{error}</p> : null}
+      {error ? <FormStatus message={error} ok={false} /> : null}
 
       {topics && (
         <ul className="space-y-2">
-          {topics.map((t) => (
+          {topics.map((topic) => (
             <li
-              key={t.id}
+              key={topic.id}
               className="flex flex-col gap-2 rounded-xl border border-white/10 bg-sb-bg/50 p-3 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
-                <div className="font-bold text-white">{t.title}</div>
+                <div className="font-bold text-white">{topic.title}</div>
                 <div className="font-mono text-xs text-white/45">
-                  {t.slug} · {t.category}
-                  {t.hidden ? ' · hidden' : ''}
+                  {topic.slug} · {topic.category}
+                  {topic.hidden ? ' · hidden' : ''}
                 </div>
               </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={() => void toggle(t.slug, !t.hidden)}
-                  className="rounded-lg border border-white/20 px-3 py-1.5 text-xs font-bold text-white hover:border-sb-gold/50"
-                >
-                  {t.hidden ? 'Unhide' : 'Hide'}
-                </button>
-              </div>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={busy}
+                onClick={() => void toggle(topic.slug, !topic.hidden)}
+                className="min-h-0 min-w-0 px-3 py-1.5 text-xs"
+              >
+                {topic.hidden ? 'Unhide' : 'Hide'}
+              </Button>
             </li>
           ))}
         </ul>

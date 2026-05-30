@@ -5,8 +5,12 @@ import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { createSupabaseBrowserClient } from '@/lib/supabase/client'
 import { listGeographyStates, getGeographyState } from '@/lib/region'
+import { withBasePath } from '@/lib/publicBasePath'
 import { Card } from '@/components/ui/Card'
 import { Select } from '@/components/ui/Select'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { Button } from '@/components/ui/Button'
+import { FormField, FormStatus, inputClass } from '@/components/ui/FormField'
 
 export function ContractorApplyPage() {
   const { t } = useTranslation()
@@ -70,59 +74,70 @@ export function ContractorApplyPage() {
   return (
     <div className="mx-auto max-w-xl space-y-8">
       <div>
-        <Link href="/contractors" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+        <Link
+          href={withBasePath('/contractors')}
+          className="text-xs font-bold text-sb-gold hover:text-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold rounded"
+        >
           ← {t('contractors.backToDirectory')}
         </Link>
-        <h1 className="mt-4 text-2xl font-black text-white">{t('contractors.applyTitle')}</h1>
-        <p className="mt-2 text-sm text-white/55">{t('contractors.applySubtitle')}</p>
+        <PageHeader
+          title={t('contractors.applyTitle')}
+          subtitle={t('contractors.applySubtitle')}
+        />
       </div>
 
       <Card>
-        <form onSubmit={(e) => void onSubmit(e)} className="space-y-4">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wide text-white/45">
-              {t('contractors.fieldCompany')} *
-            </span>
-            <input
-              required
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wide text-white/45">
-              {t('contractors.fieldContact')}
-            </span>
-            <input
-              value={contactName}
-              onChange={(e) => setContactName(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wide text-white/45">
-              {t('contractors.fieldEmail')} *
-            </span>
-            <input
-              required
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wide text-white/45">
-              {t('contractors.fieldPhone')}
-            </span>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
+        <form onSubmit={(e) => void onSubmit(e)} className="space-y-4" noValidate>
+          <FormField label={t('contractors.fieldCompany')} required>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                required
+                aria-describedby={describedBy}
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <FormField label={t('contractors.fieldContact')}>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                aria-describedby={describedBy}
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <FormField label={t('contractors.fieldEmail')} required>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                type="email"
+                required
+                autoComplete="email"
+                aria-describedby={describedBy}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <FormField label={t('contractors.fieldPhone')}>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                type="tel"
+                autoComplete="tel"
+                aria-describedby={describedBy}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
 
           <div className="grid gap-4 md:grid-cols-2">
             <Select
@@ -141,41 +156,35 @@ export function ContractorApplyPage() {
             />
           </div>
 
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wide text-white/45">
-              {t('contractors.fieldEmpanelment')}
-            </span>
-            <input
-              value={empanelmentRef}
-              onChange={(e) => setEmpanelmentRef(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wide text-white/45">
-              {t('contractors.fieldNotes')}
-            </span>
-            <textarea
-              rows={3}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
+          <FormField label={t('contractors.fieldEmpanelment')}>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                aria-describedby={describedBy}
+                value={empanelmentRef}
+                onChange={(e) => setEmpanelmentRef(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <FormField label={t('contractors.fieldNotes')}>
+            {({ id, describedBy }) => (
+              <textarea
+                id={id}
+                rows={3}
+                aria-describedby={describedBy}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className={`${inputClass} min-h-[88px]`}
+              />
+            )}
+          </FormField>
 
-          {message && (
-            <p className={`text-sm ${message.ok ? 'text-sb-greenMuted' : 'text-sb-orange'}`}>
-              {message.text}
-            </p>
-          )}
+          {message ? <FormStatus message={message.text} ok={message.ok} /> : null}
 
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full rounded-xl bg-sb-gold py-3 text-sm font-extrabold text-sb-bg hover:bg-sb-goldDark disabled:opacity-50"
-          >
+          <Button type="submit" disabled={busy} busy={busy} className="w-full">
             {busy ? t('contractors.applySending') : t('contractors.applySubmit')}
-          </button>
+          </Button>
         </form>
       </Card>
     </div>

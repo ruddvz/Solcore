@@ -6,6 +6,9 @@ import { createAlertSubscription } from '@/lib/community/mutations'
 import { listGeographyStates, getGeographyState } from '@/lib/region'
 import { Card } from '@/components/ui/Card'
 import { Select } from '@/components/ui/Select'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { Button } from '@/components/ui/Button'
+import { FormField, FormStatus, inputClass } from '@/components/ui/FormField'
 
 export function AlertsSubscribePage() {
   const { t } = useTranslation()
@@ -62,23 +65,23 @@ export function AlertsSubscribePage() {
 
   return (
     <div className="mx-auto max-w-xl space-y-8">
-      <div>
-        <h1 className="text-2xl font-black text-white">{t('alerts.title')}</h1>
-        <p className="mt-2 text-sm text-white/55">{t('alerts.subtitle')}</p>
-      </div>
+      <PageHeader title={t('alerts.title')} subtitle={t('alerts.subtitle')} />
 
       <Card>
-        <form onSubmit={(e) => void onSubmit(e)} className="space-y-4">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('alerts.email')} *</span>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
+        <form onSubmit={(e) => void onSubmit(e)} className="space-y-4" noValidate>
+          <FormField label={t('alerts.email')} required>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                type="email"
+                required
+                aria-describedby={describedBy}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
           <Select
             id="alert-type"
             label={t('alerts.type')}
@@ -95,7 +98,10 @@ export function AlertsSubscribePage() {
             label={t('alerts.state')}
             value={stateId}
             onChange={setStateId}
-            options={[{ value: '', label: t('alerts.optional') }, ...states.map((s) => ({ value: s.id, label: s.name }))]}
+            options={[
+              { value: '', label: t('alerts.optional') },
+              ...states.map((s) => ({ value: s.id, label: s.name })),
+            ]}
           />
           <Select
             id="alert-district"
@@ -108,20 +114,14 @@ export function AlertsSubscribePage() {
                 : [{ value: '', label: '—' }]
             }
           />
-          {msg && (
-            <p className={`text-sm ${msg.ok ? 'text-sb-greenMuted' : 'text-sb-orange'}`}>{msg.text}</p>
-          )}
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full rounded-xl bg-sb-gold py-3 text-sm font-extrabold text-sb-bg hover:bg-sb-goldDark disabled:opacity-50"
-          >
+          <Button type="submit" disabled={busy} busy={busy} className="w-full">
             {busy ? t('alerts.sending') : t('alerts.submit')}
-          </button>
+          </Button>
         </form>
       </Card>
 
-      <p className="text-xs text-white/40">{t('alerts.disclaimer')}</p>
+      {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
+      <p className="text-sm text-white/50">{t('alerts.disclaimer')}</p>
     </div>
   )
 }

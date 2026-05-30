@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
+import { withBasePath } from '@/lib/publicBasePath'
 import { Pill } from '@/components/ui/Pill'
 import { listGeographyStates } from '@/lib/region'
 
@@ -31,13 +32,13 @@ export function HomePage() {
         <p className="sb-body mt-4 max-w-2xl text-pretty text-white/60">{t('home.heroSubtitle')}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
-            href="/calculator"
+            href={withBasePath('/calculator')}
             className="inline-flex items-center justify-center rounded-xl bg-sb-gold px-6 py-3 text-sm font-extrabold text-sb-bg shadow-lg shadow-sb-gold/20 transition hover:bg-sb-goldDark"
           >
             {t('home.cta')}
           </Link>
           <Link
-            href="/report"
+            href={withBasePath('/report')}
             className="inline-flex items-center justify-center rounded-xl border border-white/15 px-6 py-3 text-sm font-bold text-white/80 hover:border-white/30 hover:text-white"
           >
             {t('nav.report')}

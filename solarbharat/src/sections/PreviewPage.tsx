@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
+import { withBasePath } from '@/lib/publicBasePath'
 
 const ROUTES: {
   href: string
@@ -66,7 +67,7 @@ export function PreviewPage() {
           Forum moderation UI (requires <code className="text-white/80">MODERATION_SECRET</code> + service role).
         </p>
         <Link
-          href="/preview/moderation"
+          href={withBasePath('/preview/moderation')}
           className="mt-3 inline-flex rounded-xl border border-sb-orange/40 bg-sb-orange/10 px-4 py-2 text-sm font-bold text-sb-orange hover:border-sb-orange/70"
         >
           Open moderation tools →
@@ -79,7 +80,7 @@ export function PreviewPage() {
           {ROUTES.map((r) => (
             <li key={r.href}>
               <Link
-                href={r.href}
+                href={withBasePath(r.href)}
                 className="inline-flex w-full max-w-md items-center justify-between rounded-xl border border-white/10 bg-sb-bg px-4 py-3 text-sm font-bold text-white transition hover:border-sb-gold/40 hover:text-sb-gold"
               >
                 <span>{t(`preview.link.${r.key}`)}</span>

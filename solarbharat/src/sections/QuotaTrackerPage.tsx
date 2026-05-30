@@ -6,6 +6,8 @@ import type { QuotaSnapshotRow } from '@/lib/community/types'
 import { fetchQuotaSnapshots } from '@/lib/community/publicData'
 import { listGeographyStates, getGeographyDistrict } from '@/lib/region'
 import { Card } from '@/components/ui/Card'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { SkeletonList } from '@/components/ui/Skeleton'
 
 function bandStyle(band: string): string {
   switch (band) {
@@ -23,7 +25,7 @@ function bandStyle(band: string): string {
 }
 
 export function QuotaTrackerPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [rows, setRows] = useState<QuotaSnapshotRow[]>([])
   const [loading, setLoading] = useState(true)
   const states = listGeographyStates()
@@ -52,15 +54,19 @@ export function QuotaTrackerPage() {
     return [...rows].sort((a, b) => a.stateId.localeCompare(b.stateId))
   }, [rows])
 
+  const locale = i18n.language?.startsWith('hi')
+    ? 'hi-IN'
+    : i18n.language?.startsWith('gu')
+      ? 'gu-IN'
+      : 'en-IN'
+
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-black text-white">{t('quota.title')}</h1>
-        <p className="mt-2 max-w-2xl text-sm text-white/55">{t('quota.subtitle')}</p>
-      </div>
+      <PageHeader title={t('quota.title')} subtitle={t('quota.subtitle')} />
 
+      {loading ? <p className="sr-only">{t('quota.loading')}</p> : null}
       {loading ? (
-        <p className="text-sm text-white/45">{t('quota.loading')}</p>
+        <SkeletonList count={4} />
       ) : (
         <div className="space-y-3">
           {sorted.map((q) => (
@@ -73,7 +79,11 @@ export function QuotaTrackerPage() {
                     {districtName(q.stateId, q.districtId)}
                   </div>
                   <p className="mt-1 text-xs text-white/45">
-                    {t('quota.updated')}: {new Date(q.capturedAt).toLocaleString()}
+                    {t('quota.updated')}:{' '}
+                    {new Date(q.capturedAt).toLocaleString(locale, {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}
                   </p>
                   {q.sourceDetail && (
                     <p className="mt-2 text-sm text-white/55">{q.sourceDetail}</p>
@@ -99,10 +109,10 @@ export function QuotaTrackerPage() {
       )}
 
       {!loading && sorted.length === 0 && (
-        <p className="text-sm text-white/45">{t('quota.empty')}</p>
+        <p className="text-center text-base text-white/50">{t('quota.empty')}</p>
       )}
 
-      <p className="text-xs text-white/40">{t('quota.disclaimer')}</p>
+      <p className="text-sm text-white/50">{t('quota.disclaimer')}</p>
     </div>
   )
 }

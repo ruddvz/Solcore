@@ -12,7 +12,7 @@ const withPWA = withPWAInit({
   skipWaiting: true,
   extendDefaultRuntimeCaching: true,
   fallbacks: {
-    document: '/offline',
+    document: basePath ? `${basePath}/offline` : '/offline',
   },
   workboxOptions: {
     runtimeCaching: [

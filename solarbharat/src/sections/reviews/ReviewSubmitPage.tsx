@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { createSupabaseBrowserClient } from '@/lib/supabase/client'
 import { withBasePath } from '@/lib/publicBasePath'
 import { Card } from '@/components/ui/Card'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { Button } from '@/components/ui/Button'
+import { FormField, FormStatus, inputClass } from '@/components/ui/FormField'
 
 export function ReviewSubmitPage() {
   const { t } = useTranslation()
@@ -78,79 +81,87 @@ export function ReviewSubmitPage() {
 
   return (
     <div className="mx-auto max-w-xl space-y-8">
-      <div>
-        <h1 className="text-2xl font-black text-white">{t('reviews.title')}</h1>
-        <p className="mt-2 text-sm text-white/55">{t('reviews.subtitle')}</p>
-      </div>
+      <PageHeader title={t('reviews.title')} subtitle={t('reviews.subtitle')} />
 
       <Card>
-        <form onSubmit={(e) => void onSubmit(e)} className="space-y-4">
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('reviews.email')} *</span>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('reviews.contractorRef')}</span>
-            <input
-              value={contractorReference}
-              onChange={(e) => setContractorReference(e.target.value)}
-              placeholder={t('reviews.contractorPlaceholder')}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('reviews.rating')} *</span>
-            <select
-              value={ratingOverall}
-              onChange={(e) => setRatingOverall(Number(e.target.value))}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            >
-              {[5, 4, 3, 2, 1].map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('reviews.body')} *</span>
-            <textarea
-              required
-              rows={5}
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-[11px] font-bold uppercase text-white/45">{t('reviews.codHint')}</span>
-            <input
-              value={codHint}
-              onChange={(e) => setCodHint(e.target.value)}
-              placeholder={t('reviews.codPlaceholder')}
-              className="rounded-lg border border-white/15 bg-sb-bg px-3 py-2.5 text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-            />
-          </label>
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full rounded-xl bg-gradient-to-r from-sb-gold to-sb-orange px-4 py-3 text-sm font-black text-sb-bg disabled:opacity-50"
+        <form onSubmit={(e) => void onSubmit(e)} className="space-y-4" noValidate>
+          <FormField label={t('reviews.email')} required>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                type="email"
+                required
+                aria-describedby={describedBy}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <FormField
+            label={t('reviews.contractorRef')}
+            hint={t('reviews.contractorPlaceholder')}
           >
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                aria-describedby={describedBy}
+                value={contractorReference}
+                onChange={(e) => setContractorReference(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <FormField label={t('reviews.rating')} required>
+            {({ id, describedBy }) => (
+              <select
+                id={id}
+                required
+                aria-describedby={describedBy}
+                value={ratingOverall}
+                onChange={(e) => setRatingOverall(Number(e.target.value))}
+                className={inputClass}
+              >
+                {[5, 4, 3, 2, 1].map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            )}
+          </FormField>
+          <FormField label={t('reviews.body')} required>
+            {({ id, describedBy }) => (
+              <textarea
+                id={id}
+                required
+                rows={5}
+                aria-describedby={describedBy}
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <FormField label={t('reviews.codHint')} hint={t('reviews.codPlaceholder')}>
+            {({ id, describedBy }) => (
+              <input
+                id={id}
+                aria-describedby={describedBy}
+                value={codHint}
+                onChange={(e) => setCodHint(e.target.value)}
+                className={inputClass}
+              />
+            )}
+          </FormField>
+          <Button type="submit" disabled={busy} busy={busy} className="w-full">
             {busy ? t('reviews.sending') : t('reviews.submit')}
-          </button>
+          </Button>
         </form>
       </Card>
 
-      {msg && (
-        <p className={`text-sm ${msg.ok ? 'text-sb-greenMuted' : 'text-sb-orange'}`}>{msg.text}</p>
-      )}
-      <p className="text-xs text-white/40">{t('reviews.disclaimer')}</p>
+      {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
+      <p className="text-sm text-white/50">{t('reviews.disclaimer')}</p>
     </div>
   )
 }

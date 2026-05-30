@@ -550,6 +550,7 @@
     "district": "District",
     "optionalState": "Optional",
     "capacity": "Plant size (kWp)",
+    "capacityHint": "Approximate DC capacity in kilowatts peak",
     "notes": "Notes",
     "success": "Received — we will email when lender pilots open.",
     "sending": "Sending…",

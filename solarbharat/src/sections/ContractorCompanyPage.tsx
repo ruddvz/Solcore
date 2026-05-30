@@ -7,7 +7,13 @@ import { useTranslation } from 'react-i18next'
 import type { DirectoryContractor } from '@/lib/contractors/types'
 import { fetchContractorBySlug } from '@/lib/contractors/publicListing'
 import { listGeographyStates } from '@/lib/region'
+import { withBasePath } from '@/lib/publicBasePath'
 import { Card } from '@/components/ui/Card'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { SkeletonCard } from '@/components/ui/Skeleton'
+
+const backLinkClass =
+  'text-xs font-bold text-sb-gold hover:text-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold rounded'
 
 export function ContractorCompanyPage() {
   const { t } = useTranslation()
@@ -41,14 +47,17 @@ export function ContractorCompanyPage() {
 
   if (loading) {
     return (
-      <div className="py-16 text-center text-sm text-white/45">{t('contractors.loading')}</div>
+      <div className="space-y-8">
+        <p className="sr-only">{t('contractors.loading')}</p>
+        <SkeletonCard />
+      </div>
     )
   }
 
   if (!contractor) {
     return (
       <div className="space-y-4 py-8">
-        <Link href="/contractors" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+        <Link href={withBasePath('/contractors')} className={backLinkClass}>
           ← {t('contractors.backToDirectory')}
         </Link>
         <p className="text-white/70">{t('contractors.companyNotFound')}</p>
@@ -62,11 +71,11 @@ export function ContractorCompanyPage() {
   return (
     <div className="space-y-8">
       <div>
-        <Link href="/contractors" className="text-xs font-bold text-sb-gold hover:text-sb-goldDark">
+        <Link href={withBasePath('/contractors')} className={backLinkClass}>
           ← {t('contractors.backToDirectory')}
         </Link>
         <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
-          <h1 className="text-2xl font-black text-white">{c.companyName}</h1>
+          <PageHeader title={c.companyName} />
           {c.verified && (
             <span className="rounded bg-sb-green/20 px-2 py-1 text-[11px] font-bold uppercase text-sb-greenMuted">
               {t('contractors.verified')}
@@ -75,16 +84,16 @@ export function ContractorCompanyPage() {
         </div>
         <p className="mt-2 text-sm text-white/55">
           {stateName(c.stateId)}
-          {c.districtIds.length > 0 ? ` · ${c.districtIds.length} districts` : ''}
+          {c.districtIds.length > 0
+            ? ` · ${t('contractors.districtCount', { count: c.districtIds.length })}`
+            : ''}
         </p>
       </div>
 
       <Card>
         <div className="space-y-3 text-sm leading-relaxed text-white/75">
           {paragraphs.length > 0 ? (
-            paragraphs.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))
+            paragraphs.map((p, i) => <p key={i}>{p}</p>)
           ) : (
             <p className="text-white/45">{t('contractors.noProfile')}</p>
           )}
@@ -103,7 +112,7 @@ export function ContractorCompanyPage() {
         )}
       </Card>
 
-      <p className="text-xs text-white/40">{t('contractors.verifyDisclaimer')}</p>
+      <p className="text-sm text-white/50">{t('contractors.verifyDisclaimer')}</p>
     </div>
   )
 }

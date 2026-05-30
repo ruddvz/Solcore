@@ -52,6 +52,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, inserted: 0, message: 'No snapshots in body' })
   }
 
+  const MAX_SNAPSHOTS = 500
+  if (snapshots.length > MAX_SNAPSHOTS) {
+    return NextResponse.json(
+      { error: `At most ${MAX_SNAPSHOTS} snapshots per request` },
+      { status: 400 },
+    )
+  }
+
   const rows = snapshots.map((s) => ({
     state_id: s.state_id,
     district_id: s.district_id ?? null,

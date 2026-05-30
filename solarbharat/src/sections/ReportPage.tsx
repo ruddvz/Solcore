@@ -440,7 +440,7 @@ export function ReportPage() {
               {t('report.costs.donut')}
             </div>
             <div className="mt-4">
-              <DonutSvg segments={donutSegments} />
+              <DonutSvg segments={donutSegments} ariaLabel={t('report.tabs.donut')} />
             </div>
             {fin.donutSegments.length > 0 ? (
               <ul className="mt-4 grid gap-2 text-[11px] text-white/65 sm:grid-cols-2">

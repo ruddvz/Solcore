@@ -1,20 +1,28 @@
-import Link from 'next/link'
+'use client'
+
+import { useTranslation } from 'react-i18next'
+import { ButtonLink } from '@/components/ui/Button'
 
 export default function OfflinePage() {
+  const { t } = useTranslation()
   return (
-    <div className="mx-auto max-w-md space-y-6 py-16 text-center">
-      <div className="text-5xl">📡</div>
-      <h1 className="text-2xl font-black text-white">You are offline</h1>
-      <p className="text-sm text-white/60">
-        SolarBharat needs a network connection for fresh irradiance data and reports. Cached pages may still open
-        when you reconnect.
-      </p>
-      <Link
-        href="/"
-        className="inline-flex rounded-xl bg-sb-gold px-5 py-2.5 text-sm font-extrabold text-sb-bg hover:bg-sb-goldDark"
+    <div
+      className="flex min-h-[100dvh] flex-col items-center justify-center gap-6 bg-sb-bg px-6 text-center"
+      style={{
+        paddingTop: 'max(1.5rem, env(safe-area-inset-top))',
+        paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))',
+      }}
+    >
+      <div
+        className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sb-surface text-2xl"
+        role="img"
+        aria-label={t('offline.iconLabel')}
       >
-        Try again
-      </Link>
+        <span aria-hidden>📡</span>
+      </div>
+      <h1 className="font-heading text-2xl font-extrabold text-white">{t('offline.title')}</h1>
+      <p className="max-w-sm text-base text-white/60">{t('offline.body')}</p>
+      <ButtonLink href="/">{t('offline.retry')}</ButtonLink>
     </div>
   )
 }
