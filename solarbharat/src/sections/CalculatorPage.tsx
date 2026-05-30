@@ -1,11 +1,9 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
-import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { useCalculatorStore } from '@/store/calculatorStore'
 import { listGeographyStates, coordsForLocation, getGeographyDistrict, resolveDistrictId } from '@/lib/region'
-import { withBasePath } from '@/lib/publicBasePath'
 import { TECHNOLOGIES } from '@/data/technologies'
 import { landToAcres } from '@/lib/finance'
 import type { LandUnit } from '@/types'
@@ -15,6 +13,9 @@ import { TechCard } from '@/components/ui/TechCard'
 import { MonthBars } from '@/components/charts/MonthBars'
 import { KV } from '@/components/ui/KV'
 import { PinMapPanel } from '@/components/map/PinMapPanel'
+import { PageHeader } from '@/components/ui/PageHeader'
+import { ButtonLink } from '@/components/ui/Button'
+import { FormField, inputClass } from '@/components/ui/FormField'
 
 const GEO_STATES = listGeographyStates()
 
@@ -101,20 +102,19 @@ export function CalculatorPage({
   return (
     <div className="grid gap-8 lg:grid-cols-5">
       <div className="space-y-6 lg:col-span-3">
-        <div>
-          <h1 className="font-heading text-2xl font-bold text-white">{t('calc.title')}</h1>
-          <p className="mt-1 text-sm text-white/55">
-            {t('calc.equiv', { acres: acresEquiv.toFixed(2) })}
-          </p>
+        <PageHeader
+          title={t('calc.title')}
+          subtitle={t('calc.equiv', { acres: acresEquiv.toFixed(2) })}
+        >
           {landUnit === 'bigha' ? (
-            <p className="mt-1 text-xs text-white/40">{t('calc.bighaNote')}</p>
+            <p className="text-xs text-white/40">{t('calc.bighaNote')}</p>
           ) : null}
           {(solarLoading || solarError) && (
-            <p className="mt-2 text-xs text-sb-orange">
+            <p className="text-xs text-sb-orange" role="status" aria-live="polite">
               {solarLoading ? t('calc.solarLoading') : solarError}
             </p>
           )}
-        </div>
+        </PageHeader>
 
         <Card>
           <div className="space-y-4">
@@ -136,20 +136,21 @@ export function CalculatorPage({
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <label className="flex flex-col gap-1.5" htmlFor="landValue">
-                <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/45">
-                  {t('calc.land')}
-                </span>
-                <input
-                  id="landValue"
-                  type="number"
-                  step="0.01"
-                  min="0.01"
-                  value={landValue}
-                  onChange={(e) => setLandValue(Number(e.target.value))}
-                  className="rounded-xl border border-white/15 bg-sb-bg px-3 py-2.5 font-mono text-sm text-white outline-none ring-sb-gold/40 focus:ring-2"
-                />
-              </label>
+              <FormField label={t('calc.land')} required>
+                {({ id, describedBy }) => (
+                  <input
+                    id={id}
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    required
+                    aria-describedby={describedBy}
+                    value={landValue}
+                    onChange={(e) => setLandValue(Number(e.target.value))}
+                    className={`${inputClass} font-mono text-sm`}
+                  />
+                )}
+              </FormField>
               <Select
                 id="unit"
                 label={t('calc.unit')}
@@ -164,10 +165,10 @@ export function CalculatorPage({
               />
             </div>
 
-            <div>
-              <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/45">
+            <fieldset>
+              <legend className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/50">
                 {t('calc.tech')}
-              </div>
+              </legend>
               <div className="mt-2 grid gap-3">
                 {TECHNOLOGIES.map((tech) => (
                   <TechCard
@@ -178,10 +179,10 @@ export function CalculatorPage({
                   />
                 ))}
               </div>
-            </div>
+            </fieldset>
 
             <div className="border-t border-white/10 pt-4">
-              <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/45">
+              <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/50">
                 {t('calc.phase2MapTitle')}
               </div>
               <p className="mt-1 text-xs text-white/45">{t('calc.phase2MapHint')}</p>
@@ -199,7 +200,7 @@ export function CalculatorPage({
                 <button
                   type="button"
                   onClick={() => resetPinToDistrict()}
-                  className="text-xs font-bold text-sb-gold hover:text-sb-goldDark"
+                  className="min-h-[44px] rounded text-xs font-bold text-sb-gold hover:text-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
                 >
                   {t('calc.phase2ResetPin')}
                 </button>
@@ -213,7 +214,7 @@ export function CalculatorPage({
 
             <div className="border-t border-white/10 pt-4">
               <label className="flex flex-col gap-2" htmlFor="shading">
-                <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/45">
+                <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/50">
                   {t('calc.phase2Shading')} ({shadingLossPct}%)
                 </span>
                 <input
@@ -223,20 +224,18 @@ export function CalculatorPage({
                   max={30}
                   step={1}
                   value={shadingLossPct}
+                  aria-valuemin={0}
+                  aria-valuemax={30}
+                  aria-valuenow={shadingLossPct}
                   onChange={(e) => setShadingLossPct(Number(e.target.value))}
-                  className="w-full accent-sb-gold"
+                  className="min-h-[44px] w-full accent-sb-gold"
                 />
                 <span className="text-xs text-white/45">{t('calc.phase2ShadingHint')}</span>
               </label>
             </div>
 
             <div className="flex flex-wrap gap-3 pt-2">
-              <Link
-                href={withBasePath('/report')}
-                className="rounded-xl bg-sb-gold px-5 py-2.5 text-sm font-extrabold text-sb-bg hover:bg-sb-goldDark"
-              >
-                {t('calc.generate')}
-              </Link>
+              <ButtonLink href="/report">{t('calc.generate')}</ButtonLink>
             </div>
           </div>
         </Card>

@@ -17,7 +17,7 @@ export function TechCard({
       type="button"
       onClick={onSelect}
       aria-pressed={selected}
-      className={`min-h-[44px] w-full rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold ${
+      className={`w-full min-h-[44px] rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold ${
         selected
           ? 'border-sb-gold bg-sb-gold/10 ring-2 ring-sb-gold/40'
           : 'border-white/10 bg-sb-bg/60 hover:border-white/20'
