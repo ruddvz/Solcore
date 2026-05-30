@@ -37,7 +37,13 @@ Vercel: `vercel.json` registers schedules when the project uses Vercel Cron (pla
 
 ## Moderation UI
 
-Open `/preview/moderation` (noindex), paste `MODERATION_SECRET`, load topics, hide/unhide spam.
+Set `ENABLE_MODERATION_UI=1` on the server (see `solarbharat/.env.example`). Middleware redirects `/preview/moderation` to `/preview` when the flag is off.
+
+Open `/preview/moderation` (noindex), paste `MODERATION_SECRET`, load topics, hide/unhide spam. API calls use `withBasePath` so GitHub Pages project URLs work when moderation is hosted on the same origin with API routes.
+
+## Static export (GitHub Pages)
+
+API routes, middleware, and rate limits are **not** included in `npm run export:github-pages`. See **`docs/OPS_STATIC_EXPORT.md`** for env vars and which forms still work via Supabase anon inserts.
 
 ## Full translations
 

@@ -75,7 +75,6 @@ export function AlertsSubscribePage() {
                 id={id}
                 type="email"
                 required
-                autoComplete="email"
                 aria-describedby={describedBy}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -115,13 +114,13 @@ export function AlertsSubscribePage() {
                 : [{ value: '', label: '—' }]
             }
           />
-          {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
           <Button type="submit" disabled={busy} busy={busy} className="w-full">
             {busy ? t('alerts.sending') : t('alerts.submit')}
           </Button>
         </form>
       </Card>
 
+      {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
       <p className="text-sm text-white/50">{t('alerts.disclaimer')}</p>
     </div>
   )

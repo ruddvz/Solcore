@@ -8,7 +8,6 @@ import { Card } from '@/components/ui/Card'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { FormField, FormStatus, inputClass } from '@/components/ui/FormField'
-import { Select } from '@/components/ui/Select'
 
 export function ReviewSubmitPage() {
   const { t } = useTranslation()
@@ -92,7 +91,6 @@ export function ReviewSubmitPage() {
                 id={id}
                 type="email"
                 required
-                autoComplete="email"
                 aria-describedby={describedBy}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -100,25 +98,38 @@ export function ReviewSubmitPage() {
               />
             )}
           </FormField>
-          <FormField label={t('reviews.contractorRef')}>
+          <FormField
+            label={t('reviews.contractorRef')}
+            hint={t('reviews.contractorPlaceholder')}
+          >
             {({ id, describedBy }) => (
               <input
                 id={id}
                 aria-describedby={describedBy}
                 value={contractorReference}
                 onChange={(e) => setContractorReference(e.target.value)}
-                placeholder={t('reviews.contractorPlaceholder')}
                 className={inputClass}
               />
             )}
           </FormField>
-          <Select
-            id="review-rating"
-            label={t('reviews.rating')}
-            value={String(ratingOverall)}
-            onChange={(v) => setRatingOverall(Number(v))}
-            options={[5, 4, 3, 2, 1].map((n) => ({ value: String(n), label: String(n) }))}
-          />
+          <FormField label={t('reviews.rating')} required>
+            {({ id, describedBy }) => (
+              <select
+                id={id}
+                required
+                aria-describedby={describedBy}
+                value={ratingOverall}
+                onChange={(e) => setRatingOverall(Number(e.target.value))}
+                className={inputClass}
+              >
+                {[5, 4, 3, 2, 1].map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            )}
+          </FormField>
           <FormField label={t('reviews.body')} required>
             {({ id, describedBy }) => (
               <textarea
@@ -128,18 +139,17 @@ export function ReviewSubmitPage() {
                 aria-describedby={describedBy}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
-                className={`${inputClass} min-h-[120px]`}
+                className={inputClass}
               />
             )}
           </FormField>
-          <FormField label={t('reviews.codHint')}>
+          <FormField label={t('reviews.codHint')} hint={t('reviews.codPlaceholder')}>
             {({ id, describedBy }) => (
               <input
                 id={id}
                 aria-describedby={describedBy}
                 value={codHint}
                 onChange={(e) => setCodHint(e.target.value)}
-                placeholder={t('reviews.codPlaceholder')}
                 className={inputClass}
               />
             )}
@@ -151,6 +161,7 @@ export function ReviewSubmitPage() {
       </Card>
 
       {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
+      <p className="text-sm text-white/50">{t('reviews.disclaimer')}</p>
     </div>
   )
 }
