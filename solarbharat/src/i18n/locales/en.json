@@ -15,7 +15,36 @@
     "quotes": "Quotes",
     "phase3": "Phase 3",
     "reviews": "Reviews",
-    "financing": "Finance lead"
+    "financing": "Finance lead",
+    "more": "More",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu",
+    "mainNav": "Main navigation"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "language": "Language",
+    "sections": "Report sections"
+  },
+  "common": {
+    "loading": "Loading…",
+    "notFoundCode": "404",
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "This page does not exist. Start from home or run a new calculation.",
+    "backHome": "Back to home",
+    "retry": "Try again"
+  },
+  "offline": {
+    "iconLabel": "Offline",
+    "title": "You are offline",
+    "body": "Previously loaded pages may still work. Solar data, exports, and form submissions need an internet connection.",
+    "retry": "Go to home",
+    "calculator": "Open calculator"
+  },
+  "pwa": {
+    "iosInstallTitle": "Install SolarBharat on iPhone",
+    "iosInstallBody": "Tap Share → Add to Home Screen for a faster, app-like experience.",
+    "iosInstallDismiss": "Not now"
   },
   "lang": {
     "en": "English",
@@ -142,9 +171,33 @@
     "confirmError": "Could not confirm — server configuration error."
   },
   "home": {
-    "heroTitle": "Honest, district-specific solar feasibility — in seconds.",
-    "heroSubtitle": "PM-KUSUM-focused financial model with conservative performance ratio, real subsidy stack, and cash you actually need.",
-    "cta": "Calculate My Solar ROI",
+    "trustPill": "India-first solar feasibility engine",
+    "heroTitle": "Check solar potential, savings, and risk for your district.",
+    "heroSubtitle": "Estimate output, project cost, payback, and next steps using district-level solar data and transparent assumptions.",
+    "cta": "Calculate my solar potential",
+    "ctaSecondary": "Explore contractors",
+    "ctaSample": "View sample report",
+    "districtStart": "Start with your location",
+    "searchCoverage": "Search state or district",
+    "viewDistricts": "View districts",
+    "trustTitle": "Transparent assumptions",
+    "trustBody": "Solar estimates depend on location, panel choice, tilt, shading, tariffs, and policy. SolarBharat shows assumptions clearly so you can compare scenarios.",
+    "audienceOwners": "Rooftop owners",
+    "audienceOwnersDesc": "Size a system, see payback, and export a report for your installer.",
+    "audienceFarmers": "Farmers & landowners",
+    "audienceFarmersDesc": "Ground-mount feasibility with Indian land units and PM-KUSUM context.",
+    "audienceBusiness": "Businesses",
+    "audienceBusinessDesc": "Commercial capex stack, EMI, and 25-year cash model.",
+    "audienceContractors": "Solar contractors",
+    "audienceContractorsDesc": "List your company and help customers with honest district data.",
+    "featureDistrict": "District solar data",
+    "featureDistrictDesc": "Tariff range, irradiance, DISCOM, and nodal agency per location.",
+    "featureCost": "Cost & payback model",
+    "featureCostDesc": "Full capex stack, subsidy reality check, and conservative PR.",
+    "featureReport": "Exportable report",
+    "featureReportDesc": "Six-tab feasibility PDF with assumptions and risks.",
+    "featureContractors": "Contractor path",
+    "featureContractorsDesc": "Discover listings and request quotes — verify empaneled status yourself.",
     "stat1": "6 states live",
     "stat2": "25-yr model",
     "stat3": "40-yr cash view",
@@ -199,9 +252,27 @@
     "phase2ResetPin": "Use district centre",
     "phase2Shading": "Estimated shading loss",
     "phase2ShadingHint": "Trees, buildings, terrain — reduces effective PR (plan §6.2).",
-    "effectivePr": "Effective PR (model)"
+    "effectivePr": "Effective PR (model)",
+    "stepLocation": "Location",
+    "stepSite": "Site size",
+    "stepTech": "Technology",
+    "stepMap": "Map & shading",
+    "back": "Back",
+    "continue": "Continue",
+    "errorState": "Select a state before continuing.",
+    "errorDistrict": "Select a district before calculating.",
+    "errorLand": "Enter a land area greater than 0.",
+    "errorLandHigh": "This area looks too large — check the unit.",
+    "confidenceHigh": "High confidence",
+    "confidenceMedium": "Medium confidence",
+    "confidenceLow": "Lower confidence"
   },
   "report": {
+    "emptyTitle": "No solar scenario yet",
+    "emptyBody": "Start with your state, district, and land or rooftop details to generate a report.",
+    "emptyPrimary": "Start calculator",
+    "emptySecondary": "View sample report",
+    "sampleLabel": "Sample report — not your project estimate",
     "title": "Your feasibility report",
     "back": "Back to calculator",
     "tabs": {

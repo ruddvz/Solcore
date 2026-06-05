@@ -55,7 +55,7 @@ const NAV_KEYS = [
   { href: '/preview', key: 'preview' as const, devOnly: true },
 ] as const
 
-const MOBILE_TAB_KEYS = ['home', 'calculator', 'report', 'locations'] as const
+const MOBILE_TAB_KEYS = ['home', 'calculator', 'report', 'contractors'] as const
 
 const linkFocus =
   'rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold focus-visible:ring-offset-2 focus-visible:ring-offset-sb-bg'
@@ -184,37 +184,39 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Mobile bottom tab bar — iOS-style primary destinations */}
-        <nav
-          className="flex border-t border-white/10 bg-sb-surface/80 pb-[max(0px,env(safe-area-inset-bottom))] md:hidden"
-          aria-label={t('nav.mainNav')}
-        >
-          {MOBILE_TAB_KEYS.map((key) => {
-            const item = navItems.find((n) => n.key === key)!
-            const active = isActivePath(pathname, item.href)
-            return (
-              <NavLink
-                key={key}
-                href={item.href}
-                label={t(`nav.${key}`)}
-                active={active}
-                className={`flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 px-1 text-[10px] font-bold uppercase tracking-wide ${
-                  active ? 'text-sb-gold' : 'text-white/55'
-                }`}
-              />
-            )
-          })}
-          <button
-            type="button"
-            className={`${linkFocus} flex min-h-[52px] flex-1 flex-col items-center justify-center px-1 text-[10px] font-bold uppercase tracking-wide text-white/55`}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav-sheet"
-            onClick={() => setMenuOpen(true)}
-          >
-            {t('nav.more')}
-          </button>
-        </nav>
       </header>
+
+      {/* Fixed mobile bottom tab bar */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-30 flex border-t border-white/10 bg-sb-bg/95 backdrop-blur-md md:hidden"
+        style={{ paddingBottom: 'max(0px, env(safe-area-inset-bottom))' }}
+        aria-label={t('nav.mainNav')}
+      >
+        {MOBILE_TAB_KEYS.map((key) => {
+          const item = navItems.find((n) => n.key === key)!
+          const active = isActivePath(pathname, item.href)
+          return (
+            <NavLink
+              key={key}
+              href={item.href}
+              label={t(`nav.${key}`)}
+              active={active}
+              className={`flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 px-1 text-[10px] font-bold uppercase tracking-wide ${
+                active ? 'text-sb-gold' : 'text-white/55'
+              }`}
+            />
+          )
+        })}
+        <button
+          type="button"
+          className={`${linkFocus} flex min-h-[52px] flex-1 flex-col items-center justify-center px-1 text-[10px] font-bold uppercase tracking-wide text-white/55`}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav-sheet"
+          onClick={() => setMenuOpen(true)}
+        >
+          {t('nav.more')}
+        </button>
+      </nav>
 
       {/* Full-screen menu sheet */}
       {menuOpen ? (
@@ -278,7 +280,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       <main
         id="main-content"
-        className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-3 py-6 sm:px-4 sm:py-8"
+        className="app-main-with-bottom-nav mx-auto flex w-full max-w-6xl flex-1 flex-col px-3 py-6 sm:px-4 sm:py-8 md:pb-8"
       >
         {children}
       </main>

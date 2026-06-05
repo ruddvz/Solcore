@@ -1,0 +1,74 @@
+'use client'
+
+import { Button, ButtonLink } from '@/components/ui/Button'
+
+export function BottomActionBar({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div
+      className={`fixed left-0 right-0 z-40 border-t border-white/10 bg-sb-bg/95 backdrop-blur-md md:hidden ${className}`}
+      style={{
+        bottom: 'calc(52px + env(safe-area-inset-bottom, 0px))',
+        paddingBottom: 'max(8px, env(safe-area-inset-bottom, 0px))',
+      }}
+    >
+      <div className="mx-auto flex max-w-6xl gap-2 px-3 py-3">{children}</div>
+    </div>
+  )
+}
+
+export function BottomActionBarSpacer() {
+  return (
+    <div
+      className="h-[calc(124px+env(safe-area-inset-bottom))] md:hidden"
+      aria-hidden
+    />
+  )
+}
+
+export function BottomNavButton({
+  label,
+  onClick,
+  disabled,
+  variant = 'secondary',
+}: {
+  label: string
+  onClick?: () => void
+  disabled?: boolean
+  variant?: 'primary' | 'secondary' | 'ghost'
+}) {
+  return (
+    <Button
+      type="button"
+      variant={variant}
+      className="min-h-[48px] flex-1"
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {label}
+    </Button>
+  )
+}
+
+export function BottomNavLink({
+  href,
+  label,
+  variant = 'primary',
+  className = '',
+}: {
+  href: string
+  label: string
+  variant?: 'primary' | 'secondary' | 'ghost'
+  className?: string
+}) {
+  return (
+    <ButtonLink href={href} variant={variant} className={`min-h-[48px] flex-1 ${className}`}>
+      {label}
+    </ButtonLink>
+  )
+}

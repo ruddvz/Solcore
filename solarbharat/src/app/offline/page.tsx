@@ -22,7 +22,12 @@ export default function OfflinePage() {
       </div>
       <h1 className="font-heading text-2xl font-extrabold text-white">{t('offline.title')}</h1>
       <p className="max-w-sm text-base text-white/60">{t('offline.body')}</p>
-      <ButtonLink href="/">{t('offline.retry')}</ButtonLink>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <ButtonLink href="/">{t('offline.retry')}</ButtonLink>
+        <ButtonLink href="/calculator" variant="secondary">
+          {t('offline.calculator')}
+        </ButtonLink>
+      </div>
     </div>
   )
 }

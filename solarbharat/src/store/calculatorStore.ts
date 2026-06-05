@@ -48,7 +48,7 @@ export interface CalculatorState {
 export const useCalculatorStore = create<CalculatorState>((set, get) => ({
   stateId: DEFAULT_STATE?.id ?? '',
   districtId: DEFAULT_STATE?.districts[0]?.id ?? '',
-  landValue: 5,
+  landValue: 0,
   landUnit: 'acre',
   technologyId: 'topcon_bifacial',
   shadingLossPct: 0,

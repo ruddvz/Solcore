@@ -48,10 +48,23 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     screenshots: [
       {
+        src: `${base}/screenshots/mobile-home.png`,
+        sizes: '390x844',
+        type: 'image/png',
+        form_factor: 'narrow' as const,
+      },
+      {
+        src: `${base}/screenshots/mobile-calculator.png`,
+        sizes: '390x844',
+        type: 'image/png',
+        form_factor: 'narrow' as const,
+      },
+      {
         src: `${base}/screenshots/mobile.png`,
         sizes: '390x844',
         type: 'image/png',
+        form_factor: 'narrow' as const,
       },
-    ],
+    ] as unknown as MetadataRoute.Manifest['screenshots'],
   }
 }

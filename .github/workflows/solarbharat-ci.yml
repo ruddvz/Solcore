@@ -29,8 +29,16 @@ jobs:
           cache: npm
           cache-dependency-path: solarbharat/package-lock.json
       - run: npm ci
-      - run: npm run lint
-      - run: npm run build
+      - run: npm run generate:pwa-icons
+      - run: npm run generate:pwa-screenshot
+      - run: npm run validate
+      - run: npm run verify:pwa
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+      - name: E2E tests
+        run: npm run test:e2e
+        env:
+          CI: 'true'
 
   static-export:
     runs-on: ubuntu-latest

@@ -52,7 +52,6 @@ export function TabBar({
               type="button"
               role="tab"
               aria-selected={is}
-              aria-controls={`panel-${tab.id}`}
               tabIndex={is ? 0 : -1}
               onKeyDown={(e) => onKeyDown(e, index)}
               onClick={() => onChange(tab.id)}

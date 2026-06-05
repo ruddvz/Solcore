@@ -17,6 +17,7 @@ import { useCalculatorStore } from '@/store/calculatorStore'
 import { getTechnology } from '@/data/technologies'
 import { formatCr, formatInr, formatRsLakh, formatUnitsLakh } from '@/lib/format'
 import { Card } from '@/components/ui/Card'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { Pill } from '@/components/ui/Pill'
 import { TabBar } from '@/components/ui/TabBar'
 import { KV } from '@/components/ui/KV'
@@ -179,6 +180,7 @@ export function ReportPage() {
     stateId,
     districtId,
     technologyId,
+    landValue,
     getFinancials,
     getResolvedState,
     fetchSolarForSelection,
@@ -230,16 +232,17 @@ export function ReportPage() {
     return fin.cumulative40.map((d) => ({ year: d.year, cumulativeCr: d.cumulativeRs / 1e7 }))
   }, [fin])
 
-  if (!state || !fin) {
+  const scenarioReady = landValue > 0 && state && fin
+
+  if (!scenarioReady) {
     return (
-      <Card>
-        <p className="text-white/70">
-          Adjust your land area in the calculator (must be greater than zero).
-        </p>
-        <Link className="mt-4 inline-block font-bold text-sb-gold" href="/calculator">
-          ← {t('nav.calculator')}
-        </Link>
-      </Card>
+      <EmptyState
+        title={t('report.emptyTitle')}
+        body={t('report.emptyBody')}
+        primaryAction={{ href: '/calculator', label: t('report.emptyPrimary') }}
+        secondaryAction={{ href: '/locations', label: t('nav.locations') }}
+        icon="☀"
+      />
     )
   }
 
@@ -317,7 +320,13 @@ export function ReportPage() {
 
       <div ref={pdfCaptureRef} className="space-y-6">
       {tab === 'overview' && (
-        <div className="grid gap-4 lg:grid-cols-2" data-report-section="overview">
+        <div
+          role="tabpanel"
+          id="panel-overview"
+          aria-labelledby="tab-overview"
+          className="grid gap-4 lg:grid-cols-2"
+          data-report-section="overview"
+        >
           <Card>
             <div className="sb-overline text-white/45">
               {t('report.overview.system')}

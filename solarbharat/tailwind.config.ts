@@ -8,6 +8,7 @@ const config: Config = {
         sb: {
           bg: '#0a0f1e',
           surface: '#0d1a2e',
+          surface2: '#0f2040',
           accent: '#071a0e',
           gold: '#fbbf24',
           goldDark: '#f59e0b',

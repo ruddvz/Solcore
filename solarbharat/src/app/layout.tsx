@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from 'next'
 import { DM_Sans, JetBrains_Mono, Syne } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/Providers'
-import { Layout } from '@/components/layout/Layout'
+import { AppShell } from '@/components/layout/AppShell'
+import { IosInstallPrompt } from '@/components/pwa/IosInstallPrompt'
 
 const fontSyne = Syne({
   subsets: ['latin'],
@@ -80,7 +81,8 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-sb-bg font-sans antialiased">
         <Providers>
-          <Layout>{children}</Layout>
+          <AppShell>{children}</AppShell>
+          <IosInstallPrompt />
         </Providers>
       </body>
     </html>
