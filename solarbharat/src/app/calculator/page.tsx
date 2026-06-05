@@ -1,14 +1,6 @@
 import { CalculatorPage } from '@/sections/CalculatorPage'
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { stateId?: string; districtId?: string }
-}) {
-  return (
-    <CalculatorPage
-      initialStateId={searchParams.stateId ?? null}
-      initialDistrictId={searchParams.districtId ?? null}
-    />
-  )
+/** Static-export safe: query params are read client-side in CalculatorPage. */
+export default function Page() {
+  return <CalculatorPage />
 }

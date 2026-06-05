@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useCalculatorStore } from '@/store/calculatorStore'
 import { listGeographyStates, coordsForLocation, getGeographyDistrict, resolveDistrictId } from '@/lib/region'
@@ -39,6 +40,9 @@ export function CalculatorPage({
   initialDistrictId = null,
 }: CalculatorPageProps) {
   const { t } = useTranslation()
+  const searchParams = useSearchParams()
+  const queryStateId = searchParams.get('stateId')
+  const queryDistrictId = searchParams.get('districtId')
   const [step, setStep] = useState(1)
   const [errorKey, setErrorKey] = useState<string | null>(null)
   const {
@@ -67,18 +71,25 @@ export function CalculatorPage({
   const hydratedFromUrl = useRef(false)
   useLayoutEffect(() => {
     if (hydratedFromUrl.current) return
-    if (!initialStateId) return
-    const geo = GEO_STATES.find((s) => s.id === initialStateId)
+    const stateKey = initialStateId ?? queryStateId
+    const districtKey = initialDistrictId ?? queryDistrictId
+    if (!stateKey) return
+    const geo = GEO_STATES.find((s) => s.id === stateKey)
     if (!geo) return
     hydratedFromUrl.current = true
-    setStateId(initialStateId)
+    setStateId(stateKey)
     const rid =
-      resolveDistrictId(initialStateId, initialDistrictId) ??
-      (initialDistrictId && geo.districts.some((d) => d.id === initialDistrictId)
-        ? initialDistrictId
-        : undefined)
+      resolveDistrictId(stateKey, districtKey) ??
+      (districtKey && geo.districts.some((d) => d.id === districtKey) ? districtKey : undefined)
     if (rid) setDistrictId(rid)
-  }, [initialStateId, initialDistrictId, setStateId, setDistrictId])
+  }, [
+    initialStateId,
+    initialDistrictId,
+    queryStateId,
+    queryDistrictId,
+    setStateId,
+    setDistrictId,
+  ])
 
   const state = getResolvedState()
   const geoState = GEO_STATES.find((s) => s.id === stateId)
