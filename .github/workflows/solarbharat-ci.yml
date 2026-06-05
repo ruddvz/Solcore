@@ -61,7 +61,7 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: Visual regression
-        run: npx playwright test --project=visual
+        run: npx playwright test --project=visual --workers=1
         env:
           CI: 'true'
           PLAYWRIGHT_PORT: '3012'
