@@ -29,10 +29,12 @@
   "common": {
     "loading": "Loading…",
     "notFoundCode": "404",
-    "notFoundTitle": "Page not found",
-    "notFoundBody": "This page does not exist. Start from home or run a new calculation.",
-    "backHome": "Back to home",
-    "retry": "Try again"
+    "notFoundTitle": "This page is not available",
+    "notFoundBody": "The link may be old or the route may not exist in the static preview.",
+    "backHome": "Go home",
+    "retry": "Try again",
+    "errorTitle": "Something went wrong",
+    "errorBody": "The app hit an unexpected error. You can try again or return home."
   },
   "offline": {
     "iconLabel": "Offline",

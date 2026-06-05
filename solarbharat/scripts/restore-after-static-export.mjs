@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { existsSync, renameSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { restorePath } from './static-export-fs.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
@@ -13,20 +13,15 @@ const paths = {
   mwBackup: join(root, '.static-export-backup-middleware.ts'),
 }
 
-if (existsSync(paths.apiBackup)) {
-  if (existsSync(paths.api)) {
-    console.error('restore: src/app/api already exists')
-    process.exit(1)
+try {
+  if (restorePath(paths.apiBackup, paths.api)) {
+    console.log('Restored src/app/api')
   }
-  renameSync(paths.apiBackup, paths.api)
-  console.log('Restored src/app/api')
-}
 
-if (existsSync(paths.mwBackup)) {
-  if (existsSync(paths.mw)) {
-    console.error('restore: middleware.ts already exists')
-    process.exit(1)
+  if (restorePath(paths.mwBackup, paths.mw)) {
+    console.log('Restored middleware.ts')
   }
-  renameSync(paths.mwBackup, paths.mw)
-  console.log('Restored middleware.ts')
+} catch (err) {
+  console.error(String(err))
+  process.exit(1)
 }
