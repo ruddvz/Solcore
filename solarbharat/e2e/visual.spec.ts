@@ -1,9 +1,10 @@
 import { test, expect, type Page } from '@playwright/test'
 
 async function prepareForScreenshot(page: Page) {
-  await page.evaluate(() => document.fonts.ready)
+  await page.locator('body').waitFor({ state: 'visible' })
+  await page.waitForFunction(() => document.readyState === 'complete')
   await page.evaluate(() => window.scrollTo(0, 0))
-  await page.waitForTimeout(300)
+  await page.waitForTimeout(500)
 }
 
 const VIEWPORTS = [
@@ -38,7 +39,6 @@ test.describe('Visual snapshots', () => {
         await prepareForScreenshot(page)
         const slug = path.replace(/[/?=&]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '') || 'home'
         await expect(page).toHaveScreenshot(`${slug}-${vp.name}.png`, {
-          fullPage: true,
           maxDiffPixelRatio: 0.03,
           animations: 'disabled',
         })
@@ -52,7 +52,6 @@ test.describe('Visual snapshots', () => {
       await expect(page.getByLabel(/land/i)).toBeVisible({ timeout: 10_000 })
       await prepareForScreenshot(page)
       await expect(page).toHaveScreenshot(`calculator-step2-${vp.name}.png`, {
-        fullPage: true,
         maxDiffPixelRatio: 0.03,
         animations: 'disabled',
       })
@@ -66,7 +65,6 @@ test.describe('Visual snapshots', () => {
       await expect(page.locator('[data-report-section="costs"]')).toBeVisible({ timeout: 10_000 })
       await prepareForScreenshot(page)
       await expect(page).toHaveScreenshot(`report-costs-${vp.name}.png`, {
-        fullPage: true,
         maxDiffPixelRatio: 0.03,
         animations: 'disabled',
       })
@@ -80,7 +78,6 @@ test.describe('Visual snapshots', () => {
     await expect(page.getByRole('dialog', { name: /^more$/i })).toBeVisible()
     await prepareForScreenshot(page)
     await expect(page).toHaveScreenshot('more-sheet-iphone-14.png', {
-      fullPage: false,
       maxDiffPixelRatio: 0.03,
       animations: 'disabled',
     })
