@@ -84,13 +84,13 @@ export function ContractorsListPage() {
                     </span>
                   )}
                 </div>
-                <p className="mt-2 text-sm text-white/50">{stateName(c.stateId)}</p>
+                <p className="mt-2 text-sm text-white/70">{stateName(c.stateId)}</p>
                 {c.technologyTags.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {c.technologyTags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-md border border-white/10 bg-sb-bg/80 px-2 py-0.5 text-[10px] font-bold uppercase text-white/55"
+                        className="rounded-md border border-white/10 bg-sb-bg/80 px-2 py-0.5 text-[10px] font-bold uppercase text-white/70"
                       >
                         {tag}
                       </span>
@@ -104,10 +104,10 @@ export function ContractorsListPage() {
       )}
 
       {!loading && filtered.length === 0 && (
-        <p className="text-center text-base text-white/50">{t('contractors.empty')}</p>
+        <p className="text-center text-base text-white/70">{t('contractors.empty')}</p>
       )}
 
-      <p className="text-sm text-white/50">{t('contractors.disclaimer')}</p>
+      <p className="text-sm text-white/70">{t('contractors.disclaimer')}</p>
     </div>
   )
 }

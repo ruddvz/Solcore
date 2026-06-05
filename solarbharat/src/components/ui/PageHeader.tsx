@@ -11,7 +11,7 @@ export function PageHeader({
 }) {
   return (
     <header className="space-y-2">
-      {overline ? <p className="sb-overline text-white/50">{overline}</p> : null}
+      {overline ? <p className="sb-overline text-white/70">{overline}</p> : null}
       <h1 className="font-heading text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
         {title}
       </h1>

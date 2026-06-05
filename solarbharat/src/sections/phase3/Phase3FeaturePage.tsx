@@ -56,7 +56,7 @@ export function Phase3FeaturePage({ slug }: Props) {
         </ul>
       </div>
 
-      <p className="text-xs text-white/40">{t(`phase3.detail.${slug}.note`)}</p>
+      <p className="text-xs text-white/65">{t(`phase3.detail.${slug}.note`)}</p>
     </div>
   )
 }

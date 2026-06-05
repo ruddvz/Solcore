@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,7 @@ export function LanguageSwitcher() {
             aria-label={t(`lang.${lng}`)}
             onClick={() => void i18n.changeLanguage(lng)}
             className={`min-h-[44px] min-w-[44px] rounded-lg px-3 text-xs font-bold uppercase tracking-[0.08em] transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold ${
-              active ? 'bg-sb-gold text-sb-bg' : 'text-white/55 hover:text-white'
+              active ? 'bg-sb-gold text-sb-bg' : 'text-white/70 hover:text-white'
             }`}
           >
             {lng}
@@ -89,6 +89,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation()
   const pathname = usePathname() ?? '/'
   const [menuOpen, setMenuOpen] = useState(false)
+  const menuTriggerRef = useRef<HTMLButtonElement | null>(null)
+  const sheetCloseRef = useRef<HTMLButtonElement | null>(null)
 
   const navItems = NAV_KEYS.filter((item) => !('devOnly' in item && item.devOnly) || SHOW_PREVIEW)
 
@@ -101,6 +103,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
     return () => {
       document.body.style.overflow = ''
     }
+  }, [menuOpen])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    sheetCloseRef.current?.focus()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMenuOpen(false)
+        menuTriggerRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
   }, [menuOpen])
 
   const desktopLinkClass =
@@ -127,7 +142,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </span>
               <span className="flex min-w-0 flex-col leading-tight">
                 <span className="truncate text-sm font-black tracking-tight">{t('nav.brand')}</span>
-                <span className="hidden text-[10px] font-bold uppercase tracking-wide text-white/50 sm:block">
+                <span className="hidden text-[10px] font-bold uppercase tracking-wide text-white/70 sm:block">
                   {t('nav.tagline')}
                 </span>
               </span>
@@ -159,7 +174,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 const cls = isReport
                   ? `${desktopLinkClass} text-sb-gold hover:text-sb-goldDark`
                   : isPreview
-                    ? `${desktopLinkClass} text-white/50 hover:text-white/80`
+                    ? `${desktopLinkClass} text-white/70 hover:text-white/80`
                     : active
                       ? `${desktopLinkClass} bg-white/10 text-white`
                       : `${desktopLinkClass} text-white/70 hover:text-white`
@@ -202,16 +217,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
               label={t(`nav.${key}`)}
               active={active}
               className={`flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 px-1 text-[10px] font-bold uppercase tracking-wide ${
-                active ? 'text-sb-gold' : 'text-white/55'
+                active ? 'text-sb-gold' : 'text-white/70'
               }`}
             />
           )
         })}
         <button
+          ref={menuTriggerRef}
           type="button"
-          className={`${linkFocus} flex min-h-[52px] flex-1 flex-col items-center justify-center px-1 text-[10px] font-bold uppercase tracking-wide text-white/55`}
+          className={`${linkFocus} flex min-h-[52px] flex-1 flex-col items-center justify-center px-1 text-[10px] font-bold uppercase tracking-wide text-white/70`}
           aria-expanded={menuOpen}
           aria-controls="mobile-nav-sheet"
+          aria-label={t('nav.more')}
           onClick={() => setMenuOpen(true)}
         >
           {t('nav.more')}
@@ -237,9 +254,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="mb-4 flex items-center justify-between">
               <span className="font-heading text-lg font-bold text-white">{t('nav.mainNav')}</span>
               <button
+                ref={sheetCloseRef}
                 type="button"
                 className={`${linkFocus} min-h-[44px] rounded-xl px-4 text-sm font-bold text-sb-gold`}
-                onClick={() => setMenuOpen(false)}
+                onClick={() => {
+                  setMenuOpen(false)
+                  menuTriggerRef.current?.focus()
+                }}
               >
                 {t('nav.menuClose')}
               </button>
@@ -264,13 +285,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
               })}
             </ul>
             <nav className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 border-t border-white/10 pt-4 text-sm font-bold">
-              <Link className={`${linkFocus} text-white/55 hover:text-white`} href={withBasePath('/terms')}>
+              <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/terms')}>
                 {t('footer.terms')}
               </Link>
-              <Link className={`${linkFocus} text-white/55 hover:text-white`} href={withBasePath('/privacy')}>
+              <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/privacy')}>
                 {t('footer.privacy')}
               </Link>
-              <Link className={`${linkFocus} text-white/55 hover:text-white`} href={withBasePath('/contact')}>
+              <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/contact')}>
                 {t('footer.contact')}
               </Link>
             </nav>
@@ -291,26 +312,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
           style={{ paddingBottom: 'max(0px, env(safe-area-inset-bottom))' }}
         >
           <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs font-bold" aria-label={t('footer.legalNav')}>
-            <Link className={`${linkFocus} text-white/55 hover:text-white`} href={withBasePath('/terms')}>
+            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/terms')}>
               {t('footer.terms')}
             </Link>
-            <Link className={`${linkFocus} text-white/55 hover:text-white`} href={withBasePath('/privacy')}>
+            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/privacy')}>
               {t('footer.privacy')}
             </Link>
-            <Link className={`${linkFocus} text-white/55 hover:text-white`} href={withBasePath('/contact')}>
+            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/contact')}>
               {t('footer.contact')}
             </Link>
-            <Link className={`${linkFocus} text-white/55 hover:text-white`} href={withBasePath('/calculator')}>
+            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/calculator')}>
               {t('nav.calculator')}
             </Link>
-            <Link className={`${linkFocus} text-white/55 hover:text-white`} href={withBasePath('/locations')}>
+            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/locations')}>
               {t('nav.locations')}
             </Link>
-            <Link className={`${linkFocus} text-white/55 hover:text-white`} href={withBasePath('/alerts')}>
+            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/alerts')}>
               {t('nav.alerts')}
             </Link>
           </nav>
-          <p className="text-xs text-white/50">{t('footer.disclaimer')}</p>
+          <p className="text-xs text-white/70">{t('footer.disclaimer')}</p>
         </div>
       </footer>
     </div>

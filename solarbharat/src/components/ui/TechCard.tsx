@@ -26,7 +26,7 @@ export function TechCard({
       <div className="flex items-start justify-between gap-2">
         <div>
           <div className="text-sm font-extrabold text-white">{tech.label}</div>
-          <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] text-white/55">
+          <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] text-white/70">
             <span>
               {t('tech.eff')}: <b className="text-white/80">{tech.efficiencyPct}%</b>
             </span>

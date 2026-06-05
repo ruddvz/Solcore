@@ -18,8 +18,8 @@ This file tracks **what is implemented in the repo** versus [`SOLAR_BHARAT_PRODU
 | §12 PDF | Done — `exportPdf.ts`, watermark, `data-report-section` |
 | §13 Supabase | Done — migrations + Phase 2 ops migration `20260509130000_*` |
 | §14 Common bugs | Enforced in code paths (PR 0.78, land row, Year 11, etc.) |
-| §15 Performance | **CI smoke** — Lighthouse job in `.github/workflows/solarbharat-ci.yml` (non-blocking); tune per deploy |
-| §16 Testing | **CI** — `lint` + `build` on push; manual checklist still applies for release sign-off |
+| §15 Performance | **CI** — Lighthouse job with thresholds (performance ≥0.5, a11y/SEO/BP ≥0.85) |
+| §16 Testing | **CI** — `validate`, `verify:pwa`, Playwright Chromium + WebKit iPhone; see `solarbharat/POST_AGENT_AUDIT_STATUS.md` |
 
 ## Phase 1 MVP (plan §5 + §10.5)
 

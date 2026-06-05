@@ -33,13 +33,13 @@ export function Phase3HubPage() {
               className="flex flex-col rounded-2xl border border-white/10 bg-sb-surface/40 px-5 py-4 transition hover:border-sb-gold/35 hover:text-sb-gold"
             >
               <span className="font-extrabold text-white">{t(`phase3.cards.${slug}.title`)}</span>
-              <span className="mt-1 text-xs text-white/50">{t(`phase3.cards.${slug}.blurb`)}</span>
+              <span className="mt-1 text-xs text-white/70">{t(`phase3.cards.${slug}.blurb`)}</span>
             </Link>
           </li>
         ))}
       </ul>
 
-      <p className="text-xs text-white/40">{t('phase3.footer')}</p>
+      <p className="text-xs text-white/65">{t('phase3.footer')}</p>
     </div>
   )
 }

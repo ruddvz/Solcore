@@ -4,6 +4,7 @@ import './globals.css'
 import { Providers } from '@/components/Providers'
 import { AppShell } from '@/components/layout/AppShell'
 import { IosInstallPrompt } from '@/components/pwa/IosInstallPrompt'
+import { PwaUpdatePrompt } from '@/components/pwa/PwaUpdatePrompt'
 
 const fontSyne = Syne({
   subsets: ['latin'],
@@ -83,6 +84,7 @@ export default function RootLayout({
         <Providers>
           <AppShell>{children}</AppShell>
           <IosInstallPrompt />
+          <PwaUpdatePrompt />
         </Providers>
       </body>
     </html>

@@ -1,14 +1,17 @@
+import { Suspense } from 'react'
 import { CalculatorPage } from '@/sections/CalculatorPage'
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { stateId?: string; districtId?: string }
-}) {
+/** Static-export safe: query params are read client-side in CalculatorPage. */
+export default function Page() {
   return (
-    <CalculatorPage
-      initialStateId={searchParams.stateId ?? null}
-      initialDistrictId={searchParams.districtId ?? null}
-    />
+    <Suspense
+      fallback={
+        <p className="px-4 py-8 text-sm text-white/70" role="status">
+          Loading calculator…
+        </p>
+      }
+    >
+      <CalculatorPage />
+    </Suspense>
   )
 }

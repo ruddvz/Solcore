@@ -21,7 +21,7 @@ export function LocationsIndexPage() {
             >
               {s.name}
             </Link>
-            <span className="text-white/50">
+            <span className="text-white/70">
               {' '}
               · {t('locations.districtCount', { count: s.districts.length })}
             </span>

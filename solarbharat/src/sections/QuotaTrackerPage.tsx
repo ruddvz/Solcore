@@ -20,7 +20,7 @@ function bandStyle(band: string): string {
     case 'closed':
       return 'bg-sb-red/20 text-sb-red'
     default:
-      return 'bg-white/10 text-white/55'
+      return 'bg-white/10 text-white/70'
   }
 }
 
@@ -78,7 +78,7 @@ export function QuotaTrackerPage() {
                     {' · '}
                     {districtName(q.stateId, q.districtId)}
                   </div>
-                  <p className="mt-1 text-xs text-white/45">
+                  <p className="mt-1 text-xs text-white/65">
                     {t('quota.updated')}:{' '}
                     {new Date(q.capturedAt).toLocaleString(locale, {
                       dateStyle: 'medium',
@@ -86,7 +86,7 @@ export function QuotaTrackerPage() {
                     })}
                   </p>
                   {q.sourceDetail && (
-                    <p className="mt-2 text-sm text-white/55">{q.sourceDetail}</p>
+                    <p className="mt-2 text-sm text-white/70">{q.sourceDetail}</p>
                   )}
                 </div>
                 <div className="text-right">
@@ -109,10 +109,10 @@ export function QuotaTrackerPage() {
       )}
 
       {!loading && sorted.length === 0 && (
-        <p className="text-center text-base text-white/50">{t('quota.empty')}</p>
+        <p className="text-center text-base text-white/70">{t('quota.empty')}</p>
       )}
 
-      <p className="text-sm text-white/50">{t('quota.disclaimer')}</p>
+      <p className="text-sm text-white/70">{t('quota.disclaimer')}</p>
     </div>
   )
 }

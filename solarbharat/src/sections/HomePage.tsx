@@ -70,7 +70,7 @@ export function HomePage() {
         <p className="sb-body mt-4 max-w-2xl text-pretty text-white/60">{t('home.heroSubtitle')}</p>
 
         <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="sb-overline text-white/50">{t('home.districtStart')}</p>
+          <p className="sb-overline text-white/70">{t('home.districtStart')}</p>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <Select
               id="home-state"
@@ -108,7 +108,7 @@ export function HomePage() {
           </ButtonLink>
         </div>
 
-        <p className="mt-4 text-xs text-white/45">
+        <p className="mt-4 text-xs text-white/65">
           {t('home.statStates')} · {t('home.trustTitle')} · {t('home.featureReport')}
         </p>
 
@@ -134,7 +134,7 @@ export function HomePage() {
               <div className="mt-3 font-heading text-[15px] font-bold leading-snug text-white">
                 {t(`home.${titleKey}`)}
               </div>
-              <p className="mt-1 text-[14px] leading-relaxed text-white/55">{t(`home.${d}`)}</p>
+              <p className="mt-1 text-[14px] leading-relaxed text-white/70">{t(`home.${d}`)}</p>
             </div>
           ))}
         </div>
@@ -142,12 +142,12 @@ export function HomePage() {
 
       <section>
         <h2 className="font-heading text-[22px] font-bold text-white">{t('home.trustTitle')}</h2>
-        <p className="sb-body mt-2 max-w-2xl text-white/55">{t('home.trustBody')}</p>
+        <p className="sb-body mt-2 max-w-2xl text-white/70">{t('home.trustBody')}</p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {AUDIENCE.map(({ t: titleKey, d }) => (
             <div key={titleKey} className="rounded-xl border border-white/10 bg-sb-surface/40 p-4">
               <div className="font-heading text-[15px] font-bold text-white">{t(`home.${titleKey}`)}</div>
-              <p className="mt-1 text-sm text-white/55">{t(`home.${d}`)}</p>
+              <p className="mt-1 text-sm text-white/70">{t(`home.${d}`)}</p>
             </div>
           ))}
         </div>
@@ -155,7 +155,7 @@ export function HomePage() {
 
       <section>
         <h2 className="font-heading text-[22px] font-bold text-white">{t('home.coverageTitle')}</h2>
-        <p className="sb-body mt-2 text-white/55">
+        <p className="sb-body mt-2 text-white/70">
           {t('home.coverageAll', { states: stateCount, districts: districtCount })}
         </p>
         <label className="mt-4 block">
@@ -180,7 +180,7 @@ export function HomePage() {
                   {s.districts.length}
                 </span>
               </div>
-              <p className="mt-1 text-xs text-white/45">
+              <p className="mt-1 text-xs text-white/65">
                 {s.districts
                   .slice(0, 6)
                   .map((d) => d.name)

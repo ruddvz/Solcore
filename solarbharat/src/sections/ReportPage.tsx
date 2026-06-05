@@ -69,7 +69,7 @@ function planRiskLevel(stateId: string, index: number): RiskLevel {
 function levelStyle(level: RiskLevel) {
   if (level === 'HIGH') return 'bg-sb-red/20 text-sb-red'
   if (level === 'MED') return 'bg-sb-orange/15 text-sb-orange'
-  return 'bg-white/10 text-white/55'
+  return 'bg-white/10 text-white/70'
 }
 
 function StarRating({ value, label }: { value: number; label: string }) {
@@ -80,7 +80,7 @@ function StarRating({ value, label }: { value: number; label: string }) {
         {'★'.repeat(full)}
         <span className="text-white/20">{'★'.repeat(5 - full)}</span>
       </span>
-      <span className="font-mono text-[11px] text-white/50">{value.toFixed(1)}</span>
+      <span className="font-mono text-[11px] text-white/70">{value.toFixed(1)}</span>
     </span>
   )
 }
@@ -134,7 +134,7 @@ function ModelYearTable({
   return (
     <table className="w-full text-left text-[12.5px]">
       <thead>
-        <tr className="border-b border-white/10 sb-overline text-white/40">
+        <tr className="border-b border-white/10 sb-overline text-white/65">
           {th('year', t('report.model.colYear'))}
           {th('unitsLakh', t('report.model.colUnits'))}
           {th('grossRevenueRs', t('report.model.colGross'))}
@@ -276,7 +276,7 @@ export function ReportPage() {
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <h1 className="font-heading text-2xl font-bold tracking-tight text-white">{t('report.title')}</h1>
-          <p className="mt-1 text-sm text-white/55">
+          <p className="mt-1 text-sm text-white/70">
             {district?.name}, {state.name} · {tech.label}
           </p>
         </div>
@@ -328,7 +328,7 @@ export function ReportPage() {
           data-report-section="overview"
         >
           <Card>
-            <div className="sb-overline text-white/45">
+            <div className="sb-overline text-white/65">
               {t('report.overview.system')}
             </div>
             <div className="mt-3 space-y-1">
@@ -342,7 +342,7 @@ export function ReportPage() {
             </div>
           </Card>
           <Card accent="blue">
-            <div className="sb-overline text-white/45">
+            <div className="sb-overline text-white/65">
               {t('report.overview.climate')}
             </div>
             <div className="mt-3 space-y-1">
@@ -357,12 +357,12 @@ export function ReportPage() {
               <KV label={t('report.overview.tariff')} value={`₹${fin.tariffMidRs.toFixed(2)}`} />
               <KV label={t('report.overview.subsidyPct')} value={`${state.subsidyPct}%`} />
             </div>
-            <p className="mt-3 text-[14px] leading-relaxed text-white/50">{state.monsoonNote}</p>
-            <p className="mt-1 text-[14px] leading-relaxed text-white/50">{state.gridQuality}</p>
+            <p className="mt-3 text-[14px] leading-relaxed text-white/70">{state.monsoonNote}</p>
+            <p className="mt-1 text-[14px] leading-relaxed text-white/70">{state.gridQuality}</p>
           </Card>
 
           <Card className="lg:col-span-2">
-            <div className="sb-overline text-white/45">
+            <div className="sb-overline text-white/65">
               {t('report.overview.chart40')}
             </div>
             <div className="mt-4 w-full min-w-0">
@@ -393,7 +393,7 @@ export function ReportPage() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <p className="mt-2 text-[14px] leading-relaxed text-white/45">{t('report.overview.chart40Axis')}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-white/65">{t('report.overview.chart40Axis')}</p>
           </Card>
 
           <Card>
@@ -445,7 +445,7 @@ export function ReportPage() {
       {tab === 'costs' && (
         <div className="grid gap-4 lg:grid-cols-2" data-report-section="costs">
           <Card>
-            <div className="sb-overline text-white/45">
+            <div className="sb-overline text-white/65">
               {t('report.costs.donut')}
             </div>
             <div className="mt-4">
@@ -457,14 +457,14 @@ export function ReportPage() {
                   <li key={s.key} className="flex items-center gap-2">
                     <span className="h-2 w-2 shrink-0 rounded-sm" style={{ backgroundColor: s.color }} />
                     <span className="font-bold text-white/80">{t(s.labelKey)}</span>
-                    <span className="ml-auto font-mono text-white/55">₹{formatInr(s.amountRs)}</span>
+                    <span className="ml-auto font-mono text-white/70">₹{formatInr(s.amountRs)}</span>
                   </li>
                 ))}
               </ul>
             ) : null}
           </Card>
           <Card>
-            <div className="sb-overline text-white/45">
+            <div className="sb-overline text-white/65">
               {t('report.costs.funding')}
             </div>
             <div className="mt-4">
@@ -479,7 +479,7 @@ export function ReportPage() {
                   { label: t('report.costs.youEquity'), amountRs: fin.cashEquityRs, color: '#f97316' },
                 ]}
               />
-              <div className="mt-4 space-y-1 text-[14px] leading-snug text-white/55">
+              <div className="mt-4 space-y-1 text-[14px] leading-snug text-white/70">
                 <div>
                   {t('report.costs.govt')}: <b className="text-white">₹{formatInr(fin.subsidyAmountRs)}</b>
                 </div>
@@ -495,13 +495,13 @@ export function ReportPage() {
           </Card>
 
           <Card className="lg:col-span-2">
-            <div className="sb-overline text-white/45">
+            <div className="sb-overline text-white/65">
               {t('report.costs.table')}
             </div>
             <div className="mt-3 overflow-x-auto">
               <table className="w-full text-left text-[12.5px]">
                 <thead>
-                  <tr className="border-b border-white/10 sb-overline text-white/40">
+                  <tr className="border-b border-white/10 sb-overline text-white/65">
                     <th className="py-2 pr-4">{t('report.costs.colItem')}</th>
                     <th className="py-2 text-right">{t('report.costs.colAmount')}</th>
                   </tr>
@@ -528,18 +528,18 @@ export function ReportPage() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-2 text-[14px] leading-relaxed text-white/45">{t('report.costs.landFree')}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-white/65">{t('report.costs.landFree')}</p>
           </Card>
 
           <Card className="lg:col-span-2" accent="green">
-            <div className="sb-overline text-white/45">
+            <div className="sb-overline text-white/65">
               {t('report.costs.reality')}
             </div>
             <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-white/70">
               <li>{t('report.costs.subsidyDelay')}</li>
               <li>{t('report.costs.reserve')}</li>
             </ul>
-            <div className="mt-4 sb-overline text-white/45">
+            <div className="mt-4 sb-overline text-white/65">
               {t('report.costs.benefits')}
             </div>
             <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-white/60">
@@ -555,7 +555,7 @@ export function ReportPage() {
       {tab === 'model' && (
         <div className="space-y-4" data-report-section="model">
           <Card>
-            <div className="sb-overline text-white/45">
+            <div className="sb-overline text-white/65">
               {t('report.model.chart')}
             </div>
             <div className="mt-4 w-full min-w-0">
@@ -582,11 +582,11 @@ export function ReportPage() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <p className="mt-2 text-[14px] leading-relaxed text-white/45">{t('report.model.note')}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-white/65">{t('report.model.note')}</p>
           </Card>
 
           <Card>
-            <div className="sb-overline text-white/45">
+            <div className="sb-overline text-white/65">
               {t('report.model.table')}
             </div>
             <div className="mt-3 overflow-x-auto">
@@ -602,7 +602,7 @@ export function ReportPage() {
 
       {tab === 'risks' && (
         <Card data-report-section="risks">
-          <div className="sb-overline text-white/45">
+          <div className="sb-overline text-white/65">
             {t('report.risks.title')}
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
@@ -658,7 +658,7 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
   return (
     <div className="space-y-4" data-report-section="action">
       <Card>
-        <div className="sb-overline text-white/45">{t('report.action.title')}</div>
+        <div className="sb-overline text-white/65">{t('report.action.title')}</div>
         <div className="mt-4 space-y-3">
           {phases.map((ph) => (
             <div key={ph.title} className={`rounded-xl border p-4 ${ph.tone}`}>
@@ -682,7 +682,7 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
       </Card>
 
       <Card accent="blue">
-        <div className="sb-overline text-white/45">
+        <div className="sb-overline text-white/65">
           {t('report.action.contacts')}
         </div>
         <div className="mt-3 space-y-2 text-sm text-white/75">
@@ -703,9 +703,9 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
             </div>
           ) : null}
           {state.nodalPhoneHint ? (
-            <p className="text-[14px] leading-relaxed text-white/50">{state.nodalPhoneHint}</p>
+            <p className="text-[14px] leading-relaxed text-white/70">{state.nodalPhoneHint}</p>
           ) : (
-            <p className="text-[14px] leading-relaxed text-white/45">{t('report.action.phoneVerify')}</p>
+            <p className="text-[14px] leading-relaxed text-white/65">{t('report.action.phoneVerify')}</p>
           )}
           <div>
             <span className="font-bold text-white">{t('report.action.discomLabel')}:</span> {state.discom}
@@ -717,7 +717,7 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
       </Card>
 
       <Card>
-        <div className="sb-overline text-white/45">
+        <div className="sb-overline text-white/65">
           {t('report.action.docsTitle')}
         </div>
         <ul className="mt-3 space-y-2">
@@ -751,7 +751,7 @@ function AgrivoltaicsSection({ stateId }: { stateId: string }) {
       </div>
       <div className="mt-3 grid gap-4 md:grid-cols-2">
         <div>
-          <div className="text-[11px] font-bold uppercase text-white/40">{t('report.agri.layout')}</div>
+          <div className="text-[11px] font-bold uppercase text-white/65">{t('report.agri.layout')}</div>
           <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-white/70">
             <li>{t('report.agri.l1')}</li>
             <li>{t('report.agri.l2')}</li>
@@ -759,7 +759,7 @@ function AgrivoltaicsSection({ stateId }: { stateId: string }) {
           </ul>
         </div>
         <div>
-          <div className="text-[11px] font-bold uppercase text-white/40">{t('report.agri.crops')}</div>
+          <div className="text-[11px] font-bold uppercase text-white/65">{t('report.agri.crops')}</div>
           <p className="mt-2 text-sm text-white/70">{t(`report.agri.${cropsKey}`)}</p>
         </div>
       </div>
@@ -770,7 +770,7 @@ function AgrivoltaicsSection({ stateId }: { stateId: string }) {
         <div>
           <span className="font-bold text-white">{t('report.agri.capex')}:</span> {t('report.agri.capexNote')}
         </div>
-        <div className="text-[11px] font-bold uppercase text-white/40">{t('report.agri.phases')}</div>
+        <div className="text-[11px] font-bold uppercase text-white/65">{t('report.agri.phases')}</div>
         <ul className="list-disc space-y-1 pl-4">
           <li>{t('report.agri.ph1')}</li>
           <li>{t('report.agri.ph2')}</li>
@@ -789,9 +789,9 @@ function SuppliersTab({ stateId }: { stateId: string }) {
   return (
     <div className="space-y-4" data-report-section="suppliers">
       <Card>
-        <div className="sb-overline text-white/45">{t('report.suppliers.epc')}</div>
+        <div className="sb-overline text-white/65">{t('report.suppliers.epc')}</div>
         {epcs.length === 0 ? (
-          <p className="mt-2 text-sm text-white/55">{t('report.suppliers.epcPlaceholder')}</p>
+          <p className="mt-2 text-sm text-white/70">{t('report.suppliers.epcPlaceholder')}</p>
         ) : null}
         <ul className="mt-3 space-y-2">
           {epcs.map((e) => (
@@ -818,13 +818,13 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card>
-        <div className="sb-overline text-white/45">{t('report.suppliers.panels')}</div>
-        <p className="mt-1 text-[14px] leading-relaxed text-white/45">{t('report.suppliers.almm')}</p>
+        <div className="sb-overline text-white/65">{t('report.suppliers.panels')}</div>
+        <p className="mt-1 text-[14px] leading-relaxed text-white/65">{t('report.suppliers.almm')}</p>
         <ul className="mt-3 space-y-2 text-sm">
           {PANEL_MANUFACTURERS.map((p) => (
             <li key={p.name} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 py-2">
               <span className="font-bold text-white">{p.name}</span>
-              <span className="text-white/55">
+              <span className="text-white/70">
                 {t(p.locationKey)} · {t(p.techKey)}
               </span>
               <div className="flex flex-wrap items-center gap-2">
@@ -841,12 +841,12 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card>
-        <div className="sb-overline text-white/45">{t('report.suppliers.inverters')}</div>
+        <div className="sb-overline text-white/65">{t('report.suppliers.inverters')}</div>
         <ul className="mt-3 space-y-2">
           {INVERTER_BRANDS.map((inv) => (
             <li key={inv.name} className="flex flex-wrap justify-between gap-2 text-sm">
               <span className="font-bold text-white">{inv.name}</span>
-              <span className="text-white/55">{inv.model}</span>
+              <span className="text-white/70">{inv.model}</span>
               <span className="text-[11px] text-sb-blue">
                 {t('report.suppliers.warranty')}: {inv.warranty}
               </span>
@@ -856,7 +856,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card>
-        <div className="sb-overline text-white/45">{t('report.suppliers.robots')}</div>
+        <div className="sb-overline text-white/65">{t('report.suppliers.robots')}</div>
         <ul className="mt-3 space-y-2">
           {ROBOT_SYSTEMS.map((r) => (
             <li key={r.name} className="rounded-xl border border-white/10 p-3">
@@ -868,7 +868,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
                   </span>
                 )}
               </div>
-              <div className="mt-1 text-[14px] leading-snug text-white/55">
+              <div className="mt-1 text-[14px] leading-snug text-white/70">
                 {t(r.capitalKey)} · {t(r.runKey)}
               </div>
             </li>
@@ -877,13 +877,13 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card accent="green">
-        <div className="sb-overline text-white/45">{t('report.suppliers.finance')}</div>
+        <div className="sb-overline text-white/65">{t('report.suppliers.finance')}</div>
         <ul className="mt-3 space-y-2 text-sm">
           {FINANCING_PARTNERS.map((f) => (
             <li key={f.bankKey} className="flex flex-wrap justify-between gap-2 border-b border-white/5 py-2">
               <span className="font-bold text-white">{t(f.bankKey)}</span>
               <span className="text-sb-gold">{f.rate}</span>
-              <span className="text-white/55">{t(f.tenureKey)}</span>
+              <span className="text-white/70">{t(f.tenureKey)}</span>
             </li>
           ))}
         </ul>

@@ -14,7 +14,7 @@ export function StateLocationPage({ state: st }: { state: GeographyState }) {
 
   return (
     <div className="space-y-6">
-      <p className="sb-overline text-white/50">{t('locations.crumb')}</p>
+      <p className="sb-overline text-white/70">{t('locations.crumb')}</p>
       <PageHeader title={st.name} subtitle={t('locations.stateBody', { state: st.name })} />
       <Link
         href={calcHref}
@@ -23,7 +23,7 @@ export function StateLocationPage({ state: st }: { state: GeographyState }) {
         {t('locations.openCalculator', { place: st.name })}
       </Link>
       <div className="rounded-xl border border-white/10 bg-sb-surface/60 p-4">
-        <div className="sb-overline text-white/50">{t('locations.districts')}</div>
+        <div className="sb-overline text-white/70">{t('locations.districts')}</div>
         <ul className="mt-3 max-h-72 space-y-1.5 overflow-y-auto text-base text-white/75">
           {st.districts.map((d) => (
             <li key={d.id}>

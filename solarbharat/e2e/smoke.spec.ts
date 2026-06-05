@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import AxeBuilder from '@axe-core/playwright'
+import { analyzeAccessibility, PUBLIC_ROUTES } from './helpers'
 
 test.describe('SolarBharat smoke', () => {
   test('home loads with primary CTA', async ({ page }) => {
@@ -10,11 +10,17 @@ test.describe('SolarBharat smoke', () => {
   })
 
   test('calculator rejects invalid land on step 2', async ({ page }) => {
-    await page.goto('/calculator')
-    await page.getByRole('button', { name: /continue/i }).first().click()
-    await page.getByRole('spinbutton').fill('0')
-    await page.getByRole('button', { name: /continue/i }).first().click()
-    await expect(page.getByText(/land area greater than 0/i)).toBeVisible()
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/calculator?stateId=gujarat&districtId=surat', { waitUntil: 'networkidle' })
+    await expect(page.locator('#district')).toHaveValue('surat')
+    const continueBtn = page.getByRole('button', { name: /^Continue$/i }).filter({ visible: true })
+    await continueBtn.click()
+    const landInput = page.getByLabel(/land/i)
+    await landInput.clear()
+    await landInput.fill('0')
+    await landInput.blur()
+    await continueBtn.click()
+    await expect(page.getByText(/land area greater than 0/i)).toBeVisible({ timeout: 10_000 })
   })
 
   test('report shows empty state without scenario', async ({ page }) => {
@@ -39,14 +45,22 @@ test.describe('SolarBharat smoke', () => {
 })
 
 test.describe('Accessibility', () => {
-  for (const path of ['/', '/calculator', '/report', '/contractors', '/offline']) {
+  const a11yPaths = ['/', '/calculator', '/report', '/contractors', '/offline', '/quotes', '/privacy']
+
+  for (const path of a11yPaths) {
     test(`axe ${path}`, async ({ page }) => {
+      const violations = await analyzeAccessibility(page, path)
+      expect(violations, JSON.stringify(violations, null, 2)).toEqual([])
+    })
+  }
+})
+
+test.describe('Route headings', () => {
+  for (const { path } of PUBLIC_ROUTES.slice(0, 8)) {
+    test(`no blank body on ${path}`, async ({ page }) => {
       await page.goto(path)
-      const results = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa'])
-        .disableRules(['color-contrast'])
-        .analyze()
-      expect(results.violations.filter((v) => v.impact === 'critical')).toEqual([])
+      const text = await page.locator('body').innerText()
+      expect(text.trim().length).toBeGreaterThan(20)
     })
   }
 })

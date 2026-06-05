@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { useCalculatorStore } from '@/store/calculatorStore'
 import { listGeographyStates, coordsForLocation, getGeographyDistrict, resolveDistrictId } from '@/lib/region'
@@ -39,6 +40,9 @@ export function CalculatorPage({
   initialDistrictId = null,
 }: CalculatorPageProps) {
   const { t } = useTranslation()
+  const searchParams = useSearchParams()
+  const queryStateId = searchParams.get('stateId')
+  const queryDistrictId = searchParams.get('districtId')
   const [step, setStep] = useState(1)
   const [errorKey, setErrorKey] = useState<string | null>(null)
   const {
@@ -67,18 +71,25 @@ export function CalculatorPage({
   const hydratedFromUrl = useRef(false)
   useLayoutEffect(() => {
     if (hydratedFromUrl.current) return
-    if (!initialStateId) return
-    const geo = GEO_STATES.find((s) => s.id === initialStateId)
+    const stateKey = initialStateId ?? queryStateId
+    const districtKey = initialDistrictId ?? queryDistrictId
+    if (!stateKey) return
+    const geo = GEO_STATES.find((s) => s.id === stateKey)
     if (!geo) return
     hydratedFromUrl.current = true
-    setStateId(initialStateId)
+    setStateId(stateKey)
     const rid =
-      resolveDistrictId(initialStateId, initialDistrictId) ??
-      (initialDistrictId && geo.districts.some((d) => d.id === initialDistrictId)
-        ? initialDistrictId
-        : undefined)
+      resolveDistrictId(stateKey, districtKey) ??
+      (districtKey && geo.districts.some((d) => d.id === districtKey) ? districtKey : undefined)
     if (rid) setDistrictId(rid)
-  }, [initialStateId, initialDistrictId, setStateId, setDistrictId])
+  }, [
+    initialStateId,
+    initialDistrictId,
+    queryStateId,
+    queryDistrictId,
+    setStateId,
+    setDistrictId,
+  ])
 
   const state = getResolvedState()
   const geoState = GEO_STATES.find((s) => s.id === stateId)
@@ -166,7 +177,7 @@ export function CalculatorPage({
           subtitle={t('calc.equiv', { acres: acresEquiv.toFixed(2) })}
         >
           {landUnit === 'bigha' ? (
-            <p className="text-xs text-white/40">{t('calc.bighaNote')}</p>
+            <p className="text-xs text-white/65">{t('calc.bighaNote')}</p>
           ) : null}
           {(solarLoading || solarError) && (
             <p className="text-xs text-sb-orange" role="status" aria-live="polite">
@@ -216,7 +227,7 @@ export function CalculatorPage({
                       type="number"
                       inputMode="decimal"
                       step="0.01"
-                      min="0.01"
+                      min="0"
                       required
                       aria-invalid={!!errorKey}
                       aria-describedby={describedBy}
@@ -243,7 +254,7 @@ export function CalculatorPage({
 
             {step === 3 && (
               <fieldset>
-                <legend className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/50">
+                <legend className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
                   {t('calc.tech')}
                 </legend>
                 <div className="mt-2 grid gap-3">
@@ -262,10 +273,10 @@ export function CalculatorPage({
             {step === 4 && (
               <>
                 <div className="border-t border-white/10 pt-4">
-                  <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/50">
+                  <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
                     {t('calc.phase2MapTitle')}
                   </div>
-                  <p className="mt-1 text-xs text-white/45">{t('calc.phase2MapHint')}</p>
+                  <p className="mt-1 text-xs text-white/65">{t('calc.phase2MapHint')}</p>
                   <div className="mt-3">
                     <PinMapPanel
                       center={mapCenter}
@@ -283,7 +294,7 @@ export function CalculatorPage({
                       {t('calc.phase2ResetPin')}
                     </button>
                     {districtRow && (
-                      <span className="font-mono text-[11px] text-white/40">
+                      <span className="font-mono text-[11px] text-white/65">
                         {districtRow.lat.toFixed(4)}°, {districtRow.lon.toFixed(4)}°
                       </span>
                     )}
@@ -291,7 +302,7 @@ export function CalculatorPage({
                 </div>
                 <div className="border-t border-white/10 pt-4">
                   <label className="flex flex-col gap-2" htmlFor="shading">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/50">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
                       {t('calc.phase2Shading')} ({shadingLossPct}%)
                     </span>
                     <input
@@ -307,14 +318,14 @@ export function CalculatorPage({
                       onChange={(e) => setShadingLossPct(Number(e.target.value))}
                       className="min-h-[44px] w-full accent-sb-gold"
                     />
-                    <span className="text-xs text-white/45">{t('calc.phase2ShadingHint')}</span>
+                    <span className="text-xs text-white/65">{t('calc.phase2ShadingHint')}</span>
                   </label>
                 </div>
                 <div className="hidden flex-wrap gap-3 pt-2 md:flex">
                   {reportReady ? (
                     <ButtonLink href="/report">{t('calc.generate')}</ButtonLink>
                   ) : (
-                    <p className="text-sm text-white/50">{t('calc.errorLand')}</p>
+                    <p className="text-sm text-white/70">{t('calc.errorLand')}</p>
                   )}
                 </div>
               </>
@@ -370,9 +381,9 @@ export function CalculatorPage({
               />
               <KV label={t('stateCard.subsidy')} value={`${state.subsidyPct}%`} />
             </div>
-            <p className="mt-3 text-xs text-white/50">{state.climateNote}</p>
+            <p className="mt-3 text-xs text-white/70">{state.climateNote}</p>
             <div className="mt-4">
-              <div className="text-[10px] font-bold uppercase text-white/40">
+              <div className="text-[10px] font-bold uppercase text-white/65">
                 {t('stateCard.monthlyGen')}
               </div>
               <MonthBars values={state.monthlyGenShape} />

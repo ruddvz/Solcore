@@ -15,6 +15,15 @@ npm run dev
 
 Build: `npm run build` · Start: `npm run start`
 
+### Quality gates
+
+```bash
+npm run validate          # lint + typecheck + test + build + verify:pwa
+npm run test:e2e:local    # build + Playwright (Chromium + WebKit iPhone)
+```
+
+CI uses `PLAYWRIGHT_PORT=3010` to avoid port clashes. See **`POST_AGENT_AUDIT_STATUS.md`** for audit evidence.
+
 **UI testing hub:** open **`/preview`** for links to Home, Calculator, Report, Offline page, and short PWA install notes.
 
 ## PWA (installable app)

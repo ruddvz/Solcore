@@ -62,12 +62,12 @@ export function ForumListPage() {
               <Card className="transition hover:border-sb-gold/35">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <span className="font-extrabold text-white">{topic.title}</span>
-                  <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase text-white/55">
+                  <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase text-white/70">
                     {categoryLabel(topic.category)}
                   </span>
                 </div>
-                <p className="mt-2 line-clamp-2 text-sm text-white/50">{topic.bodyMd}</p>
-                <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-white/40">
+                <p className="mt-2 line-clamp-2 text-sm text-white/70">{topic.bodyMd}</p>
+                <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-white/65">
                   {stateName(topic.stateId) && <span>{stateName(topic.stateId)}</span>}
                   {topic.schemeTag && <span>· {topic.schemeTag}</span>}
                 </div>
@@ -78,10 +78,10 @@ export function ForumListPage() {
       )}
 
       {!loading && topics.length === 0 && (
-        <p className="text-center text-base text-white/50">{t('forum.empty')}</p>
+        <p className="text-center text-base text-white/70">{t('forum.empty')}</p>
       )}
 
-      <p className="text-sm text-white/50">{t('forum.disclaimer')}</p>
+      <p className="text-sm text-white/70">{t('forum.disclaimer')}</p>
     </div>
   )
 }

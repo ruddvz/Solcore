@@ -25,7 +25,7 @@ export function PrivacyPage() {
           <p className="mt-3 text-sm leading-relaxed text-white/70">{t(`legal.privacy.${key}p`)}</p>
         </section>
       ))}
-      <p className="text-sm text-white/50">{t('legal.privacy.notice')}</p>
+      <p className="text-sm text-white/70">{t('legal.privacy.notice')}</p>
     </article>
   )
 }

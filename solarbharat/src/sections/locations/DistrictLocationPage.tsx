@@ -20,7 +20,7 @@ export function DistrictLocationPage({
 
   return (
     <div className="space-y-6">
-      <p className="sb-overline text-white/50">{t('locations.crumb')}</p>
+      <p className="sb-overline text-white/70">{t('locations.crumb')}</p>
       <PageHeader
         title={t('locations.districtTitle', { district: d.name, state: st.name })}
         subtitle={t('locations.districtBody')}

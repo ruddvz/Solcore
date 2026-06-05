@@ -68,11 +68,11 @@ export function QuoteComparePage() {
 
       {/* Mobile: one card per quote */}
       <div className="space-y-4 md:hidden">
-        <p className="text-sm text-white/50">{t('quotes.mobileHint')}</p>
+        <p className="text-sm text-white/70">{t('quotes.mobileHint')}</p>
         {compared.map((r, i) => (
           <Card key={i}>
             <label className="flex flex-col gap-1.5">
-              <span className="sb-overline text-white/50">{t('quotes.colLabel')}</span>
+              <span className="sb-overline text-white/70">{t('quotes.colLabel')}</span>
               <input
                 value={rows[i].label}
                 onChange={(e) => updateRow(i, { label: e.target.value })}
@@ -80,7 +80,7 @@ export function QuoteComparePage() {
                 aria-label={t('quotes.quoteName', { n: i + 1 })}
               />
             </label>
-            <dl className="mt-4 space-y-3 text-base">
+            <div className="mt-4 space-y-3 text-base">
               <QuoteMobileField
                 label={t('quotes.capacityKwp')}
                 type="number"
@@ -94,13 +94,13 @@ export function QuoteComparePage() {
                 onChange={(v) => updateRow(i, { costPerWpRs: v })}
               />
               <div className="flex justify-between gap-2 border-t border-white/10 pt-2">
-                <dt className="text-white/55">{t('quotes.totalCapex')}</dt>
-                <dd className="font-mono font-bold text-white">
+                <span className="text-white/70">{t('quotes.totalCapex')}</span>
+                <span className="font-mono font-bold text-white">
                   ₹{r.totalCapexRs.toLocaleString('en-IN')}
                   {bestCostPerWp != null && r.costPerWpRs === bestCostPerWp && (
                     <span className="ml-2 text-xs text-sb-greenMuted">{t('quotes.bestCpp')}</span>
                   )}
-                </dd>
+                </span>
               </div>
               <QuoteMobileText
                 label={t('quotes.panel')}
@@ -142,7 +142,7 @@ export function QuoteComparePage() {
                 onChange={(v) => updateRow(i, { penaltyClause: v })}
                 id={`penalty-m-${i}`}
               />
-            </dl>
+            </div>
             {r.flags.length === 0 ? (
               <p className="mt-3 text-sm text-sb-greenMuted">{t('quotes.flagsClean')}</p>
             ) : (
@@ -161,7 +161,7 @@ export function QuoteComparePage() {
         <p className="sr-only">{t('quotes.tableHint')}</p>
         <table className="w-full min-w-[720px] text-left text-sm">
           <thead>
-            <tr className="border-b border-white/10 text-[11px] font-bold uppercase text-white/50">
+            <tr className="border-b border-white/10 text-[11px] font-bold uppercase text-white/70">
               <th className="px-3 py-2" scope="col">
                 {t('quotes.colLabel')}
               </th>
@@ -189,7 +189,7 @@ export function QuoteComparePage() {
               onChange={(col, v) => updateRow(col, { costPerWpRs: v })}
             />
             <tr className="border-t border-white/10">
-              <th className="px-3 py-2 text-left font-bold text-white/55" scope="row">
+              <th className="px-3 py-2 text-left font-bold text-white/70" scope="row">
                 {t('quotes.totalCapex')}
               </th>
               {compared.map((r, i) => (
@@ -267,7 +267,7 @@ export function QuoteComparePage() {
         {t('quotes.addColumn')}
       </button>
 
-      <p className="text-sm text-white/50">{t('quotes.disclaimer')}</p>
+      <p className="text-sm text-white/70">{t('quotes.disclaimer')}</p>
     </div>
   )
 }
@@ -286,7 +286,7 @@ function QuoteMobileField({
   const id = label.replace(/\s/g, '-').toLowerCase()
   return (
     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <label htmlFor={id} className="text-white/55">
+      <label htmlFor={id} className="text-white/70">
         {label}
       </label>
       <input
@@ -312,7 +312,7 @@ function QuoteMobileText({
   const id = `txt-${label}`
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-white/55">
+      <label htmlFor={id} className="text-white/70">
         {label}
       </label>
       <input id={id} value={value} onChange={(e) => onChange(e.target.value)} className={inputClass} />
@@ -359,7 +359,7 @@ function QuoteNumRow({
 }) {
   return (
     <tr className="border-t border-white/5">
-      <th className="px-3 py-2 text-left font-normal text-white/55" scope="row">
+      <th className="px-3 py-2 text-left font-normal text-white/70" scope="row">
         {label}
       </th>
       {values.map((v, i) => (
@@ -390,7 +390,7 @@ function QuoteTextRow({
 }) {
   return (
     <tr className="border-t border-white/5">
-      <th className="px-3 py-2 text-left font-normal text-white/55" scope="row">
+      <th className="px-3 py-2 text-left font-normal text-white/70" scope="row">
         {label}
       </th>
       {values.map((v, i) => (
@@ -421,7 +421,7 @@ function QuoteBoolRow({
   const { t } = useTranslation()
   return (
     <tr className="border-t border-white/5">
-      <th className="px-3 py-2 text-left font-normal text-white/55" scope="row">
+      <th className="px-3 py-2 text-left font-normal text-white/70" scope="row">
         {label}
       </th>
       {values.map((v, i) => (
