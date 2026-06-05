@@ -102,7 +102,7 @@ export function ForumTopicPage() {
         <Link href={withBasePath('/forum')} className={backLinkClass}>
           ← {t('forum.back')}
         </Link>
-        <p className="text-white/70">{t('forum.notFound')}</p>
+        <p className="text-sb-muted">{t('forum.notFound')}</p>
       </div>
     )
   }
@@ -115,32 +115,32 @@ export function ForumTopicPage() {
 
       <div>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase text-white/70">
+          <span className="rounded bg-sb-surface-muted px-2 py-0.5 text-[10px] font-bold uppercase text-sb-muted">
             {categoryLabel(topic.category)}
           </span>
           {stateName(topic.stateId) && (
-            <span className="text-xs text-white/65">{stateName(topic.stateId)}</span>
+            <span className="text-xs text-sb-muted">{stateName(topic.stateId)}</span>
           )}
         </div>
         <PageHeader title={topic.title} />
-        <div className="mt-4 rounded-xl border border-white/10 bg-sb-surface/50 p-4 text-sm leading-relaxed text-white/80">
+        <div className="mt-4 rounded-xl border border-sb-line bg-sb-surface/50 p-4 text-sm leading-relaxed text-sb-ink-soft">
           {topic.bodyMd}
         </div>
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-sm font-extrabold uppercase text-white/65">{t('forum.replies')}</h2>
+        <h2 className="text-sm font-extrabold uppercase text-sb-muted">{t('forum.replies')}</h2>
         {posts.map((p) => (
           <Card key={p.id}>
             <div className="flex items-start justify-between gap-2">
-              <p className="text-sm leading-relaxed text-white/80">{p.bodyMd}</p>
+              <p className="text-sm leading-relaxed text-sb-ink-soft">{p.bodyMd}</p>
               {p.isVerifiedAnswer && (
                 <span className="shrink-0 rounded bg-sb-green/20 px-2 py-0.5 text-[10px] font-bold uppercase text-sb-greenMuted">
                   {t('forum.verified')}
                 </span>
               )}
             </div>
-            <p className="mt-2 text-[10px] text-white/35">
+            <p className="mt-2 text-[10px] text-sb-muted2">
               {new Date(p.createdAt).toLocaleString(locale, {
                 dateStyle: 'medium',
                 timeStyle: 'short',

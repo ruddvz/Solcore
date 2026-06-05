@@ -5,14 +5,19 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { isActivePath, withBasePath } from '@/lib/publicBasePath'
+import { MoreMenuSheet } from '@/components/layout/MoreMenuSheet'
+import {
+  IconCalculator,
+  IconContractors,
+  IconHome,
+  IconReport,
+} from '@/components/ui/SolarIcons'
 
-const SHOW_PREVIEW = process.env.NEXT_PUBLIC_SHOW_PREVIEW === '1'
-
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const { t, i18n } = useTranslation()
   return (
     <div
-      className="flex shrink-0 items-center gap-1 rounded-xl border border-white/10 bg-sb-bg p-1"
+      className={`flex shrink-0 items-center gap-0.5 rounded-sb-pill border border-sb-line bg-sb-surface p-0.5 ${compact ? '' : ''}`}
       role="group"
       aria-label={t('a11y.language')}
     >
@@ -26,8 +31,8 @@ export function LanguageSwitcher() {
             aria-pressed={active}
             aria-label={t(`lang.${lng}`)}
             onClick={() => void i18n.changeLanguage(lng)}
-            className={`min-h-[44px] min-w-[44px] rounded-lg px-3 text-xs font-bold uppercase tracking-[0.08em] transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold ${
-              active ? 'bg-sb-gold text-sb-bg' : 'text-white/70 hover:text-white'
+            className={`min-h-[36px] min-w-[36px] rounded-sb-pill px-2.5 text-[11px] font-bold uppercase tracking-wide transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold ${
+              active ? 'bg-sb-goldSoft text-sb-ink' : 'text-sb-muted hover:text-sb-ink'
             }`}
           >
             {lng}
@@ -38,300 +43,177 @@ export function LanguageSwitcher() {
   )
 }
 
-const NAV_KEYS = [
+const DESKTOP_NAV = [
   { href: '/', key: 'home' as const },
-  { href: '/locations', key: 'locations' as const },
   { href: '/calculator', key: 'calculator' as const },
-  { href: '/contractors', key: 'contractors' as const },
-  { href: '/quota', key: 'quota' as const },
-  { href: '/forum', key: 'forum' as const },
-  { href: '/plan', key: 'plan' as const },
-  { href: '/quotes', key: 'quotes' as const },
-  { href: '/phase3', key: 'phase3' as const },
-  { href: '/reviews/submit', key: 'reviews' as const },
-  { href: '/financing/interest', key: 'financing' as const },
-  { href: '/alerts', key: 'alerts' as const },
   { href: '/report', key: 'report' as const },
-  { href: '/preview', key: 'preview' as const, devOnly: true },
+  { href: '/contractors', key: 'contractors' as const },
+  { href: '/locations', key: 'locations' as const },
+  { href: '/forum', key: 'forum' as const },
+  { href: '/quota', key: 'quota' as const },
 ] as const
 
-const MOBILE_TAB_KEYS = ['home', 'calculator', 'report', 'contractors'] as const
+const TAB_ITEMS = [
+  { href: '/', key: 'home' as const, Icon: IconHome },
+  { href: '/calculator', key: 'calculator' as const, Icon: IconCalculator },
+  { href: '/report', key: 'report' as const, Icon: IconReport },
+  { href: '/contractors', key: 'contractors' as const, Icon: IconContractors },
+] as const
 
 const linkFocus =
-  'rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold focus-visible:ring-offset-2 focus-visible:ring-offset-sb-bg'
-
-function NavLink({
-  href,
-  label,
-  active,
-  className,
-  onNavigate,
-}: {
-  href: string
-  label: string
-  active: boolean
-  className: string
-  onNavigate?: () => void
-}) {
-  return (
-    <Link
-      href={withBasePath(href)}
-      aria-current={active ? 'page' : undefined}
-      onClick={onNavigate}
-      className={`${linkFocus} ${className}`}
-    >
-      {label}
-    </Link>
-  )
-}
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold focus-visible:ring-offset-2 focus-visible:ring-offset-sb-bg'
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation()
   const pathname = usePathname() ?? '/'
-  const [menuOpen, setMenuOpen] = useState(false)
-  const menuTriggerRef = useRef<HTMLButtonElement | null>(null)
-  const sheetCloseRef = useRef<HTMLButtonElement | null>(null)
-
-  const navItems = NAV_KEYS.filter((item) => !('devOnly' in item && item.devOnly) || SHOW_PREVIEW)
+  const [moreOpen, setMoreOpen] = useState(false)
+  const moreTriggerRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
-    setMenuOpen(false)
+    setMoreOpen(false)
   }, [pathname])
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    document.body.style.overflow = moreOpen ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
     }
-  }, [menuOpen])
+  }, [moreOpen])
 
   useEffect(() => {
-    if (!menuOpen) return
-    sheetCloseRef.current?.focus()
+    if (!moreOpen) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setMenuOpen(false)
-        menuTriggerRef.current?.focus()
+        setMoreOpen(false)
+        moreTriggerRef.current?.focus()
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [menuOpen])
-
-  const desktopLinkClass =
-    'whitespace-nowrap px-2.5 py-2.5 text-xs font-bold sm:text-sm min-h-[44px] inline-flex items-center'
+  }, [moreOpen])
 
   return (
     <div className="flex min-h-screen flex-col">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-xl focus:bg-sb-gold focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-sb-bg"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-sb-md focus:bg-sb-gold focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-sb-ink"
       >
         {t('a11y.skipToContent')}
       </a>
 
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-sb-bg/90 backdrop-blur-xl supports-[backdrop-filter]:bg-sb-bg/80">
-        <div className="pt-[max(0.5rem,env(safe-area-inset-top,0px))]">
-          <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 sm:px-4 md:gap-3 md:py-2">
+      <header className="sticky top-0 z-30 border-b border-sb-line-soft bg-[rgba(255,248,223,0.78)] backdrop-blur-[18px] supports-[backdrop-filter]:bg-[rgba(255,248,223,0.72)]">
+        <div className="pt-[max(0px,env(safe-area-inset-top,0px))]">
+          <div className="mx-auto flex h-16 max-w-page items-center gap-3 px-4 md:px-6">
             <Link
               href={withBasePath('/')}
-              className={`${linkFocus} flex min-h-[44px] shrink-0 items-center gap-2`}
+              aria-label={t('nav.brand')}
+              className={`${linkFocus} flex min-h-[44px] shrink-0 items-center gap-2 rounded-sb-md`}
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sb-gold to-sb-orange text-lg">
+              <span
+                className="flex h-10 w-10 items-center justify-center rounded-sb-md bg-gradient-to-br from-sb-gold to-sb-orange text-lg shadow-sb-sm"
+                aria-hidden
+              >
                 ☀
               </span>
-              <span className="flex min-w-0 flex-col leading-tight">
-                <span className="truncate text-sm font-black tracking-tight">{t('nav.brand')}</span>
-                <span className="hidden text-[10px] font-bold uppercase tracking-wide text-white/70 sm:block">
+              <span className="hidden flex-col leading-tight sm:flex">
+                <span className="text-sm font-extrabold tracking-tight text-sb-ink">
+                  {t('nav.brand')}
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-wide text-sb-muted">
                   {t('nav.tagline')}
                 </span>
               </span>
             </Link>
 
-            <div className="ml-auto flex items-center gap-2 md:ml-0">
-              <button
-                type="button"
-                className={`${linkFocus} inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-white/10 bg-white/5 px-3 text-sm font-bold text-white md:hidden`}
-                aria-expanded={menuOpen}
-                aria-controls="mobile-nav-sheet"
-                onClick={() => setMenuOpen((o) => !o)}
-              >
-                {menuOpen ? t('nav.menuClose') : t('nav.menuOpen')}
-              </button>
-              <div className="hidden md:block">
-                <LanguageSwitcher />
-              </div>
-            </div>
-
             <nav
-              className="sb-nav-scroll hidden min-h-[44px] min-w-0 flex-1 flex-nowrap items-center gap-0.5 overflow-x-auto md:flex"
+              className="sb-nav-scroll hidden min-h-[44px] flex-1 flex-nowrap items-center gap-1 overflow-x-auto md:flex"
               aria-label={t('nav.mainNav')}
             >
-              {navItems.map(({ href, key }) => {
+              {DESKTOP_NAV.map(({ href, key }) => {
                 const active = isActivePath(pathname, href)
-                const isReport = key === 'report'
-                const isPreview = key === 'preview'
-                const cls = isReport
-                  ? `${desktopLinkClass} text-sb-gold hover:text-sb-goldDark`
-                  : isPreview
-                    ? `${desktopLinkClass} text-white/70 hover:text-white/80`
-                    : active
-                      ? `${desktopLinkClass} bg-white/10 text-white`
-                      : `${desktopLinkClass} text-white/70 hover:text-white`
                 return (
-                  <NavLink
+                  <Link
                     key={href}
-                    href={href}
-                    label={t(`nav.${key}`)}
-                    active={active}
-                    className={cls}
-                  />
+                    href={withBasePath(href)}
+                    aria-current={active ? 'page' : undefined}
+                    className={`${linkFocus} whitespace-nowrap rounded-sb-pill px-3 py-2 text-sm font-semibold ${
+                      active
+                        ? 'bg-sb-goldSoft text-sb-ink'
+                        : 'text-sb-muted hover:bg-sb-surface-muted hover:text-sb-ink'
+                    }`}
+                  >
+                    {t(`nav.${key}`)}
+                  </Link>
                 )
               })}
             </nav>
 
-            <div className="hidden shrink-0 md:block md:ml-auto">
-              {/* spacer when lang is in header row on md+ */}
-            </div>
-            <div className="hidden md:order-last md:flex">
-              <LanguageSwitcher />
+            <div className="ml-auto flex items-center gap-2">
+              <LanguageSwitcher compact />
             </div>
           </div>
         </div>
-
       </header>
 
-      {/* Fixed mobile bottom tab bar */}
-      <nav
-        className="fixed bottom-0 left-0 right-0 z-30 flex border-t border-white/10 bg-sb-bg/95 backdrop-blur-md md:hidden"
-        style={{ paddingBottom: 'max(0px, env(safe-area-inset-bottom))' }}
-        aria-label={t('nav.mainNav')}
-      >
-        {MOBILE_TAB_KEYS.map((key) => {
-          const item = navItems.find((n) => n.key === key)!
-          const active = isActivePath(pathname, item.href)
-          return (
-            <NavLink
-              key={key}
-              href={item.href}
-              label={t(`nav.${key}`)}
-              active={active}
-              className={`flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 px-1 text-[10px] font-bold uppercase tracking-wide ${
-                active ? 'text-sb-gold' : 'text-white/70'
-              }`}
-            />
-          )
-        })}
-        <button
-          ref={menuTriggerRef}
-          type="button"
-          className={`${linkFocus} flex min-h-[52px] flex-1 flex-col items-center justify-center px-1 text-[10px] font-bold uppercase tracking-wide text-white/70`}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-nav-sheet"
-          aria-label={t('nav.more')}
-          onClick={() => setMenuOpen(true)}
-        >
-          {t('nav.more')}
-        </button>
-      </nav>
-
-      {/* Full-screen menu sheet */}
-      {menuOpen ? (
-        <div className="fixed inset-0 z-40 md:hidden" role="presentation">
-          <button
-            type="button"
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            aria-label={t('nav.menuClose')}
-            onClick={() => setMenuOpen(false)}
-          />
-          <div
-            id="mobile-nav-sheet"
-            role="dialog"
-            aria-modal="true"
-            aria-label={t('nav.mainNav')}
-            className="absolute bottom-0 left-0 right-0 max-h-[85vh] overflow-y-auto rounded-t-[20px] border border-white/10 bg-sb-surface px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 shadow-2xl"
-          >
-            <div className="mb-4 flex items-center justify-between">
-              <span className="font-heading text-lg font-bold text-white">{t('nav.mainNav')}</span>
-              <button
-                ref={sheetCloseRef}
-                type="button"
-                className={`${linkFocus} min-h-[44px] rounded-xl px-4 text-sm font-bold text-sb-gold`}
-                onClick={() => {
-                  setMenuOpen(false)
-                  menuTriggerRef.current?.focus()
-                }}
-              >
-                {t('nav.menuClose')}
-              </button>
-            </div>
-            <LanguageSwitcher />
-            <ul className="mt-4 grid gap-1">
-              {navItems.map(({ href, key }) => {
-                const active = isActivePath(pathname, href)
-                return (
-                  <li key={href}>
-                    <NavLink
-                      href={href}
-                      label={t(`nav.${key}`)}
-                      active={active}
-                      onNavigate={() => setMenuOpen(false)}
-                      className={`flex min-h-[48px] w-full items-center rounded-xl px-4 text-base font-bold ${
-                        active ? 'bg-sb-gold/15 text-sb-gold' : 'text-white/85 hover:bg-white/5'
-                      }`}
-                    />
-                  </li>
-                )
-              })}
-            </ul>
-            <nav className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 border-t border-white/10 pt-4 text-sm font-bold">
-              <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/terms')}>
-                {t('footer.terms')}
-              </Link>
-              <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/privacy')}>
-                {t('footer.privacy')}
-              </Link>
-              <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/contact')}>
-                {t('footer.contact')}
-              </Link>
-            </nav>
-          </div>
-        </div>
-      ) : null}
-
-      <main
-        id="main-content"
-        className="app-main-with-bottom-nav mx-auto flex w-full max-w-6xl flex-1 flex-col px-3 py-6 sm:px-4 sm:py-8 md:pb-8"
-      >
+      <main id="main-content" className="sb-page mx-auto w-full max-w-page flex-1">
         {children}
       </main>
 
-      <footer className="hidden border-t border-white/10 bg-sb-surface/40 py-6 md:block">
+      <nav
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center pb-[max(10px,env(safe-area-inset-bottom))] md:hidden"
+        aria-label={t('nav.mainNav')}
+      >
         <div
-          className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-3 text-center sm:px-4"
-          style={{ paddingBottom: 'max(0px, env(safe-area-inset-bottom))' }}
+          className="pointer-events-auto flex h-[66px] w-[calc(100%-24px)] max-w-[430px] items-center justify-around rounded-sb-pill border border-sb-line-soft bg-[rgba(255,253,247,0.86)] px-2 shadow-sb-nav backdrop-blur-[22px] backdrop-saturate-[1.25]"
         >
-          <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs font-bold" aria-label={t('footer.legalNav')}>
-            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/terms')}>
+          {TAB_ITEMS.map(({ href, key, Icon }) => {
+            const active = isActivePath(pathname, href)
+            return (
+              <Link
+                key={href}
+                href={withBasePath(href)}
+                aria-current={active ? 'page' : undefined}
+                className={`${linkFocus} flex min-h-[44px] min-w-[44px] flex-1 flex-col items-center justify-center gap-0.5 rounded-sb-pill px-1 ${
+                  active ? 'bg-sb-goldSoft text-sb-ink' : 'text-sb-muted'
+                }`}
+              >
+                <Icon className="h-5 w-5" />
+                <span className="text-[10px] font-semibold leading-none">{t(`nav.${key}`)}</span>
+              </Link>
+            )
+          })}
+          <button
+            ref={moreTriggerRef}
+            type="button"
+            aria-expanded={moreOpen}
+            aria-label={t('nav.more')}
+            onClick={() => setMoreOpen(true)}
+            className={`${linkFocus} flex min-h-[44px] min-w-[44px] flex-1 flex-col items-center justify-center gap-0.5 rounded-sb-pill px-1 text-sb-muted`}
+          >
+            <span className="text-lg leading-none" aria-hidden>
+              ⋯
+            </span>
+            <span className="text-[10px] font-semibold leading-none">{t('nav.more')}</span>
+          </button>
+        </div>
+      </nav>
+
+      <MoreMenuSheet open={moreOpen} onClose={() => setMoreOpen(false)} pathname={pathname} />
+
+      <footer className="hidden border-t border-sb-line bg-sb-surface/80 py-8 md:block">
+        <div className="mx-auto flex max-w-page flex-col items-center gap-3 px-6 text-center">
+          <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs font-semibold text-sb-muted">
+            <Link className={`${linkFocus} hover:text-sb-ink`} href={withBasePath('/terms')}>
               {t('footer.terms')}
             </Link>
-            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/privacy')}>
+            <Link className={`${linkFocus} hover:text-sb-ink`} href={withBasePath('/privacy')}>
               {t('footer.privacy')}
             </Link>
-            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/contact')}>
+            <Link className={`${linkFocus} hover:text-sb-ink`} href={withBasePath('/contact')}>
               {t('footer.contact')}
             </Link>
-            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/calculator')}>
-              {t('nav.calculator')}
-            </Link>
-            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/locations')}>
-              {t('nav.locations')}
-            </Link>
-            <Link className={`${linkFocus} text-white/70 hover:text-white`} href={withBasePath('/alerts')}>
-              {t('nav.alerts')}
-            </Link>
           </nav>
-          <p className="text-xs text-white/70">{t('footer.disclaimer')}</p>
+          <p className="sb-caption max-w-readable">{t('footer.disclaimer')}</p>
         </div>
       </footer>
     </div>

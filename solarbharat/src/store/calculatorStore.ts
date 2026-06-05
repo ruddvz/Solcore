@@ -34,6 +34,8 @@ export interface CalculatorState {
   solarError: string | null
   setStateId: (id: string) => void
   setDistrictId: (id: string) => void
+  /** Set state + district in one update (avoids reset when hydrating from URL). */
+  setLocation: (stateId: string, districtId?: string) => void
   setLandValue: (v: number) => void
   setLandUnit: (u: LandUnit) => void
   setTechnologyId: (id: string) => void
@@ -73,6 +75,22 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
 
   setDistrictId: (districtId) => {
     set({ districtId, pinLat: null, pinLon: null, solarCache: {} })
+    void get().fetchSolarForSelection()
+  },
+
+  setLocation: (stateId, districtId) => {
+    const st = GEO_STATES.find((s) => s.id === stateId)
+    const rid =
+      districtId && st?.districts.some((d) => d.id === districtId)
+        ? districtId
+        : (st?.districts[0]?.id ?? '')
+    set({
+      stateId,
+      districtId: rid,
+      pinLat: null,
+      pinLon: null,
+      solarCache: {},
+    })
     void get().fetchSolarForSelection()
   },
 

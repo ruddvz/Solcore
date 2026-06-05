@@ -15,14 +15,14 @@ export function DataSourceBadge({
   label: string
   confidence?: string
 }) {
-  const cls = styles[source] ?? 'bg-white/10 text-white/70'
+  const cls = styles[source] ?? 'bg-sb-surface-muted text-sb-muted'
   return (
     <span className="inline-flex flex-wrap items-center gap-2">
       <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${cls}`}>
         {label}
       </span>
       {confidence ? (
-        <span className="text-[11px] font-medium text-white/70">{confidence}</span>
+        <span className="text-[11px] font-medium text-sb-ink-soft">{confidence}</span>
       ) : null}
     </span>
   )

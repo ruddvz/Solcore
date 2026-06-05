@@ -18,7 +18,7 @@ export function FormField({ label, error, hint, required, children }: FormFieldP
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
+      <label htmlFor={id} className="text-[13px] font-semibold text-sb-ink-soft">
         {label}
         {required ? (
           <span className="text-sb-orange" aria-hidden>
@@ -29,12 +29,12 @@ export function FormField({ label, error, hint, required, children }: FormFieldP
       </label>
       {children({ id, describedBy })}
       {hint ? (
-        <p id={hintId} className="text-xs text-white/65">
+        <p id={hintId} className="sb-caption">
           {hint}
         </p>
       ) : null}
       {error ? (
-        <p id={errorId} className="text-sm text-sb-orange" role="alert">
+        <p id={errorId} className="text-sm font-medium text-sb-red" role="alert">
           {error}
         </p>
       ) : null}
@@ -43,7 +43,7 @@ export function FormField({ label, error, hint, required, children }: FormFieldP
 }
 
 export const inputClass =
-  'min-h-[44px] w-full rounded-xl border border-white/15 bg-sb-bg px-3 py-2.5 text-base text-white outline-none ring-sb-gold/40 focus-visible:ring-2'
+  'min-h-[52px] w-full rounded-sb-md border border-sb-line-strong bg-white px-3 py-2.5 text-base text-sb-ink outline-none focus-visible:ring-2 focus-visible:ring-sb-gold'
 
 export function FormStatus({
   message,
@@ -54,7 +54,7 @@ export function FormStatus({
 }) {
   return (
     <p
-      className={`text-sm ${ok ? 'text-sb-greenMuted' : 'text-sb-orange'}`}
+      className={`text-sm font-medium ${ok ? 'text-sb-green' : 'text-sb-red'}`}
       role="status"
       aria-live="polite"
     >

@@ -22,10 +22,10 @@ export function PrivacyPage() {
           >
             {t(`legal.privacy.${key}h`)}
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-white/70">{t(`legal.privacy.${key}p`)}</p>
+          <p className="mt-3 text-sm leading-relaxed text-sb-muted">{t(`legal.privacy.${key}p`)}</p>
         </section>
       ))}
-      <p className="text-sm text-white/70">{t('legal.privacy.notice')}</p>
+      <p className="text-sm text-sb-muted">{t('legal.privacy.notice')}</p>
     </article>
   )
 }

@@ -60,7 +60,7 @@ export function ContractorCompanyPage() {
         <Link href={withBasePath('/contractors')} className={backLinkClass}>
           ← {t('contractors.backToDirectory')}
         </Link>
-        <p className="text-white/70">{t('contractors.companyNotFound')}</p>
+        <p className="text-sb-muted">{t('contractors.companyNotFound')}</p>
       </div>
     )
   }
@@ -82,7 +82,7 @@ export function ContractorCompanyPage() {
             </span>
           )}
         </div>
-        <p className="mt-2 text-sm text-white/70">
+        <p className="mt-2 text-sm text-sb-muted">
           {stateName(c.stateId)}
           {c.districtIds.length > 0
             ? ` · ${t('contractors.districtCount', { count: c.districtIds.length })}`
@@ -91,28 +91,28 @@ export function ContractorCompanyPage() {
       </div>
 
       <Card>
-        <div className="space-y-3 text-sm leading-relaxed text-white/75">
+        <div className="space-y-3 text-sm leading-relaxed text-sb-ink-soft">
           {paragraphs.length > 0 ? (
             paragraphs.map((p, i) => <p key={i}>{p}</p>)
           ) : (
-            <p className="text-white/65">{t('contractors.noProfile')}</p>
+            <p className="text-sb-muted">{t('contractors.noProfile')}</p>
           )}
         </div>
 
         {(c.contactEmail || c.contactPhone) && (
-          <div className="mt-6 border-t border-white/10 pt-4 text-sm">
-            <div className="text-[11px] font-bold uppercase text-white/65">{t('contractors.contact')}</div>
+          <div className="mt-6 border-t border-sb-line pt-4 text-sm">
+            <div className="text-[11px] font-bold uppercase text-sb-muted">{t('contractors.contact')}</div>
             {c.contactEmail && (
               <a href={`mailto:${c.contactEmail}`} className="mt-1 block text-sb-gold hover:underline">
                 {c.contactEmail}
               </a>
             )}
-            {c.contactPhone && <p className="mt-1 font-mono text-white/80">{c.contactPhone}</p>}
+            {c.contactPhone && <p className="mt-1 font-mono text-sb-ink-soft">{c.contactPhone}</p>}
           </div>
         )}
       </Card>
 
-      <p className="text-sm text-white/70">{t('contractors.verifyDisclaimer')}</p>
+      <p className="text-sm text-sb-muted">{t('contractors.verifyDisclaimer')}</p>
     </div>
   )
 }

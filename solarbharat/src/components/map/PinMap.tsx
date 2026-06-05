@@ -58,7 +58,7 @@ export function PinMap({ center, marker, onMarkerChange, ariaLabel }: PinMapProp
 
   return (
     <div
-      className="overflow-hidden rounded-xl border border-white/15"
+      className="overflow-hidden rounded-xl border border-sb-line-strong"
       style={{ height: 260 }}
       role="region"
       aria-label={ariaLabel}

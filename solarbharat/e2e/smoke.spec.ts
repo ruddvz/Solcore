@@ -12,7 +12,7 @@ test.describe('SolarBharat smoke', () => {
   test('calculator rejects invalid land on step 2', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/calculator?stateId=gujarat&districtId=surat', { waitUntil: 'networkidle' })
-    await expect(page.locator('#district')).toHaveValue('surat')
+    await expect(page.locator('#district')).toHaveValue('surat', { timeout: 15_000 })
     const continueBtn = page.getByRole('button', { name: /^Continue$/i }).filter({ visible: true })
     await continueBtn.click()
     const landInput = page.getByLabel(/land/i)

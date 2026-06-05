@@ -11,13 +11,13 @@ export function BottomActionBar({
 }) {
   return (
     <div
-      className={`fixed left-0 right-0 z-40 border-t border-white/10 bg-sb-bg/95 backdrop-blur-md md:hidden ${className}`}
+      className={`fixed left-0 right-0 z-40 border-t border-sb-line bg-[rgba(255,253,247,0.92)] backdrop-blur-md md:hidden ${className}`}
       style={{
-        bottom: 'calc(52px + env(safe-area-inset-bottom, 0px))',
+        bottom: 'calc(78px + env(safe-area-inset-bottom, 0px))',
         paddingBottom: 'max(8px, env(safe-area-inset-bottom, 0px))',
       }}
     >
-      <div className="mx-auto flex max-w-6xl gap-2 px-3 py-3">{children}</div>
+      <div className="mx-auto flex max-w-page gap-2 px-3 py-3">{children}</div>
     </div>
   )
 }
@@ -25,7 +25,7 @@ export function BottomActionBar({
 export function BottomActionBarSpacer() {
   return (
     <div
-      className="h-[calc(124px+env(safe-area-inset-bottom))] md:hidden"
+      className="h-[calc(150px+env(safe-area-inset-bottom))] md:hidden"
       aria-hidden
     />
   )

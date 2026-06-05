@@ -20,37 +20,37 @@ export function TechCard({
       className={`w-full min-h-[44px] rounded-xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold ${
         selected
           ? 'border-sb-gold bg-sb-gold/10 ring-2 ring-sb-gold/40'
-          : 'border-white/10 bg-sb-bg/60 hover:border-white/20'
+          : 'border-sb-line bg-sb-surface hover:border-sb-line-strong'
       }`}
     >
       <div className="flex items-start justify-between gap-2">
         <div>
-          <div className="text-sm font-extrabold text-white">{tech.label}</div>
-          <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] text-white/70">
+          <div className="text-sm font-extrabold text-sb-ink">{tech.label}</div>
+          <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px] text-sb-muted">
             <span>
-              {t('tech.eff')}: <b className="text-white/80">{tech.efficiencyPct}%</b>
+              {t('tech.eff')}: <b className="text-sb-ink-soft">{tech.efficiencyPct}%</b>
             </span>
             <span>
-              {t('tech.deg')}: <b className="text-white/80">{tech.degradationPctPerYear}%</b>
+              {t('tech.deg')}: <b className="text-sb-ink-soft">{tech.degradationPctPerYear}%</b>
             </span>
             <span>
-              {t('tech.costWp')}: <b className="text-white/80">₹{tech.costPerWpRs}</b>
+              {t('tech.costWp')}: <b className="text-sb-ink-soft">₹{tech.costPerWpRs}</b>
             </span>
             <span>
-              {t('tech.bif')}: <b className="text-white/80">+{tech.bifacialGainPct}%</b>
+              {t('tech.bif')}: <b className="text-sb-ink-soft">+{tech.bifacialGainPct}%</b>
             </span>
             <span className="col-span-2">
-              {t('tech.warranty')}: <b className="text-white/80">{tech.warrantyYears} yrs</b>
+              {t('tech.warranty')}: <b className="text-sb-ink-soft">{tech.warrantyYears} yrs</b>
             </span>
           </div>
         </div>
         <span
           className={`shrink-0 rounded-full px-2 py-1 text-[10px] font-extrabold uppercase ${
             tech.verdict === 'best'
-              ? 'bg-sb-green/20 text-sb-greenMuted'
+              ? 'bg-sb-greenMuted text-sb-greenDark'
               : tech.verdict === 'good'
                 ? 'bg-sb-blue/20 text-sb-blue'
-                : 'bg-white/10 text-white/60'
+                : 'bg-sb-surface-muted text-sb-muted'
           }`}
         >
           {t(verdictKey)}

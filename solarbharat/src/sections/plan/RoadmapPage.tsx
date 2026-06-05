@@ -14,13 +14,13 @@ export function RoadmapPage() {
       {SECTIONS.map((key) => (
         <section
           key={key}
-          className="rounded-2xl border border-white/10 bg-sb-surface/40 p-6"
+          className="rounded-2xl border border-sb-line bg-sb-surface p-6"
           aria-labelledby={`roadmap-${key}-heading`}
         >
           <h2 id={`roadmap-${key}-heading`} className="text-lg font-extrabold text-sb-gold">
             {t(`roadmap.${key}.title`)}
           </h2>
-          <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-white/75">
+          <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-sb-ink-soft">
             {(t(`roadmap.${key}.items`, { returnObjects: true }) as string[]).map((item, i) => (
               <li key={i}>{item}</li>
             ))}
@@ -28,7 +28,7 @@ export function RoadmapPage() {
         </section>
       ))}
 
-      <p className="text-sm text-white/70">{t('roadmap.footer')}</p>
+      <p className="text-sm text-sb-muted">{t('roadmap.footer')}</p>
     </div>
   )
 }

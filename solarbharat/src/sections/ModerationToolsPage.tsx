@@ -109,11 +109,11 @@ export function ModerationToolsPage() {
           {topics.map((topic) => (
             <li
               key={topic.id}
-              className="flex flex-col gap-2 rounded-xl border border-white/10 bg-sb-bg/50 p-3 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-2 rounded-xl border border-sb-line bg-sb-surface-muted p-3 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
-                <div className="font-bold text-white">{topic.title}</div>
-                <div className="font-mono text-xs text-white/65">
+                <div className="font-bold text-sb-ink">{topic.title}</div>
+                <div className="font-mono text-xs text-sb-muted">
                   {topic.slug} · {topic.category}
                   {topic.hidden ? ' · hidden' : ''}
                 </div>

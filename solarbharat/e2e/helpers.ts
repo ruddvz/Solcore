@@ -3,6 +3,13 @@ import AxeBuilder from '@axe-core/playwright'
 
 /** Fail CI on critical/serious axe violations; color-contrast enabled globally. */
 export async function analyzeAccessibility(page: Page, path: string) {
+  await page.addInitScript(() => {
+    try {
+      localStorage.setItem('sb-ios-install-dismissed', '1')
+    } catch {
+      /* ignore */
+    }
+  })
   await page.goto(path, { waitUntil: 'networkidle' })
   await page.waitForTimeout(300)
   const results = await new AxeBuilder({ page })

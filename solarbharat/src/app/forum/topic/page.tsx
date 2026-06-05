@@ -3,7 +3,7 @@ import { ForumTopicPage } from '@/sections/ForumTopicPage'
 
 export default function Page() {
   return (
-    <Suspense fallback={<div className="py-16 text-center text-sm text-white/65">Loading…</div>}>
+    <Suspense fallback={<div className="py-16 text-center text-sm text-sb-muted">Loading…</div>}>
       <ForumTopicPage />
     </Suspense>
   )

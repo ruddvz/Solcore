@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <Suspense
       fallback={
-        <p className="px-4 py-8 text-sm text-white/70" role="status">
+        <p className="px-4 py-8 text-sm text-sb-muted" role="status">
           Loading calculator…
         </p>
       }
