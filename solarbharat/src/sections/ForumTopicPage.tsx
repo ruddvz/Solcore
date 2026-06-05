@@ -9,7 +9,7 @@ import { fetchForumTopicBySlug, fetchForumPosts } from '@/lib/community/publicDa
 import { createForumPost } from '@/lib/community/mutations'
 import { listGeographyStates } from '@/lib/region'
 import { withBasePath } from '@/lib/publicBasePath'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { FormField, inputClass } from '@/components/ui/FormField'
@@ -131,7 +131,7 @@ export function ForumTopicPage() {
       <div className="space-y-3">
         <h2 className="text-sm font-extrabold uppercase text-sb-muted">{t('forum.replies')}</h2>
         {posts.map((p) => (
-          <Card key={p.id}>
+          <AppCard key={p.id}>
             <div className="flex items-start justify-between gap-2">
               <p className="text-sm leading-relaxed text-sb-ink-soft">{p.bodyMd}</p>
               {p.isVerifiedAnswer && (
@@ -146,11 +146,11 @@ export function ForumTopicPage() {
                 timeStyle: 'short',
               })}
             </p>
-          </Card>
+          </AppCard>
         ))}
       </div>
 
-      <Card>
+      <AppCard>
         <form onSubmit={(e) => void onReply(e)} className="space-y-3" noValidate>
           <FormField label={t('forum.yourReply')} required>
             {({ id, describedBy }) => (
@@ -174,7 +174,7 @@ export function ForumTopicPage() {
             {busy ? t('forum.posting') : t('forum.reply')}
           </Button>
         </form>
-      </Card>
+      </AppCard>
     </div>
   )
 }

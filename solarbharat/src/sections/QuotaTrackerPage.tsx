@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import type { QuotaSnapshotRow } from '@/lib/community/types'
 import { fetchQuotaSnapshots } from '@/lib/community/publicData'
 import { listGeographyStates, getGeographyDistrict } from '@/lib/region'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { SkeletonList } from '@/components/ui/Skeleton'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -71,7 +71,7 @@ export function QuotaTrackerPage() {
       ) : (
         <div className="space-y-3">
           {sorted.map((q) => (
-            <Card key={q.id}>
+            <AppCard key={q.id}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="font-extrabold text-sb-ink">
@@ -104,7 +104,7 @@ export function QuotaTrackerPage() {
                   <p className="mt-1 text-[10px] uppercase text-sb-muted2">{q.source}</p>
                 </div>
               </div>
-            </Card>
+            </AppCard>
           ))}
         </div>
       )}

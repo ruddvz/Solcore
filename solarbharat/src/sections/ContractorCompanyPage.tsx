@@ -8,7 +8,7 @@ import type { DirectoryContractor } from '@/lib/contractors/types'
 import { fetchContractorBySlug } from '@/lib/contractors/publicListing'
 import { listGeographyStates } from '@/lib/region'
 import { withBasePath } from '@/lib/publicBasePath'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { SkeletonCard } from '@/components/ui/Skeleton'
 
@@ -90,7 +90,7 @@ export function ContractorCompanyPage() {
         </p>
       </div>
 
-      <Card>
+      <AppCard>
         <div className="space-y-3 text-sm leading-relaxed text-sb-ink-soft">
           {paragraphs.length > 0 ? (
             paragraphs.map((p, i) => <p key={i}>{p}</p>)
@@ -110,7 +110,7 @@ export function ContractorCompanyPage() {
             {c.contactPhone && <p className="mt-1 font-mono text-sb-ink-soft">{c.contactPhone}</p>}
           </div>
         )}
-      </Card>
+      </AppCard>
 
       <p className="text-sm text-sb-muted">{t('contractors.verifyDisclaimer')}</p>
     </div>

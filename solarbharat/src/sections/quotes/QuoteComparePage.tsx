@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { compareQuotes, type QuoteInput } from '@/lib/quotes/compareQuotes'
 import { useCalculatorStore } from '@/store/calculatorStore'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { inputClass } from '@/components/ui/FormField'
 
@@ -58,19 +58,19 @@ export function QuoteComparePage() {
       <PageHeader title={t('quotes.title')} subtitle={t('quotes.subtitle')} />
 
       {fin && (
-        <Card accent="green">
+        <AppCard variant="green">
           <div className="sb-overline text-sb-greenDark">{t('quotes.modelHint')}</div>
           <p className="mt-2 font-mono text-lg text-sb-ink">
             ₹{Math.round(fin.totalCapexRs).toLocaleString('en-IN')} ({t('quotes.fromCalculator')})
           </p>
-        </Card>
+        </AppCard>
       )}
 
       {/* Mobile: one card per quote */}
       <div className="space-y-4 md:hidden">
         <p className="text-sm text-sb-muted">{t('quotes.mobileHint')}</p>
         {compared.map((r, i) => (
-          <Card key={i}>
+          <AppCard key={i}>
             <label className="flex flex-col gap-1.5">
               <span className="sb-overline text-sb-muted">{t('quotes.colLabel')}</span>
               <input
@@ -152,7 +152,7 @@ export function QuoteComparePage() {
                 ))}
               </ul>
             )}
-          </Card>
+          </AppCard>
         ))}
       </div>
 
@@ -244,7 +244,7 @@ export function QuoteComparePage() {
 
       <div className="hidden gap-4 md:grid md:grid-cols-2">
         {compared.map((r, i) => (
-          <Card key={i}>
+          <AppCard key={i}>
             <div className="font-extrabold text-sb-ink">{r.label}</div>
             {r.flags.length === 0 ? (
               <p className="mt-2 text-sm text-sb-greenDark">{t('quotes.flagsClean')}</p>
@@ -255,7 +255,7 @@ export function QuoteComparePage() {
                 ))}
               </ul>
             )}
-          </Card>
+          </AppCard>
         ))}
       </div>
 

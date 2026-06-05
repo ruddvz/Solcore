@@ -1,14 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import type { ForumTopicRow } from '@/lib/community/types'
 import { fetchForumTopics } from '@/lib/community/publicData'
 import { listGeographyStates } from '@/lib/region'
 import { withBasePath } from '@/lib/publicBasePath'
 import { isSupabaseConfigured } from '@/lib/supabase/isConfigured'
-import { AppCard } from '@/components/ui/AppCard'
+import { ForumTopicCard } from '@/components/ui/ForumTopicCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { ButtonLink } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -64,30 +63,15 @@ export function ForumListPage() {
       ) : topics.length > 0 ? (
         <div className="space-y-3">
           {topics.slice(0, usingDemo ? 3 : topics.length).map((topic) => (
-            <Link
+            <ForumTopicCard
               key={topic.id}
+              topic={topic}
               href={`${withBasePath('/forum/topic')}?slug=${encodeURIComponent(topic.slug)}`}
-              className="block rounded-[26px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
-            >
-              <AppCard variant="interactive" className="p-4">
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <span className="text-[15px] font-bold text-sb-ink">{topic.title}</span>
-                  <span className="rounded-sb-pill bg-sb-surface-muted px-2.5 py-0.5 text-[10px] font-bold uppercase text-sb-muted">
-                    {categoryLabel(topic.category)}
-                  </span>
-                </div>
-                <p className="mt-2 line-clamp-2 text-sm text-sb-muted">{topic.bodyMd}</p>
-                <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-semibold text-sb-muted-2">
-                  {stateName(topic.stateId) && <span>{stateName(topic.stateId)}</span>}
-                  {topic.schemeTag && <span>· {topic.schemeTag}</span>}
-                  {usingDemo ? (
-                    <span className="rounded-sb-pill border border-sb-orange/30 bg-sb-orangeSoft px-2 py-0.5 text-[10px] font-bold text-sb-ink-soft">
-                      {t('forum.demoLabel')}
-                    </span>
-                  ) : null}
-                </div>
-              </AppCard>
-            </Link>
+              categoryLabel={categoryLabel(topic.category)}
+              stateLabel={stateName(topic.stateId)}
+              demoLabel={t('forum.demoLabel')}
+              showDemoLabel={usingDemo}
+            />
           ))}
         </div>
       ) : (
