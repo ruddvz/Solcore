@@ -45,6 +45,7 @@ export interface CalculatorState {
   fetchSolarForSelection: () => Promise<void>
   getResolvedState: () => StateInfo | null
   getFinancials: () => FinancialResult | null
+  loadSampleScenario: () => void
 }
 
 export const useCalculatorStore = create<CalculatorState>((set, get) => ({
@@ -158,5 +159,22 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
     const state = get().getResolvedState()
     if (!state || landValue <= 0) return null
     return calculateFinancials({ state, landValue, landUnit, technologyId })
+  },
+
+  loadSampleScenario: () => {
+    const gujarat = GEO_STATES.find((s) => s.id === 'gujarat') ?? DEFAULT_STATE
+    const district = gujarat?.districts.find((d) => d.id === 'surat') ?? gujarat?.districts[0]
+    set({
+      stateId: gujarat?.id ?? '',
+      districtId: district?.id ?? '',
+      landValue: 5,
+      landUnit: 'acre',
+      technologyId: 'topcon_bifacial',
+      shadingLossPct: 8,
+      pinLat: null,
+      pinLon: null,
+      solarCache: {},
+    })
+    void get().fetchSolarForSelection()
   },
 }))

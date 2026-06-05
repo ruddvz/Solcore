@@ -25,7 +25,7 @@ test.describe('SolarBharat smoke', () => {
 
   test('report shows empty state without scenario', async ({ page }) => {
     await page.goto('/report')
-    await expect(page.getByText(/no solar scenario/i)).toBeVisible()
+    await expect(page.getByText(/no report yet/i)).toBeVisible()
   })
 
   test('contractors page loads', async ({ page }) => {

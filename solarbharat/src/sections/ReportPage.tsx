@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import {
   LineChart,
@@ -18,6 +19,7 @@ import { getTechnology } from '@/data/technologies'
 import { formatCr, formatInr, formatRsLakh, formatUnitsLakh } from '@/lib/format'
 import { Card } from '@/components/ui/Card'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { InfoBanner } from '@/components/ui/InfoBanner'
 import { Pill } from '@/components/ui/Pill'
 import { TabBar } from '@/components/ui/TabBar'
 import { KV } from '@/components/ui/KV'
@@ -176,6 +178,8 @@ function ModelYearTable({
 
 export function ReportPage() {
   const { t } = useTranslation()
+  const searchParams = useSearchParams()
+  const isSample = searchParams.get('sample') === '1'
   const {
     stateId,
     districtId,
@@ -184,12 +188,20 @@ export function ReportPage() {
     getFinancials,
     getResolvedState,
     fetchSolarForSelection,
+    loadSampleScenario,
   } = useCalculatorStore()
   const [tab, setTab] = useState<TabId>('overview')
   const [pdfBusy, setPdfBusy] = useState(false)
   const pdfCaptureRef = useRef<HTMLDivElement>(null)
+  const sampleLoaded = useRef(false)
 
   const state = getResolvedState()
+
+  useEffect(() => {
+    if (!isSample || sampleLoaded.current || landValue > 0) return
+    sampleLoaded.current = true
+    loadSampleScenario()
+  }, [isSample, landValue, loadSampleScenario])
 
   useEffect(() => {
     void fetchSolarForSelection()
@@ -240,8 +252,8 @@ export function ReportPage() {
         title={t('report.emptyTitle')}
         body={t('report.emptyBody')}
         primaryAction={{ href: '/calculator', label: t('report.emptyPrimary') }}
-        secondaryAction={{ href: '/locations', label: t('nav.locations') }}
-        icon="☀"
+        secondaryAction={{ href: '/report?sample=1', label: t('report.emptySecondary') }}
+        icon={<span aria-hidden>☀</span>}
       />
     )
   }
@@ -273,6 +285,11 @@ export function ReportPage() {
 
   return (
     <div className="space-y-6">
+      {isSample ? (
+        <InfoBanner tone="warning" title={t('report.sampleLabel')}>
+          {t('home.estimateNote')}
+        </InfoBanner>
+      ) : null}
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <h1 className="font-heading text-2xl font-bold tracking-tight text-sb-ink">{t('report.title')}</h1>

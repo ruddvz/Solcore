@@ -8,6 +8,7 @@ import { listGeographyStates, getGeographyDistrict } from '@/lib/region'
 import { Card } from '@/components/ui/Card'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { SkeletonList } from '@/components/ui/Skeleton'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 function bandStyle(band: string): string {
   switch (band) {
@@ -109,7 +110,11 @@ export function QuotaTrackerPage() {
       )}
 
       {!loading && sorted.length === 0 && (
-        <p className="text-center text-base text-sb-muted">{t('quota.empty')}</p>
+        <EmptyState
+          title={t('quota.empty')}
+          body={t('quota.emptyBody')}
+          primaryAction={{ href: '/alerts', label: t('quota.emptyCta') }}
+        />
       )}
 
       <p className="text-sm text-sb-muted">{t('quota.disclaimer')}</p>
