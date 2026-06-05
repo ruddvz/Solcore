@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { createForumTopic } from '@/lib/community/mutations'
 import { listGeographyStates } from '@/lib/region'
 import { withBasePath } from '@/lib/publicBasePath'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { Select } from '@/components/ui/Select'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Button } from '@/components/ui/Button'
@@ -66,7 +66,7 @@ export function ForumNewTopicPage() {
         <PageHeader title={t('forum.newTitle')} />
       </div>
 
-      <Card>
+      <AppCard>
         <form onSubmit={(e) => void onSubmit(e)} className="space-y-4" noValidate>
           <FormField label={t('forum.fieldTitle')} required>
             {({ id, describedBy }) => (
@@ -127,7 +127,7 @@ export function ForumNewTopicPage() {
             {busy ? t('forum.posting') : t('forum.publish')}
           </Button>
         </form>
-      </Card>
+      </AppCard>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 
 function supportEmail(): string {
@@ -15,7 +15,7 @@ export function ContactPage() {
     <div className="mx-auto max-w-2xl space-y-8">
       <PageHeader title={t('legal.contact.title')} subtitle={t('legal.contact.intro')} />
 
-      <Card>
+      <AppCard>
         <h2 className="text-sm font-extrabold uppercase tracking-wide text-sb-gold">
           {t('legal.contact.emailHeading')}
         </h2>
@@ -30,7 +30,7 @@ export function ContactPage() {
           <p className="mt-3 text-sm text-sb-muted">{t('legal.contact.noEmail')}</p>
         )}
         <p className="mt-4 text-xs text-sb-muted">{t('legal.contact.envHint')}</p>
-      </Card>
+      </AppCard>
 
       <p className="text-sm text-sb-muted">{t('legal.contact.responseTime')}</p>
     </div>

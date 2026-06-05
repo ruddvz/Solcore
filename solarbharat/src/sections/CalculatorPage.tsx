@@ -9,7 +9,7 @@ import { TECHNOLOGIES } from '@/data/technologies'
 import { landToAcres } from '@/lib/finance'
 import { validateCalculatorInputs, canGenerateReport } from '@/lib/calcValidation'
 import type { LandUnit } from '@/types'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { Select } from '@/components/ui/Select'
 import { TechCard } from '@/components/ui/TechCard'
 import { MonthBars } from '@/components/charts/MonthBars'
@@ -196,7 +196,7 @@ export function CalculatorPage({
           </p>
         ) : null}
 
-        <Card>
+        <AppCard>
           <div className="space-y-4">
             {step === 1 && (
               <div className="space-y-4">
@@ -350,13 +350,13 @@ export function CalculatorPage({
               ) : null}
             </div>
           </div>
-        </Card>
+        </AppCard>
         <BottomActionBarSpacer />
       </div>
 
       <div className="space-y-4 lg:col-span-2">
         {state && (
-          <Card accent="green">
+          <AppCard variant="green">
             <div className="sb-overline text-sb-greenDark">
               {state.name}
               {state.policyIsFallback && (
@@ -396,7 +396,7 @@ export function CalculatorPage({
               </div>
               <MonthBars values={state.monthlyGenShape} />
             </div>
-          </Card>
+          </AppCard>
         )}
       </div>
 

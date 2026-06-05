@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
 
 const variants = {
   default: 'bg-[var(--sb-card)] border-[var(--sb-line)] shadow-[0_8px_28px_rgba(39,31,15,0.08)]',
@@ -15,20 +15,24 @@ const variants = {
     'bg-sb-card-strong border-[var(--sb-line)] shadow-sb-sm transition active:scale-[0.99] hover:border-sb-lineStrong focus-within:ring-2 focus-within:ring-sb-gold/40',
 } as const
 
+type AppCardProps = {
+  children: ReactNode
+  className?: string
+  variant?: keyof typeof variants
+  as?: 'div' | 'section' | 'article'
+} & HTMLAttributes<HTMLElement>
+
 export function AppCard({
   children,
   className = '',
   variant = 'default',
   as: Tag = 'div',
-}: {
-  children: ReactNode
-  className?: string
-  variant?: keyof typeof variants
-  as?: 'div' | 'section' | 'article'
-}) {
+  ...rest
+}: AppCardProps) {
   return (
     <Tag
       className={`rounded-[26px] border p-4 md:rounded-[30px] md:p-5 lg:p-6 ${variants[variant]} ${className}`}
+      {...rest}
     >
       {children}
     </Tag>

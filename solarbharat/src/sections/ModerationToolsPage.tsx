@@ -5,7 +5,7 @@ import { withBasePath } from '@/lib/publicBasePath'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { FormField, FormStatus, inputClass } from '@/components/ui/FormField'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 
 type TopicRow = {
   id: string
@@ -74,7 +74,7 @@ export function ModerationToolsPage() {
         subtitle="Uses MODERATION_SECRET and SUPABASE_SERVICE_ROLE_KEY on the server. Never expose the service key in the browser — this page only sends the moderation bearer token."
       />
 
-      <Card>
+      <AppCard>
         <FormField
           label="Moderation secret"
           hint="Set ENABLE_MODERATION_UI=1 on the server to reach this page in production."
@@ -100,7 +100,7 @@ export function ModerationToolsPage() {
         >
           {busy ? 'Loading…' : 'Load topics'}
         </Button>
-      </Card>
+      </AppCard>
 
       {error ? <FormStatus message={error} ok={false} /> : null}
 

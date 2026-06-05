@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createAlertSubscription } from '@/lib/community/mutations'
 import { listGeographyStates, getGeographyState } from '@/lib/region'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { Select } from '@/components/ui/Select'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Button } from '@/components/ui/Button'
@@ -67,7 +67,7 @@ export function AlertsSubscribePage() {
     <div className="mx-auto max-w-xl space-y-8">
       <PageHeader title={t('alerts.title')} subtitle={t('alerts.subtitle')} />
 
-      <Card>
+      <AppCard>
         <form onSubmit={(e) => void onSubmit(e)} className="space-y-4" noValidate>
           <FormField label={t('alerts.email')} required>
             {({ id, describedBy }) => (
@@ -118,7 +118,7 @@ export function AlertsSubscribePage() {
             {busy ? t('alerts.sending') : t('alerts.submit')}
           </Button>
         </form>
-      </Card>
+      </AppCard>
 
       {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
       <p className="text-sm text-sb-muted">{t('alerts.disclaimer')}</p>

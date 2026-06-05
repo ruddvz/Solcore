@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createSupabaseBrowserClient } from '@/lib/supabase/client'
 import { withBasePath } from '@/lib/publicBasePath'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { Button } from '@/components/ui/Button'
 import { FormField, FormStatus, inputClass } from '@/components/ui/FormField'
@@ -83,7 +83,7 @@ export function ReviewSubmitPage() {
     <div className="mx-auto max-w-xl space-y-8">
       <PageHeader title={t('reviews.title')} subtitle={t('reviews.subtitle')} />
 
-      <Card>
+      <AppCard>
         <form onSubmit={(e) => void onSubmit(e)} className="space-y-4" noValidate>
           <FormField label={t('reviews.email')} required>
             {({ id, describedBy }) => (
@@ -158,7 +158,7 @@ export function ReviewSubmitPage() {
             {busy ? t('reviews.sending') : t('reviews.submit')}
           </Button>
         </form>
-      </Card>
+      </AppCard>
 
       {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
       <p className="text-sm text-sb-muted">{t('reviews.disclaimer')}</p>

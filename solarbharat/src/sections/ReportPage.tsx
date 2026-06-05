@@ -17,7 +17,7 @@ import {
 import { useCalculatorStore } from '@/store/calculatorStore'
 import { getTechnology } from '@/data/technologies'
 import { formatCr, formatInr, formatRsLakh, formatUnitsLakh } from '@/lib/format'
-import { Card } from '@/components/ui/Card'
+import { AppCard } from '@/components/ui/AppCard'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { InfoBanner } from '@/components/ui/InfoBanner'
 import { Pill } from '@/components/ui/Pill'
@@ -344,7 +344,7 @@ export function ReportPage() {
           className="grid gap-4 lg:grid-cols-2"
           data-report-section="overview"
         >
-          <Card>
+          <AppCard>
             <div className="sb-overline text-sb-muted">
               {t('report.overview.system')}
             </div>
@@ -357,8 +357,8 @@ export function ReportPage() {
               <KV label={t('report.overview.techBadge')} value={t(`calc.verdict.${tech.verdict}`)} />
               <KV label={t('report.overview.dcac')} value={fin.dcAcRatio.toFixed(2)} />
             </div>
-          </Card>
-          <Card accent="blue">
+          </AppCard>
+          <AppCard variant="blue">
             <div className="sb-overline text-sb-muted">
               {t('report.overview.climate')}
             </div>
@@ -376,9 +376,9 @@ export function ReportPage() {
             </div>
             <p className="mt-3 text-[14px] leading-relaxed text-sb-muted">{state.monsoonNote}</p>
             <p className="mt-1 text-[14px] leading-relaxed text-sb-muted">{state.gridQuality}</p>
-          </Card>
+          </AppCard>
 
-          <Card className="lg:col-span-2">
+          <AppCard className="lg:col-span-2">
             <div className="sb-overline text-sb-muted">
               {t('report.overview.chart40')}
             </div>
@@ -411,9 +411,9 @@ export function ReportPage() {
               </ResponsiveContainer>
             </div>
             <p className="mt-2 text-[14px] leading-relaxed text-sb-muted">{t('report.overview.chart40Axis')}</p>
-          </Card>
+          </AppCard>
 
-          <Card>
+          <AppCard>
             <KV
               label={t('report.overview.mBreakeven')}
               value={fin.breakevenYear ? `Year ${fin.breakevenYear}` : '—'}
@@ -432,9 +432,9 @@ export function ReportPage() {
               value={formatCr(fin.netProfit25YrsRs)}
               variant="warn"
             />
-          </Card>
+          </AppCard>
 
-          <Card accent="green">
+          <AppCard variant="green">
             <div className="sb-overline text-sb-orange">
               {t('report.overview.warnings')}
             </div>
@@ -455,13 +455,13 @@ export function ReportPage() {
                   : t('report.overview.wDust')}
               </li>
             </ul>
-          </Card>
+          </AppCard>
         </div>
       )}
 
       {tab === 'costs' && (
         <div className="grid gap-4 lg:grid-cols-2" data-report-section="costs">
-          <Card>
+          <AppCard>
             <div className="sb-overline text-sb-muted">
               {t('report.costs.donut')}
             </div>
@@ -479,8 +479,8 @@ export function ReportPage() {
                 ))}
               </ul>
             ) : null}
-          </Card>
-          <Card>
+          </AppCard>
+          <AppCard>
             <div className="sb-overline text-sb-muted">
               {t('report.costs.funding')}
             </div>
@@ -509,9 +509,9 @@ export function ReportPage() {
                 </div>
               </div>
             </div>
-          </Card>
+          </AppCard>
 
-          <Card className="lg:col-span-2">
+          <AppCard className="lg:col-span-2">
             <div className="sb-overline text-sb-muted">
               {t('report.costs.table')}
             </div>
@@ -546,9 +546,9 @@ export function ReportPage() {
               </table>
             </div>
             <p className="mt-2 text-[14px] leading-relaxed text-sb-muted">{t('report.costs.landFree')}</p>
-          </Card>
+          </AppCard>
 
-          <Card className="lg:col-span-2" accent="green">
+          <AppCard variant="green" className="lg:col-span-2">
             <div className="sb-overline text-sb-muted">
               {t('report.costs.reality')}
             </div>
@@ -565,13 +565,13 @@ export function ReportPage() {
               <li>{t('report.costs.rec')}</li>
               <li>{t('report.costs.nabard')}</li>
             </ul>
-          </Card>
+          </AppCard>
         </div>
       )}
 
       {tab === 'model' && (
         <div className="space-y-4" data-report-section="model">
-          <Card>
+          <AppCard>
             <div className="sb-overline text-sb-muted">
               {t('report.model.chart')}
             </div>
@@ -600,9 +600,9 @@ export function ReportPage() {
               </ResponsiveContainer>
             </div>
             <p className="mt-2 text-[14px] leading-relaxed text-sb-muted">{t('report.model.note')}</p>
-          </Card>
+          </AppCard>
 
-          <Card>
+          <AppCard>
             <div className="sb-overline text-sb-muted">
               {t('report.model.table')}
             </div>
@@ -613,12 +613,12 @@ export function ReportPage() {
                 footerValue={formatInr(fin.netProfit25YrsRs)}
               />
             </div>
-          </Card>
+          </AppCard>
         </div>
       )}
 
       {tab === 'risks' && (
-        <Card data-report-section="risks">
+        <AppCard data-report-section="risks">
           <div className="sb-overline text-sb-muted">
             {t('report.risks.title')}
           </div>
@@ -647,7 +647,7 @@ export function ReportPage() {
               )
             })}
           </div>
-        </Card>
+        </AppCard>
       )}
 
       {tab === 'action' && <ActionPlanTab state={state} />}
@@ -674,7 +674,7 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
 
   return (
     <div className="space-y-4" data-report-section="action">
-      <Card>
+      <AppCard>
         <div className="sb-overline text-sb-muted">{t('report.action.title')}</div>
         <div className="mt-4 space-y-3">
           {phases.map((ph) => (
@@ -696,9 +696,9 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
             </div>
           ))}
         </div>
-      </Card>
+      </AppCard>
 
-      <Card accent="blue">
+      <AppCard variant="blue">
         <div className="sb-overline text-sb-muted">
           {t('report.action.contacts')}
         </div>
@@ -731,9 +731,9 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
             <span className="font-bold text-sb-ink">Bank:</span> {t('report.action.bank')}
           </div>
         </div>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <div className="sb-overline text-sb-muted">
           {t('report.action.docsTitle')}
         </div>
@@ -750,7 +750,7 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
             </li>
           ))}
         </ul>
-      </Card>
+      </AppCard>
 
       <AgrivoltaicsSection stateId={state.id} />
     </div>
@@ -762,7 +762,7 @@ function AgrivoltaicsSection({ stateId }: { stateId: string }) {
   const cropsKey =
     stateId === 'gujarat' ? 'cropsGj' : stateId === 'rajasthan' ? 'cropsRj' : 'cropsDef'
   return (
-    <Card accent="green">
+    <AppCard variant="green">
       <div className="sb-overline text-sb-greenMuted">
         {t('report.agri.title')}
       </div>
@@ -795,7 +795,7 @@ function AgrivoltaicsSection({ stateId }: { stateId: string }) {
         </ul>
         <p className="text-sb-orange">{t('report.agri.na')}</p>
       </div>
-    </Card>
+    </AppCard>
   )
 }
 
@@ -805,7 +805,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
 
   return (
     <div className="space-y-4" data-report-section="suppliers">
-      <Card>
+      <AppCard>
         <div className="sb-overline text-sb-muted">{t('report.suppliers.epc')}</div>
         {epcs.length === 0 ? (
           <p className="mt-2 text-sm text-sb-muted">{t('report.suppliers.epcPlaceholder')}</p>
@@ -832,9 +832,9 @@ function SuppliersTab({ stateId }: { stateId: string }) {
             </li>
           ))}
         </ul>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <div className="sb-overline text-sb-muted">{t('report.suppliers.panels')}</div>
         <p className="mt-1 text-[14px] leading-relaxed text-sb-muted">{t('report.suppliers.almm')}</p>
         <ul className="mt-3 space-y-2 text-sm">
@@ -855,9 +855,9 @@ function SuppliersTab({ stateId }: { stateId: string }) {
             </li>
           ))}
         </ul>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <div className="sb-overline text-sb-muted">{t('report.suppliers.inverters')}</div>
         <ul className="mt-3 space-y-2">
           {INVERTER_BRANDS.map((inv) => (
@@ -870,9 +870,9 @@ function SuppliersTab({ stateId }: { stateId: string }) {
             </li>
           ))}
         </ul>
-      </Card>
+      </AppCard>
 
-      <Card>
+      <AppCard>
         <div className="sb-overline text-sb-muted">{t('report.suppliers.robots')}</div>
         <ul className="mt-3 space-y-2">
           {ROBOT_SYSTEMS.map((r) => (
@@ -891,9 +891,9 @@ function SuppliersTab({ stateId }: { stateId: string }) {
             </li>
           ))}
         </ul>
-      </Card>
+      </AppCard>
 
-      <Card accent="green">
+      <AppCard variant="green">
         <div className="sb-overline text-sb-muted">{t('report.suppliers.finance')}</div>
         <ul className="mt-3 space-y-2 text-sm">
           {FINANCING_PARTNERS.map((f) => (
@@ -904,7 +904,7 @@ function SuppliersTab({ stateId }: { stateId: string }) {
             </li>
           ))}
         </ul>
-      </Card>
+      </AppCard>
     </div>
   )
 }
