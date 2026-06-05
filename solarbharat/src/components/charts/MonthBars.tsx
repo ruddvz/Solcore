@@ -15,7 +15,7 @@ export function MonthBars({ values }: { values: number[] }) {
               style={{ height: `${Math.max(8, h)}%` }}
               title={`${MONTHS[i]}: ${v.toFixed(2)}`}
             />
-            <span className="text-[9px] text-white/35">{MONTHS[i]}</span>
+            <span className="text-[9px] text-sb-muted2">{MONTHS[i]}</span>
           </div>
         )
       })}

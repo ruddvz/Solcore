@@ -19,10 +19,10 @@ export function StepIndicator({
               <span
                 className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
                   active
-                    ? 'bg-sb-gold text-sb-bg'
+                    ? 'bg-sb-gold text-sb-ink'
                     : done
                       ? 'bg-sb-green/20 text-sb-green'
-                      : 'bg-white/10 text-white/70'
+                      : 'bg-sb-surface-muted text-sb-muted'
                 }`}
                 aria-current={active ? 'step' : undefined}
               >
@@ -30,7 +30,7 @@ export function StepIndicator({
               </span>
               <span
                 className={`hidden text-center text-[10px] font-bold uppercase tracking-wide sm:block ${
-                  active ? 'text-sb-gold' : 'text-white/65'
+                  active ? 'text-sb-gold' : 'text-sb-muted'
                 }`}
               >
                 {labels[i] ?? `Step ${step}`}

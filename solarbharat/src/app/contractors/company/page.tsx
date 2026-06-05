@@ -3,7 +3,7 @@ import { ContractorCompanyPage } from '@/sections/ContractorCompanyPage'
 
 export default function Page() {
   return (
-    <Suspense fallback={<div className="py-16 text-center text-sm text-white/65">Loading…</div>}>
+    <Suspense fallback={<div className="py-16 text-center text-sm text-sb-muted">Loading…</div>}>
       <ContractorCompanyPage />
     </Suspense>
   )

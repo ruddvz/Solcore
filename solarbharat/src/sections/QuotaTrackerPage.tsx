@@ -20,7 +20,7 @@ function bandStyle(band: string): string {
     case 'closed':
       return 'bg-sb-red/20 text-sb-red'
     default:
-      return 'bg-white/10 text-white/70'
+      return 'bg-sb-surface-muted text-sb-muted'
   }
 }
 
@@ -73,12 +73,12 @@ export function QuotaTrackerPage() {
             <Card key={q.id}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <div className="font-extrabold text-white">
+                  <div className="font-extrabold text-sb-ink">
                     {stateName(q.stateId)}
                     {' · '}
                     {districtName(q.stateId, q.districtId)}
                   </div>
-                  <p className="mt-1 text-xs text-white/65">
+                  <p className="mt-1 text-xs text-sb-muted">
                     {t('quota.updated')}:{' '}
                     {new Date(q.capturedAt).toLocaleString(locale, {
                       dateStyle: 'medium',
@@ -86,7 +86,7 @@ export function QuotaTrackerPage() {
                     })}
                   </p>
                   {q.sourceDetail && (
-                    <p className="mt-2 text-sm text-white/70">{q.sourceDetail}</p>
+                    <p className="mt-2 text-sm text-sb-muted">{q.sourceDetail}</p>
                   )}
                 </div>
                 <div className="text-right">
@@ -100,7 +100,7 @@ export function QuotaTrackerPage() {
                       ~{q.mwRemaining} MW
                     </p>
                   )}
-                  <p className="mt-1 text-[10px] uppercase text-white/35">{q.source}</p>
+                  <p className="mt-1 text-[10px] uppercase text-sb-muted2">{q.source}</p>
                 </div>
               </div>
             </Card>
@@ -109,10 +109,10 @@ export function QuotaTrackerPage() {
       )}
 
       {!loading && sorted.length === 0 && (
-        <p className="text-center text-base text-white/70">{t('quota.empty')}</p>
+        <p className="text-center text-base text-sb-muted">{t('quota.empty')}</p>
       )}
 
-      <p className="text-sm text-white/70">{t('quota.disclaimer')}</p>
+      <p className="text-sm text-sb-muted">{t('quota.disclaimer')}</p>
     </div>
   )
 }

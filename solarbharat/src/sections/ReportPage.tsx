@@ -69,7 +69,7 @@ function planRiskLevel(stateId: string, index: number): RiskLevel {
 function levelStyle(level: RiskLevel) {
   if (level === 'HIGH') return 'bg-sb-red/20 text-sb-red'
   if (level === 'MED') return 'bg-sb-orange/15 text-sb-orange'
-  return 'bg-white/10 text-white/70'
+  return 'bg-sb-surface-muted text-sb-muted'
 }
 
 function StarRating({ value, label }: { value: number; label: string }) {
@@ -78,9 +78,9 @@ function StarRating({ value, label }: { value: number; label: string }) {
     <span className="inline-flex items-center gap-1.5" aria-label={label}>
       <span className="text-sb-gold">
         {'★'.repeat(full)}
-        <span className="text-white/20">{'★'.repeat(5 - full)}</span>
+        <span className="text-sb-muted2">{'★'.repeat(5 - full)}</span>
       </span>
-      <span className="font-mono text-[11px] text-white/70">{value.toFixed(1)}</span>
+      <span className="font-mono text-[11px] text-sb-muted">{value.toFixed(1)}</span>
     </span>
   )
 }
@@ -123,7 +123,7 @@ function ModelYearTable({
   const th = (k: ModelSortKey, label: string) => (
     <th
       scope="col"
-      className="cursor-pointer py-2 pr-2 select-none hover:text-white/90"
+      className="cursor-pointer py-2 pr-2 select-none hover:text-sb-ink"
       onClick={() => onHeader(k)}
     >
       {label}
@@ -134,7 +134,7 @@ function ModelYearTable({
   return (
     <table className="w-full text-left text-[12.5px]">
       <thead>
-        <tr className="border-b border-white/10 sb-overline text-white/65">
+        <tr className="border-b border-sb-line sb-overline text-sb-muted">
           {th('year', t('report.model.colYear'))}
           {th('unitsLakh', t('report.model.colUnits'))}
           {th('grossRevenueRs', t('report.model.colGross'))}
@@ -148,8 +148,8 @@ function ModelYearTable({
         {sorted.map((r) => (
           <tr
             key={r.year}
-            className={`border-b border-white/5 ${
-              r.year === 11 ? 'bg-sb-accent font-semibold text-white' : ''
+            className={`border-b border-sb-line ${
+              r.year === 11 ? 'bg-sb-accent font-semibold text-sb-ink' : ''
             }`}
           >
             <td className="py-1.5 pr-2 font-mono font-bold">{r.year}</td>
@@ -158,10 +158,10 @@ function ModelYearTable({
             <td className="py-1.5 pr-2 font-mono">{formatInr(r.omRs)}</td>
             <td className="py-1.5 pr-2 font-mono">{formatInr(r.emiRs)}</td>
             <td className="py-1.5 pr-2 font-mono text-sb-green">{formatInr(r.netProfitRs)}</td>
-            <td className="py-1.5 font-mono text-white/80">{formatInr(r.cumulativeRs)}</td>
+            <td className="py-1.5 font-mono text-sb-ink-soft">{formatInr(r.cumulativeRs)}</td>
           </tr>
         ))}
-        <tr className="bg-white/5 font-extrabold">
+        <tr className="bg-sb-surface-muted font-extrabold">
           <td className="py-2 pr-2" colSpan={5}>
             {footerLabel}
           </td>
@@ -275,8 +275,8 @@ export function ReportPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-bold tracking-tight text-white">{t('report.title')}</h1>
-          <p className="mt-1 text-sm text-white/70">
+          <h1 className="font-heading text-2xl font-bold tracking-tight text-sb-ink">{t('report.title')}</h1>
+          <p className="mt-1 text-sm text-sb-muted">
             {district?.name}, {state.name} · {tech.label}
           </p>
         </div>
@@ -293,13 +293,13 @@ export function ReportPage() {
             type="button"
             disabled={pdfBusy}
             onClick={() => void handlePdfFullReport()}
-            className="rounded-xl border border-white/15 px-4 py-2 text-sm font-bold text-white/85 hover:border-white/30 disabled:opacity-50"
+            className="rounded-xl border border-sb-line-strong px-4 py-2 text-sm font-bold text-sb-ink-soft hover:border-sb-line-strong disabled:opacity-50"
           >
             {pdfBusy ? t('report.pdf.downloading') : t('report.pdf.fullReport')}
           </button>
           <Link
             href="/calculator"
-            className="shrink-0 rounded-xl border border-white/15 px-4 py-2 text-sm font-bold text-white/75 hover:border-white/30"
+            className="shrink-0 rounded-xl border border-sb-line-strong px-4 py-2 text-sm font-bold text-sb-ink-soft hover:border-sb-line-strong"
           >
             ← {t('report.back')}
           </Link>
@@ -328,7 +328,7 @@ export function ReportPage() {
           data-report-section="overview"
         >
           <Card>
-            <div className="sb-overline text-white/65">
+            <div className="sb-overline text-sb-muted">
               {t('report.overview.system')}
             </div>
             <div className="mt-3 space-y-1">
@@ -342,7 +342,7 @@ export function ReportPage() {
             </div>
           </Card>
           <Card accent="blue">
-            <div className="sb-overline text-white/65">
+            <div className="sb-overline text-sb-muted">
               {t('report.overview.climate')}
             </div>
             <div className="mt-3 space-y-1">
@@ -357,12 +357,12 @@ export function ReportPage() {
               <KV label={t('report.overview.tariff')} value={`₹${fin.tariffMidRs.toFixed(2)}`} />
               <KV label={t('report.overview.subsidyPct')} value={`${state.subsidyPct}%`} />
             </div>
-            <p className="mt-3 text-[14px] leading-relaxed text-white/70">{state.monsoonNote}</p>
-            <p className="mt-1 text-[14px] leading-relaxed text-white/70">{state.gridQuality}</p>
+            <p className="mt-3 text-[14px] leading-relaxed text-sb-muted">{state.monsoonNote}</p>
+            <p className="mt-1 text-[14px] leading-relaxed text-sb-muted">{state.gridQuality}</p>
           </Card>
 
           <Card className="lg:col-span-2">
-            <div className="sb-overline text-white/65">
+            <div className="sb-overline text-sb-muted">
               {t('report.overview.chart40')}
             </div>
             <div className="mt-4 w-full min-w-0">
@@ -393,7 +393,7 @@ export function ReportPage() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <p className="mt-2 text-[14px] leading-relaxed text-white/65">{t('report.overview.chart40Axis')}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-sb-muted">{t('report.overview.chart40Axis')}</p>
           </Card>
 
           <Card>
@@ -421,7 +421,7 @@ export function ReportPage() {
             <div className="sb-overline text-sb-orange">
               {t('report.overview.warnings')}
             </div>
-            <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-white/70">
+            <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-sb-muted">
               <li>
                 {t('report.overview.wCash', {
                   amountL: formatRsLakh(fin.totalCashRequiredRs),
@@ -445,26 +445,26 @@ export function ReportPage() {
       {tab === 'costs' && (
         <div className="grid gap-4 lg:grid-cols-2" data-report-section="costs">
           <Card>
-            <div className="sb-overline text-white/65">
+            <div className="sb-overline text-sb-muted">
               {t('report.costs.donut')}
             </div>
             <div className="mt-4">
               <DonutSvg segments={donutSegments} ariaLabel={t('report.tabs.donut')} />
             </div>
             {fin.donutSegments.length > 0 ? (
-              <ul className="mt-4 grid gap-2 text-[11px] text-white/65 sm:grid-cols-2">
+              <ul className="mt-4 grid gap-2 text-[11px] text-sb-muted sm:grid-cols-2">
                 {fin.donutSegments.map((s) => (
                   <li key={s.key} className="flex items-center gap-2">
                     <span className="h-2 w-2 shrink-0 rounded-sm" style={{ backgroundColor: s.color }} />
-                    <span className="font-bold text-white/80">{t(s.labelKey)}</span>
-                    <span className="ml-auto font-mono text-white/70">₹{formatInr(s.amountRs)}</span>
+                    <span className="font-bold text-sb-ink-soft">{t(s.labelKey)}</span>
+                    <span className="ml-auto font-mono text-sb-muted">₹{formatInr(s.amountRs)}</span>
                   </li>
                 ))}
               </ul>
             ) : null}
           </Card>
           <Card>
-            <div className="sb-overline text-white/65">
+            <div className="sb-overline text-sb-muted">
               {t('report.costs.funding')}
             </div>
             <div className="mt-4">
@@ -479,15 +479,15 @@ export function ReportPage() {
                   { label: t('report.costs.youEquity'), amountRs: fin.cashEquityRs, color: '#f97316' },
                 ]}
               />
-              <div className="mt-4 space-y-1 text-[14px] leading-snug text-white/70">
+              <div className="mt-4 space-y-1 text-[14px] leading-snug text-sb-muted">
                 <div>
-                  {t('report.costs.govt')}: <b className="text-white">₹{formatInr(fin.subsidyAmountRs)}</b>
+                  {t('report.costs.govt')}: <b className="text-sb-ink">₹{formatInr(fin.subsidyAmountRs)}</b>
                 </div>
                 <div>
-                  {t('report.costs.loan')}: <b className="text-white">₹{formatInr(fin.loanAmountRs)}</b>
+                  {t('report.costs.loan')}: <b className="text-sb-ink">₹{formatInr(fin.loanAmountRs)}</b>
                 </div>
                 <div>
-                  {t('report.costs.you')}: <b className="text-white">₹{formatInr(fin.cashEquityRs)}</b> +{' '}
+                  {t('report.costs.you')}: <b className="text-sb-ink">₹{formatInr(fin.cashEquityRs)}</b> +{' '}
                   <b className="text-sb-orange">₹{formatInr(fin.operatingReserveRs)}</b> reserve
                 </div>
               </div>
@@ -495,32 +495,32 @@ export function ReportPage() {
           </Card>
 
           <Card className="lg:col-span-2">
-            <div className="sb-overline text-white/65">
+            <div className="sb-overline text-sb-muted">
               {t('report.costs.table')}
             </div>
             <div className="mt-3 overflow-x-auto">
               <table className="w-full text-left text-[12.5px]">
                 <thead>
-                  <tr className="border-b border-white/10 sb-overline text-white/65">
+                  <tr className="border-b border-sb-line sb-overline text-sb-muted">
                     <th className="py-2 pr-4">{t('report.costs.colItem')}</th>
                     <th className="py-2 text-right">{t('report.costs.colAmount')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {fin.costLines.map((c) => (
-                    <tr key={c.key} className="border-b border-white/5">
-                      <td className="py-2 pr-4 text-white/80">{t(c.labelKey)}</td>
+                    <tr key={c.key} className="border-b border-sb-line">
+                      <td className="py-2 pr-4 text-sb-ink-soft">{t(c.labelKey)}</td>
                       <td className="py-2 text-right font-mono font-bold">
                         {formatInr(c.amountRs)}
                       </td>
                     </tr>
                   ))}
-                  <tr className="border-b border-white/5">
-                    <td className="py-2 pr-4 text-white/80">{t('report.costs.landRow')}</td>
+                  <tr className="border-b border-sb-line">
+                    <td className="py-2 pr-4 text-sb-ink-soft">{t('report.costs.landRow')}</td>
                     <td className="py-2 text-right font-mono font-bold text-sb-green">₹0</td>
                   </tr>
                   <tr>
-                    <td className="py-2 pr-4 font-extrabold text-white">Total</td>
+                    <td className="py-2 pr-4 font-extrabold text-sb-ink">Total</td>
                     <td className="py-2 text-right font-mono font-extrabold text-sb-gold">
                       {formatInr(fin.totalCapexRs)}
                     </td>
@@ -528,21 +528,21 @@ export function ReportPage() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-2 text-[14px] leading-relaxed text-white/65">{t('report.costs.landFree')}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-sb-muted">{t('report.costs.landFree')}</p>
           </Card>
 
           <Card className="lg:col-span-2" accent="green">
-            <div className="sb-overline text-white/65">
+            <div className="sb-overline text-sb-muted">
               {t('report.costs.reality')}
             </div>
-            <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-white/70">
+            <ul className="mt-3 list-disc space-y-2 pl-4 text-sm text-sb-muted">
               <li>{t('report.costs.subsidyDelay')}</li>
               <li>{t('report.costs.reserve')}</li>
             </ul>
-            <div className="mt-4 sb-overline text-white/65">
+            <div className="mt-4 sb-overline text-sb-muted">
               {t('report.costs.benefits')}
             </div>
-            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-white/60">
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-sb-muted">
               <li>{t('report.costs.gst')}</li>
               <li>{t('report.costs.ad')}</li>
               <li>{t('report.costs.rec')}</li>
@@ -555,7 +555,7 @@ export function ReportPage() {
       {tab === 'model' && (
         <div className="space-y-4" data-report-section="model">
           <Card>
-            <div className="sb-overline text-white/65">
+            <div className="sb-overline text-sb-muted">
               {t('report.model.chart')}
             </div>
             <div className="mt-4 w-full min-w-0">
@@ -582,11 +582,11 @@ export function ReportPage() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            <p className="mt-2 text-[14px] leading-relaxed text-white/65">{t('report.model.note')}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-sb-muted">{t('report.model.note')}</p>
           </Card>
 
           <Card>
-            <div className="sb-overline text-white/65">
+            <div className="sb-overline text-sb-muted">
               {t('report.model.table')}
             </div>
             <div className="mt-3 overflow-x-auto">
@@ -602,13 +602,13 @@ export function ReportPage() {
 
       {tab === 'risks' && (
         <Card data-report-section="risks">
-          <div className="sb-overline text-white/65">
+          <div className="sb-overline text-sb-muted">
             {t('report.risks.title')}
           </div>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
-            <div className="sb-overline text-white/35">Risk</div>
-            <div className="sb-overline text-white/35">Impact</div>
-            <div className="sb-overline text-white/35">Mitigation</div>
+            <div className="sb-overline text-sb-muted2">Risk</div>
+            <div className="sb-overline text-sb-muted2">Impact</div>
+            <div className="sb-overline text-sb-muted2">Mitigation</div>
           </div>
           <div className="mt-2 space-y-3">
             {RISK_ROWS.map((row, idx) => {
@@ -616,16 +616,16 @@ export function ReportPage() {
               return (
               <div
                 key={row.risk}
-                className="grid gap-2 rounded-xl border border-white/10 bg-sb-bg/40 p-3 md:grid-cols-3"
+                className="grid gap-2 rounded-xl border border-sb-line bg-sb-surface-muted p-3 md:grid-cols-3"
               >
                 <div>
                   <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-extrabold ${levelStyle(level)}`}>
                     {level}
                   </span>
-                  <div className="mt-2 text-sm font-bold text-white">{t(`report.risks.${row.risk}`)}</div>
+                  <div className="mt-2 text-sm font-bold text-sb-ink">{t(`report.risks.${row.risk}`)}</div>
                 </div>
-                <div className="text-sm text-white/65">{t(`report.risks.${row.impact}`)}</div>
-                <div className="text-sm text-white/65">{t(`report.risks.${row.mitigation}`)}</div>
+                <div className="text-sm text-sb-muted">{t(`report.risks.${row.impact}`)}</div>
+                <div className="text-sm text-sb-muted">{t(`report.risks.${row.mitigation}`)}</div>
               </div>
               )
             })}
@@ -648,24 +648,24 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
 
   const phases = [
     { title: 'p1', items: ['p1a', 'p1b', 'p1c'] as const, tone: 'border-sb-gold/40 bg-sb-gold/5' },
-    { title: 'p2', items: ['p2a', 'p2b'] as const, tone: 'border-white/10' },
-    { title: 'p3', items: ['p3a', 'p3b'] as const, tone: 'border-white/10' },
+    { title: 'p2', items: ['p2a', 'p2b'] as const, tone: 'border-sb-line' },
+    { title: 'p3', items: ['p3a', 'p3b'] as const, tone: 'border-sb-line' },
     { title: 'p4', items: ['p4a', 'p4b'] as const, tone: 'border-sb-blue/30 bg-sb-blue/5' },
-    { title: 'p5', items: ['p5a', 'p5b'] as const, tone: 'border-white/10' },
+    { title: 'p5', items: ['p5a', 'p5b'] as const, tone: 'border-sb-line' },
     { title: 'p6', items: ['p6a', 'p6b'] as const, tone: 'border-sb-green/30 bg-sb-green/5' },
   ] as const
 
   return (
     <div className="space-y-4" data-report-section="action">
       <Card>
-        <div className="sb-overline text-white/65">{t('report.action.title')}</div>
+        <div className="sb-overline text-sb-muted">{t('report.action.title')}</div>
         <div className="mt-4 space-y-3">
           {phases.map((ph) => (
             <div key={ph.title} className={`rounded-xl border p-4 ${ph.tone}`}>
               <div className="sb-overline text-sb-gold">
                 {t(`report.action.${ph.title}`)}
               </div>
-              <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-white/70">
+              <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-sb-muted">
                 {ph.items.map((k) => (
                   <li key={k}>
                     {t(`report.action.${k}`, {
@@ -682,16 +682,16 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
       </Card>
 
       <Card accent="blue">
-        <div className="sb-overline text-white/65">
+        <div className="sb-overline text-sb-muted">
           {t('report.action.contacts')}
         </div>
-        <div className="mt-3 space-y-2 text-sm text-white/75">
+        <div className="mt-3 space-y-2 text-sm text-sb-ink-soft">
           <div>
-            <span className="font-bold text-white">{t('report.action.nodalLabel')}:</span> {state.nodalAgency}
+            <span className="font-bold text-sb-ink">{t('report.action.nodalLabel')}:</span> {state.nodalAgency}
           </div>
           {state.nodalPortalUrl ? (
             <div>
-              <span className="font-bold text-white">{t('report.action.portalLabel')}:</span>{' '}
+              <span className="font-bold text-sb-ink">{t('report.action.portalLabel')}:</span>{' '}
               <a
                 href={state.nodalPortalUrl}
                 target="_blank"
@@ -703,26 +703,26 @@ function ActionPlanTab({ state }: { state: StateInfo }) {
             </div>
           ) : null}
           {state.nodalPhoneHint ? (
-            <p className="text-[14px] leading-relaxed text-white/70">{state.nodalPhoneHint}</p>
+            <p className="text-[14px] leading-relaxed text-sb-muted">{state.nodalPhoneHint}</p>
           ) : (
-            <p className="text-[14px] leading-relaxed text-white/65">{t('report.action.phoneVerify')}</p>
+            <p className="text-[14px] leading-relaxed text-sb-muted">{t('report.action.phoneVerify')}</p>
           )}
           <div>
-            <span className="font-bold text-white">{t('report.action.discomLabel')}:</span> {state.discom}
+            <span className="font-bold text-sb-ink">{t('report.action.discomLabel')}:</span> {state.discom}
           </div>
           <div>
-            <span className="font-bold text-white">Bank:</span> {t('report.action.bank')}
+            <span className="font-bold text-sb-ink">Bank:</span> {t('report.action.bank')}
           </div>
         </div>
       </Card>
 
       <Card>
-        <div className="sb-overline text-white/65">
+        <div className="sb-overline text-sb-muted">
           {t('report.action.docsTitle')}
         </div>
         <ul className="mt-3 space-y-2">
           {docs.map((d) => (
-            <li key={d} className="flex items-start gap-2 text-sm text-white/75">
+            <li key={d} className="flex items-start gap-2 text-sm text-sb-ink-soft">
               <input
                 type="checkbox"
                 className="mt-1 h-4 w-4 accent-sb-gold"
@@ -751,26 +751,26 @@ function AgrivoltaicsSection({ stateId }: { stateId: string }) {
       </div>
       <div className="mt-3 grid gap-4 md:grid-cols-2">
         <div>
-          <div className="text-[11px] font-bold uppercase text-white/65">{t('report.agri.layout')}</div>
-          <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-white/70">
+          <div className="text-[11px] font-bold uppercase text-sb-muted">{t('report.agri.layout')}</div>
+          <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-sb-muted">
             <li>{t('report.agri.l1')}</li>
             <li>{t('report.agri.l2')}</li>
             <li>{t('report.agri.l3')}</li>
           </ul>
         </div>
         <div>
-          <div className="text-[11px] font-bold uppercase text-white/65">{t('report.agri.crops')}</div>
-          <p className="mt-2 text-sm text-white/70">{t(`report.agri.${cropsKey}`)}</p>
+          <div className="text-[11px] font-bold uppercase text-sb-muted">{t('report.agri.crops')}</div>
+          <p className="mt-2 text-sm text-sb-muted">{t(`report.agri.${cropsKey}`)}</p>
         </div>
       </div>
-      <div className="mt-4 space-y-2 text-sm text-white/65">
+      <div className="mt-4 space-y-2 text-sm text-sb-muted">
         <div>
-          <span className="font-bold text-white">{t('report.agri.income')}:</span> {t('report.agri.incomeNote')}
+          <span className="font-bold text-sb-ink">{t('report.agri.income')}:</span> {t('report.agri.incomeNote')}
         </div>
         <div>
-          <span className="font-bold text-white">{t('report.agri.capex')}:</span> {t('report.agri.capexNote')}
+          <span className="font-bold text-sb-ink">{t('report.agri.capex')}:</span> {t('report.agri.capexNote')}
         </div>
-        <div className="text-[11px] font-bold uppercase text-white/65">{t('report.agri.phases')}</div>
+        <div className="text-[11px] font-bold uppercase text-sb-muted">{t('report.agri.phases')}</div>
         <ul className="list-disc space-y-1 pl-4">
           <li>{t('report.agri.ph1')}</li>
           <li>{t('report.agri.ph2')}</li>
@@ -789,18 +789,18 @@ function SuppliersTab({ stateId }: { stateId: string }) {
   return (
     <div className="space-y-4" data-report-section="suppliers">
       <Card>
-        <div className="sb-overline text-white/65">{t('report.suppliers.epc')}</div>
+        <div className="sb-overline text-sb-muted">{t('report.suppliers.epc')}</div>
         {epcs.length === 0 ? (
-          <p className="mt-2 text-sm text-white/70">{t('report.suppliers.epcPlaceholder')}</p>
+          <p className="mt-2 text-sm text-sb-muted">{t('report.suppliers.epcPlaceholder')}</p>
         ) : null}
         <ul className="mt-3 space-y-2">
           {epcs.map((e) => (
             <li
               key={e.name}
-              className="flex flex-col gap-2 rounded-xl border border-white/10 bg-sb-bg/50 px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
+              className="flex flex-col gap-2 rounded-xl border border-sb-line bg-sb-surface-muted px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
             >
               <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-                <span className="font-bold text-white">{e.name}</span>
+                <span className="font-bold text-sb-ink">{e.name}</span>
                 <StarRating
                   value={e.rating}
                   label={t('report.suppliers.ratingAria', { name: e.name })}
@@ -818,20 +818,20 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card>
-        <div className="sb-overline text-white/65">{t('report.suppliers.panels')}</div>
-        <p className="mt-1 text-[14px] leading-relaxed text-white/65">{t('report.suppliers.almm')}</p>
+        <div className="sb-overline text-sb-muted">{t('report.suppliers.panels')}</div>
+        <p className="mt-1 text-[14px] leading-relaxed text-sb-muted">{t('report.suppliers.almm')}</p>
         <ul className="mt-3 space-y-2 text-sm">
           {PANEL_MANUFACTURERS.map((p) => (
-            <li key={p.name} className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 py-2">
-              <span className="font-bold text-white">{p.name}</span>
-              <span className="text-white/70">
+            <li key={p.name} className="flex flex-wrap items-center justify-between gap-2 border-b border-sb-line py-2">
+              <span className="font-bold text-sb-ink">{p.name}</span>
+              <span className="text-sb-muted">
                 {t(p.locationKey)} · {t(p.techKey)}
               </span>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded bg-sb-gold/20 px-2 py-0.5 text-[10px] font-extrabold uppercase text-sb-gold">
                   ALMM
                 </span>
-                <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold text-white/60">
+                <span className="rounded bg-sb-surface-muted px-2 py-0.5 text-[10px] font-bold text-sb-muted">
                   {p.tag}
                 </span>
               </div>
@@ -841,12 +841,12 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card>
-        <div className="sb-overline text-white/65">{t('report.suppliers.inverters')}</div>
+        <div className="sb-overline text-sb-muted">{t('report.suppliers.inverters')}</div>
         <ul className="mt-3 space-y-2">
           {INVERTER_BRANDS.map((inv) => (
             <li key={inv.name} className="flex flex-wrap justify-between gap-2 text-sm">
-              <span className="font-bold text-white">{inv.name}</span>
-              <span className="text-white/70">{inv.model}</span>
+              <span className="font-bold text-sb-ink">{inv.name}</span>
+              <span className="text-sb-muted">{inv.model}</span>
               <span className="text-[11px] text-sb-blue">
                 {t('report.suppliers.warranty')}: {inv.warranty}
               </span>
@@ -856,19 +856,19 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card>
-        <div className="sb-overline text-white/65">{t('report.suppliers.robots')}</div>
+        <div className="sb-overline text-sb-muted">{t('report.suppliers.robots')}</div>
         <ul className="mt-3 space-y-2">
           {ROBOT_SYSTEMS.map((r) => (
-            <li key={r.name} className="rounded-xl border border-white/10 p-3">
+            <li key={r.name} className="rounded-xl border border-sb-line p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-bold text-white">{r.name}</span>
+                <span className="font-bold text-sb-ink">{r.name}</span>
                 {r.rec && (
                   <span className="rounded bg-sb-purple/20 px-2 py-0.5 text-[10px] font-extrabold text-sb-purple">
                     {t('report.suppliers.recommended')}
                   </span>
                 )}
               </div>
-              <div className="mt-1 text-[14px] leading-snug text-white/70">
+              <div className="mt-1 text-[14px] leading-snug text-sb-muted">
                 {t(r.capitalKey)} · {t(r.runKey)}
               </div>
             </li>
@@ -877,13 +877,13 @@ function SuppliersTab({ stateId }: { stateId: string }) {
       </Card>
 
       <Card accent="green">
-        <div className="sb-overline text-white/65">{t('report.suppliers.finance')}</div>
+        <div className="sb-overline text-sb-muted">{t('report.suppliers.finance')}</div>
         <ul className="mt-3 space-y-2 text-sm">
           {FINANCING_PARTNERS.map((f) => (
-            <li key={f.bankKey} className="flex flex-wrap justify-between gap-2 border-b border-white/5 py-2">
-              <span className="font-bold text-white">{t(f.bankKey)}</span>
+            <li key={f.bankKey} className="flex flex-wrap justify-between gap-2 border-b border-sb-line py-2">
+              <span className="font-bold text-sb-ink">{t(f.bankKey)}</span>
               <span className="text-sb-gold">{f.rate}</span>
-              <span className="text-white/70">{t(f.tenureKey)}</span>
+              <span className="text-sb-muted">{t(f.tenureKey)}</span>
             </li>
           ))}
         </ul>

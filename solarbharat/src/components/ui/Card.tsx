@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
+import { AppCard } from '@/components/ui/AppCard'
 
+/** @deprecated Prefer AppCard — kept for compatibility */
 export function Card({
   children,
   className = '',
@@ -9,17 +11,11 @@ export function Card({
   className?: string
   accent?: 'gold' | 'green' | 'blue'
 }) {
-  const border =
-    accent === 'green'
-      ? 'border-l-sb-green'
-      : accent === 'blue'
-        ? 'border-l-sb-blue'
-        : 'border-l-sb-gold'
+  const variant =
+    accent === 'green' ? 'green' : accent === 'blue' ? 'default' : 'solar'
   return (
-    <div
-      className={`rounded-xl border border-white/10 bg-sb-surface/90 p-4 shadow-lg shadow-black/20 border-l-4 ${border} ${className}`}
-    >
+    <AppCard variant={variant} className={`border-l-4 ${className}`}>
       {children}
-    </div>
+    </AppCard>
   )
 }

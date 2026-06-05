@@ -2,7 +2,7 @@
 export function Skeleton({ className = '' }: { className?: string }) {
   return (
     <div
-      className={`animate-pulse rounded-lg bg-white/10 ${className}`}
+      className={`animate-pulse rounded-lg bg-sb-surface-muted ${className}`}
       aria-hidden
     />
   )
@@ -11,7 +11,7 @@ export function Skeleton({ className = '' }: { className?: string }) {
 export function SkeletonCard() {
   return (
     <div
-      className="rounded-xl border border-white/10 bg-sb-surface/60 p-4"
+      className="rounded-xl border border-sb-line bg-sb-surface p-4"
       role="status"
       aria-label="Loading"
     >

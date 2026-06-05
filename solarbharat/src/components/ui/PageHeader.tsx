@@ -11,11 +11,9 @@ export function PageHeader({
 }) {
   return (
     <header className="space-y-2">
-      {overline ? <p className="sb-overline text-white/70">{overline}</p> : null}
-      <h1 className="font-heading text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-        {title}
-      </h1>
-      {subtitle ? <p className="sb-body max-w-2xl text-pretty text-white/60">{subtitle}</p> : null}
+      {overline ? <p className="sb-overline text-sb-goldDark">{overline}</p> : null}
+      <h1 className="sb-title-1">{title}</h1>
+      {subtitle ? <p className="sb-body max-w-2xl text-pretty">{subtitle}</p> : null}
       {children}
     </header>
   )

@@ -12,7 +12,7 @@ export function LocationsIndexPage() {
   return (
     <div className="space-y-6">
       <PageHeader title={t('locations.title')} subtitle={t('locations.subtitle')} />
-      <ul className="columns-1 gap-x-10 text-base text-white/80 md:columns-2 lg:columns-3">
+      <ul className="columns-1 gap-x-10 text-base text-sb-ink-soft md:columns-2 lg:columns-3">
         {states.map((s) => (
           <li key={s.id} className="break-inside-avoid py-1.5">
             <Link
@@ -21,7 +21,7 @@ export function LocationsIndexPage() {
             >
               {s.name}
             </Link>
-            <span className="text-white/70">
+            <span className="text-sb-muted">
               {' '}
               · {t('locations.districtCount', { count: s.districts.length })}
             </span>

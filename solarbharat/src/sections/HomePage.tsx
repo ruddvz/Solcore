@@ -62,15 +62,15 @@ export function HomePage() {
 
   return (
     <div className="space-y-14">
-      <section className="rounded-[var(--radius-lg)] border border-white/10 bg-gradient-to-br from-sb-surface to-sb-bg p-6 md:p-12">
-        <p className="sb-overline text-sb-gold">{t('home.trustPill')}</p>
-        <h1 className="font-heading mt-3 max-w-3xl text-balance font-extrabold tracking-tight text-white [font-size:clamp(28px,5vw,44px)] leading-[1.1]">
+      <section className="rounded-sb-xl border border-sb-gold/25 bg-gradient-to-br from-sb-goldFaint via-sb-surface to-sb-bg p-6 shadow-sb-sm md:p-10">
+        <p className="sb-overline text-sb-goldDark">{t('home.trustPill')}</p>
+        <h1 className="sb-title-1 mt-3 max-w-3xl text-balance">
           {t('home.heroTitle')}
         </h1>
-        <p className="sb-body mt-4 max-w-2xl text-pretty text-white/60">{t('home.heroSubtitle')}</p>
+        <p className="sb-body mt-4 max-w-2xl text-pretty">{t('home.heroSubtitle')}</p>
 
-        <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="sb-overline text-white/70">{t('home.districtStart')}</p>
+        <div className="mt-6 rounded-sb-lg border border-sb-line-strong bg-sb-card-strong p-4 shadow-sb-sm">
+          <p className="sb-overline text-sb-muted">{t('home.districtStart')}</p>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <Select
               id="home-state"
@@ -96,7 +96,7 @@ export function HomePage() {
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Link
             href={calcHref}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-sb-gold px-6 py-3 text-sm font-extrabold text-sb-bg shadow-lg shadow-sb-gold/20 transition hover:bg-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-sb-md bg-sb-gold px-6 py-3 text-sm font-extrabold text-sb-ink shadow-sb-md transition hover:bg-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
           >
             {t('home.cta')}
           </Link>
@@ -108,11 +108,9 @@ export function HomePage() {
           </ButtonLink>
         </div>
 
-        <p className="mt-4 text-xs text-white/65">
-          {t('home.statStates')} · {t('home.trustTitle')} · {t('home.featureReport')}
-        </p>
+        <p className="mt-4 text-xs text-sb-muted">{t('home.estimateNote')}</p>
 
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Pill value={String(stateCount)} label={t('home.statStates')} />
           <Pill value={String(districtCount)} label={t('home.statDistricts')} />
           <Pill value="25" label={t('home.stat2')} />
@@ -121,41 +119,41 @@ export function HomePage() {
       </section>
 
       <section>
-        <h2 className="font-heading text-[22px] font-bold text-white">{t('home.featuresTitle')}</h2>
+        <h2 className="font-heading text-[22px] font-bold text-sb-ink">{t('home.featuresTitle')}</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {FEATURES.map(({ Icon, t: titleKey, d }) => (
             <div
               key={titleKey}
-              className="rounded-[20px] border border-white/10 bg-sb-surface/60 p-5 transition hover:border-sb-gold/30"
+              className="rounded-[20px] border border-sb-line bg-sb-surface p-5 transition hover:border-sb-gold/30"
             >
               <div className="text-sb-gold">
                 <Icon />
               </div>
-              <div className="mt-3 font-heading text-[15px] font-bold leading-snug text-white">
+              <div className="mt-3 font-heading text-[15px] font-bold leading-snug text-sb-ink">
                 {t(`home.${titleKey}`)}
               </div>
-              <p className="mt-1 text-[14px] leading-relaxed text-white/70">{t(`home.${d}`)}</p>
+              <p className="mt-1 text-[14px] leading-relaxed text-sb-muted">{t(`home.${d}`)}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section>
-        <h2 className="font-heading text-[22px] font-bold text-white">{t('home.trustTitle')}</h2>
-        <p className="sb-body mt-2 max-w-2xl text-white/70">{t('home.trustBody')}</p>
+        <h2 className="font-heading text-[22px] font-bold text-sb-ink">{t('home.trustTitle')}</h2>
+        <p className="sb-body mt-2 max-w-2xl text-sb-muted">{t('home.trustBody')}</p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {AUDIENCE.map(({ t: titleKey, d }) => (
-            <div key={titleKey} className="rounded-xl border border-white/10 bg-sb-surface/40 p-4">
-              <div className="font-heading text-[15px] font-bold text-white">{t(`home.${titleKey}`)}</div>
-              <p className="mt-1 text-sm text-white/70">{t(`home.${d}`)}</p>
+            <div key={titleKey} className="rounded-xl border border-sb-line bg-sb-surface p-4">
+              <div className="font-heading text-[15px] font-bold text-sb-ink">{t(`home.${titleKey}`)}</div>
+              <p className="mt-1 text-sm text-sb-muted">{t(`home.${d}`)}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section>
-        <h2 className="font-heading text-[22px] font-bold text-white">{t('home.coverageTitle')}</h2>
-        <p className="sb-body mt-2 text-white/70">
+        <h2 className="font-heading text-[22px] font-bold text-sb-ink">{t('home.coverageTitle')}</h2>
+        <p className="sb-body mt-2 text-sb-muted">
           {t('home.coverageAll', { states: stateCount, districts: districtCount })}
         </p>
         <label className="mt-4 block">
@@ -165,22 +163,22 @@ export function HomePage() {
             value={coverageQuery}
             onChange={(e) => setCoverageQuery(e.target.value)}
             placeholder={t('home.searchCoverage')}
-            className="min-h-[48px] w-full rounded-xl border border-white/15 bg-sb-bg px-4 text-base text-white outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
+            className="min-h-[48px] w-full rounded-xl border border-sb-line-strong bg-sb-bg px-4 text-base text-sb-ink outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
           />
         </label>
         <ul className="mt-4 space-y-2">
           {filteredStates.map((s) => (
             <li
               key={s.id}
-              className="rounded-xl border border-white/10 bg-sb-surface/50 px-4 py-3"
+              className="rounded-xl border border-sb-line bg-sb-surface/50 px-4 py-3"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-bold text-white">{s.name}</span>
-                <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs font-bold text-white/60">
+                <span className="font-bold text-sb-ink">{s.name}</span>
+                <span className="rounded-full bg-sb-surface-muted px-2 py-0.5 text-xs font-bold text-sb-muted">
                   {s.districts.length}
                 </span>
               </div>
-              <p className="mt-1 text-xs text-white/65">
+              <p className="mt-1 text-xs text-sb-muted">
                 {s.districts
                   .slice(0, 6)
                   .map((d) => d.name)

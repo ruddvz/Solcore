@@ -11,13 +11,13 @@ const PinMapDynamic = dynamic(() => import('@/components/map/PinMap').then((m) =
 })
 
 const inputClass =
-  'min-h-[44px] w-full rounded-xl border border-white/15 bg-sb-bg px-3 py-2.5 text-base text-white outline-none ring-sb-gold/40 focus-visible:ring-2'
+  'min-h-[44px] w-full rounded-xl border border-sb-line-strong bg-sb-bg px-3 py-2.5 text-base text-sb-ink outline-none ring-sb-gold/40 focus-visible:ring-2'
 
 function MapLoading() {
   const { t } = useTranslation()
   return (
     <div
-      className="flex h-[260px] items-center justify-center rounded-xl border border-white/10 bg-sb-surface/40 text-base text-white/70"
+      className="flex h-[260px] items-center justify-center rounded-xl border border-sb-line bg-sb-surface text-base text-sb-muted"
       role="status"
     >
       {t('common.loading')}
@@ -38,10 +38,10 @@ export function PinMapPanel({
   return (
     <div className="space-y-3">
       <PinMapDynamic marker={marker} onMarkerChange={onMarkerChange} {...rest} />
-      <p className="text-xs text-white/70">{t('calc.phase2MapKeyboard')}</p>
+      <p className="text-xs text-sb-muted">{t('calc.phase2MapKeyboard')}</p>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={latId} className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
+          <label htmlFor={latId} className="text-[11px] font-bold uppercase tracking-[0.08em] text-sb-muted">
             {t('calc.phase2Lat')}
           </label>
           <input
@@ -57,7 +57,7 @@ export function PinMapPanel({
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={lonId} className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
+          <label htmlFor={lonId} className="text-[11px] font-bold uppercase tracking-[0.08em] text-sb-muted">
             {t('calc.phase2Lon')}
           </label>
           <input

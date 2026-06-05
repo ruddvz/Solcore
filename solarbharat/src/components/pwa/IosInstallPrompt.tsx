@@ -46,12 +46,12 @@ export function IosInstallPrompt() {
       role="region"
       aria-label={t('pwa.iosInstallTitle')}
     >
-      <p className="font-heading text-sm font-bold text-white">{t('pwa.iosInstallTitle')}</p>
-      <p className="mt-1 text-xs text-white/60">{t('pwa.iosInstallBody')}</p>
+      <p className="font-heading text-sm font-bold text-sb-ink">{t('pwa.iosInstallTitle')}</p>
+      <p className="mt-1 text-xs text-sb-muted">{t('pwa.iosInstallBody')}</p>
       <button
         type="button"
         onClick={dismiss}
-        className="mt-3 min-h-[44px] rounded-xl px-4 text-xs font-bold text-sb-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
+        className="mt-3 min-h-[44px] rounded-xl px-4 text-xs font-bold text-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
       >
         {t('pwa.iosInstallDismiss')}
       </button>

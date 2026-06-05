@@ -20,8 +20,8 @@ export default function OfflinePage() {
       >
         <span aria-hidden>📡</span>
       </div>
-      <h1 className="font-heading text-2xl font-extrabold text-white">{t('offline.title')}</h1>
-      <p className="max-w-sm text-base text-white/60">{t('offline.body')}</p>
+      <h1 className="font-heading text-2xl font-extrabold text-sb-ink">{t('offline.title')}</h1>
+      <p className="max-w-sm text-base text-sb-muted">{t('offline.body')}</p>
       <div className="flex flex-col gap-3 sm:flex-row">
         <ButtonLink href="/">{t('offline.retry')}</ButtonLink>
         <ButtonLink href="/calculator" variant="secondary">

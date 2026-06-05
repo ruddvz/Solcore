@@ -42,10 +42,10 @@ export function PwaUpdatePrompt() {
       role="status"
       className="fixed bottom-[calc(84px+env(safe-area-inset-bottom,0px))] left-3 right-3 z-50 mx-auto flex max-w-lg items-center gap-3 rounded-xl border border-sb-gold/30 bg-sb-surface px-4 py-3 shadow-float md:bottom-6"
     >
-      <p className="flex-1 text-sm font-medium text-white/90">{t('pwa.updateAvailable')}</p>
+      <p className="flex-1 text-sm font-medium text-sb-ink">{t('pwa.updateAvailable')}</p>
       <button
         type="button"
-        className="min-h-[44px] shrink-0 rounded-lg bg-sb-gold px-4 text-sm font-bold text-sb-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        className="min-h-[44px] shrink-0 rounded-lg bg-sb-gold px-4 text-sm font-bold text-sb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
         onClick={() => {
           waitingWorker.postMessage({ type: 'SKIP_WAITING' })
         }}

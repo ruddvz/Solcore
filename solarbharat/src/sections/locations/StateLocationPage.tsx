@@ -14,17 +14,17 @@ export function StateLocationPage({ state: st }: { state: GeographyState }) {
 
   return (
     <div className="space-y-6">
-      <p className="sb-overline text-white/70">{t('locations.crumb')}</p>
+      <p className="sb-overline text-sb-muted">{t('locations.crumb')}</p>
       <PageHeader title={st.name} subtitle={t('locations.stateBody', { state: st.name })} />
       <Link
         href={calcHref}
-        className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-sb-gold px-5 py-3 text-base font-extrabold text-sb-bg hover:bg-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
+        className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-sb-gold px-5 py-3 text-base font-extrabold text-sb-ink hover:bg-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
       >
         {t('locations.openCalculator', { place: st.name })}
       </Link>
-      <div className="rounded-xl border border-white/10 bg-sb-surface/60 p-4">
-        <div className="sb-overline text-white/70">{t('locations.districts')}</div>
-        <ul className="mt-3 max-h-72 space-y-1.5 overflow-y-auto text-base text-white/75">
+      <div className="rounded-xl border border-sb-line bg-sb-surface p-4">
+        <div className="sb-overline text-sb-muted">{t('locations.districts')}</div>
+        <ul className="mt-3 max-h-72 space-y-1.5 overflow-y-auto text-base text-sb-ink-soft">
           {st.districts.map((d) => (
             <li key={d.id}>
               <Link

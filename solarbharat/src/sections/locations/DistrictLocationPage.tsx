@@ -20,7 +20,7 @@ export function DistrictLocationPage({
 
   return (
     <div className="space-y-6">
-      <p className="sb-overline text-white/70">{t('locations.crumb')}</p>
+      <p className="sb-overline text-sb-muted">{t('locations.crumb')}</p>
       <PageHeader
         title={t('locations.districtTitle', { district: d.name, state: st.name })}
         subtitle={t('locations.districtBody')}
@@ -28,7 +28,7 @@ export function DistrictLocationPage({
       <div className="flex flex-wrap gap-3">
         <Link
           href={calcHref}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-sb-gold px-5 py-3 text-base font-extrabold text-sb-bg hover:bg-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-sb-gold px-5 py-3 text-base font-extrabold text-sb-ink hover:bg-sb-goldDark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
         >
           {t('locations.calcDistrict')}
         </Link>

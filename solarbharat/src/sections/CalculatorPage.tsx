@@ -53,6 +53,7 @@ export function CalculatorPage({
     technologyId,
     setStateId,
     setDistrictId,
+    setLocation,
     setLandUnit,
     setTechnologyId,
     setLandValue,
@@ -77,18 +78,16 @@ export function CalculatorPage({
     const geo = GEO_STATES.find((s) => s.id === stateKey)
     if (!geo) return
     hydratedFromUrl.current = true
-    setStateId(stateKey)
     const rid =
       resolveDistrictId(stateKey, districtKey) ??
       (districtKey && geo.districts.some((d) => d.id === districtKey) ? districtKey : undefined)
-    if (rid) setDistrictId(rid)
+    setLocation(stateKey, rid)
   }, [
     initialStateId,
     initialDistrictId,
     queryStateId,
     queryDistrictId,
-    setStateId,
-    setDistrictId,
+    setLocation,
   ])
 
   const state = getResolvedState()
@@ -177,7 +176,7 @@ export function CalculatorPage({
           subtitle={t('calc.equiv', { acres: acresEquiv.toFixed(2) })}
         >
           {landUnit === 'bigha' ? (
-            <p className="text-xs text-white/65">{t('calc.bighaNote')}</p>
+            <p className="text-xs text-sb-muted">{t('calc.bighaNote')}</p>
           ) : null}
           {(solarLoading || solarError) && (
             <p className="text-xs text-sb-orange" role="status" aria-live="polite">
@@ -254,7 +253,7 @@ export function CalculatorPage({
 
             {step === 3 && (
               <fieldset>
-                <legend className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
+                <legend className="text-[11px] font-bold uppercase tracking-[0.08em] text-sb-muted">
                   {t('calc.tech')}
                 </legend>
                 <div className="mt-2 grid gap-3">
@@ -272,11 +271,11 @@ export function CalculatorPage({
 
             {step === 4 && (
               <>
-                <div className="border-t border-white/10 pt-4">
-                  <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
+                <div className="border-t border-sb-line pt-4">
+                  <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-sb-muted">
                     {t('calc.phase2MapTitle')}
                   </div>
-                  <p className="mt-1 text-xs text-white/65">{t('calc.phase2MapHint')}</p>
+                  <p className="mt-1 text-xs text-sb-muted">{t('calc.phase2MapHint')}</p>
                   <div className="mt-3">
                     <PinMapPanel
                       center={mapCenter}
@@ -294,15 +293,15 @@ export function CalculatorPage({
                       {t('calc.phase2ResetPin')}
                     </button>
                     {districtRow && (
-                      <span className="font-mono text-[11px] text-white/65">
+                      <span className="font-mono text-[11px] text-sb-muted">
                         {districtRow.lat.toFixed(4)}°, {districtRow.lon.toFixed(4)}°
                       </span>
                     )}
                   </div>
                 </div>
-                <div className="border-t border-white/10 pt-4">
+                <div className="border-t border-sb-line pt-4">
                   <label className="flex flex-col gap-2" htmlFor="shading">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-sb-muted">
                       {t('calc.phase2Shading')} ({shadingLossPct}%)
                     </span>
                     <input
@@ -318,14 +317,14 @@ export function CalculatorPage({
                       onChange={(e) => setShadingLossPct(Number(e.target.value))}
                       className="min-h-[44px] w-full accent-sb-gold"
                     />
-                    <span className="text-xs text-white/65">{t('calc.phase2ShadingHint')}</span>
+                    <span className="text-xs text-sb-muted">{t('calc.phase2ShadingHint')}</span>
                   </label>
                 </div>
                 <div className="hidden flex-wrap gap-3 pt-2 md:flex">
                   {reportReady ? (
                     <ButtonLink href="/report">{t('calc.generate')}</ButtonLink>
                   ) : (
-                    <p className="text-sm text-white/70">{t('calc.errorLand')}</p>
+                    <p className="text-sm text-sb-muted">{t('calc.errorLand')}</p>
                   )}
                 </div>
               </>
@@ -349,10 +348,10 @@ export function CalculatorPage({
       <div className="space-y-4 lg:col-span-2">
         {state && (
           <Card accent="green">
-            <div className="sb-overline text-sb-greenMuted">
+            <div className="sb-overline text-sb-greenDark">
               {state.name}
               {state.policyIsFallback && (
-                <span className="ml-2 rounded bg-sb-orange/20 px-2 py-0.5 text-[10px] text-sb-orange">
+                <span className="ml-2 rounded bg-sb-orangeSoft px-2 py-0.5 text-[10px] font-semibold text-sb-ink">
                   {t('calc.policyVerify')}
                 </span>
               )}
@@ -381,9 +380,9 @@ export function CalculatorPage({
               />
               <KV label={t('stateCard.subsidy')} value={`${state.subsidyPct}%`} />
             </div>
-            <p className="mt-3 text-xs text-white/70">{state.climateNote}</p>
+            <p className="mt-3 text-xs text-sb-ink-soft">{state.climateNote}</p>
             <div className="mt-4">
-              <div className="text-[10px] font-bold uppercase text-white/65">
+              <div className="text-[10px] font-bold uppercase text-sb-ink-soft">
                 {t('stateCard.monthlyGen')}
               </div>
               <MonthBars values={state.monthlyGenShape} />

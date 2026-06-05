@@ -77,20 +77,20 @@ export function ContractorsListPage() {
             >
               <Card className="h-full transition hover:border-sb-gold/35">
                 <div className="flex items-start justify-between gap-2">
-                  <div className="font-extrabold text-white">{c.companyName}</div>
+                  <div className="font-extrabold text-sb-ink">{c.companyName}</div>
                   {c.verified && (
-                    <span className="shrink-0 rounded bg-sb-green/20 px-2 py-0.5 text-[10px] font-bold uppercase text-sb-greenMuted">
+                    <span className="shrink-0 rounded bg-sb-greenMuted px-2 py-0.5 text-[10px] font-bold uppercase text-sb-greenDark">
                       {t('contractors.verified')}
                     </span>
                   )}
                 </div>
-                <p className="mt-2 text-sm text-white/70">{stateName(c.stateId)}</p>
+                <p className="mt-2 text-sm text-sb-muted">{stateName(c.stateId)}</p>
                 {c.technologyTags.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {c.technologyTags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-md border border-white/10 bg-sb-bg/80 px-2 py-0.5 text-[10px] font-bold uppercase text-white/70"
+                        className="rounded-md border border-sb-line bg-sb-goldFaint px-2 py-0.5 text-[10px] font-bold uppercase text-sb-muted"
                       >
                         {tag}
                       </span>
@@ -104,10 +104,10 @@ export function ContractorsListPage() {
       )}
 
       {!loading && filtered.length === 0 && (
-        <p className="text-center text-base text-white/70">{t('contractors.empty')}</p>
+        <p className="text-center text-base text-sb-muted">{t('contractors.empty')}</p>
       )}
 
-      <p className="text-sm text-white/70">{t('contractors.disclaimer')}</p>
+      <p className="text-sm text-sb-muted">{t('contractors.disclaimer')}</p>
     </div>
   )
 }
