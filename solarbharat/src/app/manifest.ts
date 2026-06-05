@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     id: `${base}/`,
     name: 'SolarBharat',
-    short_name: 'SolarBharat',
+    short_name: 'Solcore',
     description: "India's Solar Intelligence Platform — district-level feasibility (estimates only).",
     start_url: `${base}/`,
     scope: `${base}/`,

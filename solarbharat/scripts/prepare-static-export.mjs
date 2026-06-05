@@ -2,9 +2,10 @@
 /**
  * Static export cannot include Route Handlers. Temporarily move `src/app/api` and root `middleware.ts`.
  */
-import { existsSync, renameSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { movePath } from './static-export-fs.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
@@ -21,12 +22,10 @@ if (existsSync(paths.apiBackup) || existsSync(paths.mwBackup)) {
   process.exit(1)
 }
 
-if (existsSync(paths.api)) {
-  renameSync(paths.api, paths.apiBackup)
+if (movePath(paths.api, paths.apiBackup)) {
   console.log('Moved src/app/api → .static-export-backup-api')
 }
 
-if (existsSync(paths.mw)) {
-  renameSync(paths.mw, paths.mwBackup)
+if (movePath(paths.mw, paths.mwBackup)) {
   console.log('Moved middleware.ts → .static-export-backup-middleware.ts')
 }

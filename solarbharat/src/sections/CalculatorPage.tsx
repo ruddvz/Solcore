@@ -199,21 +199,30 @@ export function CalculatorPage({
         <Card>
           <div className="space-y-4">
             {step === 1 && (
-              <div className="grid gap-4 md:grid-cols-2">
-                <Select
-                  id="state"
-                  label={t('calc.state')}
-                  value={stateId}
-                  onChange={setStateId}
-                  options={GEO_STATES.map((s) => ({ value: s.id, label: s.name }))}
-                />
-                <Select
-                  id="district"
-                  label={t('calc.district')}
-                  value={districtId}
-                  onChange={setDistrictId}
-                  options={districts.map((d) => ({ value: d.id, label: d.name }))}
-                />
+              <div className="space-y-4">
+                <p className="sb-body">{t('calc.locationHint')}</p>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Select
+                    id="state"
+                    label={t('calc.state')}
+                    value={stateId}
+                    onChange={(id) => {
+                      setStateId(id)
+                      const next = GEO_STATES.find((s) => s.id === id)
+                      setDistrictId(next?.districts[0]?.id ?? '')
+                    }}
+                    options={GEO_STATES.map((s) => ({ value: s.id, label: s.name }))}
+                  />
+                  <Select
+                    id="district"
+                    label={t('calc.district')}
+                    value={districtId}
+                    disabled={!stateId}
+                    onChange={setDistrictId}
+                    options={districts.map((d) => ({ value: d.id, label: d.name }))}
+                    hint={t('calc.centroidHint')}
+                  />
+                </div>
               </div>
             )}
 

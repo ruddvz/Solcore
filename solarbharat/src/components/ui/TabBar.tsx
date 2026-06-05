@@ -38,7 +38,7 @@ export function TabBar({
     <div className="relative pb-2">
       <div
         ref={listRef}
-        className="sb-nav-scroll flex snap-x snap-mandatory gap-1 overflow-x-auto overflow-y-hidden rounded-sb-pill bg-sb-surface-muted p-1"
+        className="sb-nav-scroll flex snap-x snap-mandatory gap-1 overflow-x-auto overflow-y-hidden rounded-sb-pill border border-[var(--sb-line)] bg-[rgba(255,253,247,0.72)] p-1 shadow-sb-xs backdrop-blur-sm"
         role="tablist"
         aria-label={label}
       >
@@ -55,10 +55,8 @@ export function TabBar({
               tabIndex={is ? 0 : -1}
               onKeyDown={(e) => onKeyDown(e, index)}
               onClick={() => onChange(tab.id)}
-              className={`min-h-[36px] shrink-0 snap-start rounded-sb-pill px-3 py-2 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold ${
-                is
-                  ? 'bg-white text-sb-ink shadow-sb-sm'
-                  : 'text-sb-muted hover:text-sb-ink'
+              className={`min-h-[44px] shrink-0 snap-start rounded-sb-pill px-4 py-2 text-[13px] font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold ${
+                is ? 'bg-sb-goldSoft text-sb-ink shadow-sb-xs' : 'text-sb-muted hover:text-sb-ink'
               }`}
             >
               {tab.label}

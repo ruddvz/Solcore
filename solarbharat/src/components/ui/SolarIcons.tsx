@@ -55,3 +55,27 @@ export function IconContractors({ className = iconClass }: { className?: string 
     </svg>
   )
 }
+
+export function IconMore({ className = iconClass }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="6" cy="12" r="1.75" fill="currentColor" />
+      <circle cx="12" cy="12" r="1.75" fill="currentColor" />
+      <circle cx="18" cy="12" r="1.75" fill="currentColor" />
+    </svg>
+  )
+}
+
+export function IconOffline({ className = iconClass }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4 12a8 8 0 0114.5-4.5M20 12a8 8 0 01-14.5 4.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path d="M4 4l16 16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  )
+}

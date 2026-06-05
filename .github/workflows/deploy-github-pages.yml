@@ -45,6 +45,9 @@ jobs:
           STATIC_EXPORT: '1'
         run: |
           npm ci
+          npm run lint
+          npm run typecheck
+          npm run test
           npm run export:github-pages
 
       - uses: actions/upload-pages-artifact@v3

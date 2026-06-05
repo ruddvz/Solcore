@@ -6,10 +6,12 @@ import { usePathname } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { isActivePath, withBasePath } from '@/lib/publicBasePath'
 import { MoreMenuSheet } from '@/components/layout/MoreMenuSheet'
+import { ButtonLink } from '@/components/ui/Button'
 import {
   IconCalculator,
   IconContractors,
   IconHome,
+  IconMore,
   IconReport,
 } from '@/components/ui/SolarIcons'
 
@@ -17,7 +19,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const { t, i18n } = useTranslation()
   return (
     <div
-      className={`flex shrink-0 items-center gap-0.5 rounded-sb-pill border border-sb-line bg-sb-surface p-0.5 ${compact ? '' : ''}`}
+      className={`flex shrink-0 items-center gap-0.5 rounded-sb-pill border border-[var(--sb-line)] bg-sb-surface p-0.5 ${compact ? '' : ''}`}
       role="group"
       aria-label={t('a11y.language')}
     >
@@ -101,32 +103,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {t('a11y.skipToContent')}
       </a>
 
-      <header className="sticky top-0 z-30 border-b border-sb-line-soft bg-[rgba(255,248,223,0.78)] backdrop-blur-[18px] supports-[backdrop-filter]:bg-[rgba(255,248,223,0.72)]">
+      <header className="sticky top-0 z-30 sb-glass-header">
         <div className="pt-[max(0px,env(safe-area-inset-top,0px))]">
-          <div className="mx-auto flex h-16 max-w-page items-center gap-3 px-4 md:px-6">
+          <div className="mx-auto flex h-16 max-w-page items-center gap-3 px-4 md:h-[72px] md:px-6">
             <Link
               href={withBasePath('/')}
               aria-label={t('nav.brand')}
               className={`${linkFocus} flex min-h-[44px] shrink-0 items-center gap-2 rounded-sb-md`}
             >
               <span
-                className="flex h-10 w-10 items-center justify-center rounded-sb-md bg-gradient-to-br from-sb-gold to-sb-orange text-lg shadow-sb-sm"
+                className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-gradient-to-br from-sb-gold to-sb-orange text-base shadow-sb-sm"
                 aria-hidden
               >
                 ☀
               </span>
-              <span className="hidden flex-col leading-tight sm:flex">
-                <span className="text-sm font-extrabold tracking-tight text-sb-ink">
+              <span className="flex flex-col leading-tight">
+                <span className="text-base font-bold tracking-tight text-sb-ink">
                   {t('nav.brand')}
                 </span>
-                <span className="text-[10px] font-semibold uppercase tracking-wide text-sb-muted">
+                <span className="hidden text-[10px] font-semibold uppercase tracking-wide text-sb-muted sm:block">
                   {t('nav.tagline')}
                 </span>
               </span>
             </Link>
 
             <nav
-              className="sb-nav-scroll hidden min-h-[44px] flex-1 flex-nowrap items-center gap-1 overflow-x-auto md:flex"
+              className="sb-nav-scroll hidden min-h-[44px] flex-1 flex-nowrap items-center gap-1 overflow-x-auto rounded-sb-pill border border-[var(--sb-line)] bg-[rgba(255,253,247,0.6)] p-1 lg:flex"
               aria-label={t('nav.mainNav')}
             >
               {DESKTOP_NAV.map(({ href, key }) => {
@@ -149,6 +151,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </nav>
 
             <div className="ml-auto flex items-center gap-2">
+              <ButtonLink href="/calculator" size="sm" className="hidden md:inline-flex">
+                {t('nav.openCalculator')}
+              </ButtonLink>
+              <button
+                type="button"
+                aria-expanded={moreOpen}
+                aria-label={t('nav.more')}
+                onClick={() => setMoreOpen(true)}
+                className={`${linkFocus} hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-sb-pill border border-[var(--sb-line)] bg-sb-surface px-3 text-sb-muted lg:inline-flex`}
+              >
+                <IconMore className="h-5 w-5" />
+              </button>
               <LanguageSwitcher compact />
             </div>
           </div>
@@ -160,12 +174,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       <nav
-        className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center pb-[max(10px,env(safe-area-inset-bottom))] md:hidden"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-center pb-[max(10px,env(safe-area-inset-bottom))] lg:hidden"
         aria-label={t('nav.mainNav')}
       >
-        <div
-          className="pointer-events-auto flex h-[66px] w-[calc(100%-24px)] max-w-[430px] items-center justify-around rounded-sb-pill border border-sb-line-soft bg-[rgba(255,253,247,0.86)] px-2 shadow-sb-nav backdrop-blur-[22px] backdrop-saturate-[1.25]"
-        >
+        <div className="pointer-events-auto sb-glass-nav flex h-[66px] w-[calc(100%-24px)] max-w-[430px] items-center justify-around rounded-sb-pill px-2">
           {TAB_ITEMS.map(({ href, key, Icon }) => {
             const active = isActivePath(pathname, href)
             return (
@@ -178,7 +190,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 }`}
               >
                 <Icon className="h-5 w-5" />
-                <span className="text-[10px] font-semibold leading-none">{t(`nav.${key}`)}</span>
+                <span className="text-[10.5px] font-semibold leading-none">{t(`nav.${key}`)}</span>
               </Link>
             )
           })}
@@ -190,17 +202,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
             onClick={() => setMoreOpen(true)}
             className={`${linkFocus} flex min-h-[44px] min-w-[44px] flex-1 flex-col items-center justify-center gap-0.5 rounded-sb-pill px-1 text-sb-muted`}
           >
-            <span className="text-lg leading-none" aria-hidden>
-              ⋯
-            </span>
-            <span className="text-[10px] font-semibold leading-none">{t('nav.more')}</span>
+            <IconMore className="h-5 w-5" />
+            <span className="text-[10.5px] font-semibold leading-none">{t('nav.more')}</span>
           </button>
         </div>
       </nav>
 
-      <MoreMenuSheet open={moreOpen} onClose={() => setMoreOpen(false)} pathname={pathname} />
+      <MoreMenuSheet
+        open={moreOpen}
+        onClose={() => setMoreOpen(false)}
+        pathname={pathname}
+        returnFocusRef={moreTriggerRef}
+      />
 
-      <footer className="hidden border-t border-sb-line bg-sb-surface/80 py-8 md:block">
+      <footer className="hidden border-t border-[var(--sb-line)] bg-sb-surface/80 py-8 lg:block">
         <div className="mx-auto flex max-w-page flex-col items-center gap-3 px-6 text-center">
           <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs font-semibold text-sb-muted">
             <Link className={`${linkFocus} hover:text-sb-ink`} href={withBasePath('/terms')}>

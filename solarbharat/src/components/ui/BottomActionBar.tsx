@@ -11,9 +11,9 @@ export function BottomActionBar({
 }) {
   return (
     <div
-      className={`fixed left-0 right-0 z-40 border-t border-sb-line bg-[rgba(255,253,247,0.92)] backdrop-blur-md md:hidden ${className}`}
+      className={`fixed left-0 right-0 z-40 border-t border-[var(--sb-line)] bg-[rgba(255,253,247,0.92)] backdrop-blur-md lg:hidden ${className}`}
       style={{
-        bottom: 'calc(78px + env(safe-area-inset-bottom, 0px))',
+        bottom: 'calc(82px + env(safe-area-inset-bottom, 0px))',
         paddingBottom: 'max(8px, env(safe-area-inset-bottom, 0px))',
       }}
     >
@@ -24,10 +24,7 @@ export function BottomActionBar({
 
 export function BottomActionBarSpacer() {
   return (
-    <div
-      className="h-[calc(150px+env(safe-area-inset-bottom))] md:hidden"
-      aria-hidden
-    />
+    <div className="h-[calc(154px+env(safe-area-inset-bottom))] lg:hidden" aria-hidden />
   )
 }
 

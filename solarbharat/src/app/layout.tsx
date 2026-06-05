@@ -20,9 +20,9 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(metadataOrigin || siteUrl),
   applicationName: 'SolarBharat',
-  title: 'SolarBharat — India’s Solar Truth Engine',
+  title: 'SolarBharat — India Solar Intelligence',
   description:
-    'District-level solar feasibility for India: NASA POWER irradiance, honest capex stack, PM-KUSUM-style subsidies — estimates only.',
+    'District-level solar feasibility for India: NASA POWER irradiance, honest capex stack, subsidy context — estimates only.',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',

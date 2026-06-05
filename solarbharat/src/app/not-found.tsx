@@ -11,7 +11,7 @@ export default function NotFound() {
       body={t('common.notFoundBody')}
       primaryAction={{ href: '/', label: t('common.backHome') }}
       secondaryAction={{ href: '/calculator', label: t('nav.calculator') }}
-      icon="404"
+      icon={<span className="text-xl font-bold">404</span>}
     />
   )
 }

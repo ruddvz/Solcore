@@ -8,7 +8,7 @@ const SECTION_KEYS = ['s1', 's2', 's3', 's4', 's5', 's6'] as const
 export function PrivacyPage() {
   const { t } = useTranslation()
   return (
-    <article className="mx-auto max-w-3xl space-y-8">
+    <article className="mx-auto max-w-readable space-y-8">
       <PageHeader
         title={t('legal.privacy.title')}
         overline={t('legal.privacy.lastUpdated')}
