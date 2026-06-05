@@ -161,7 +161,7 @@ export function ReviewSubmitPage() {
       </Card>
 
       {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
-      <p className="text-sm text-white/50">{t('reviews.disclaimer')}</p>
+      <p className="text-sm text-white/70">{t('reviews.disclaimer')}</p>
     </div>
   )
 }

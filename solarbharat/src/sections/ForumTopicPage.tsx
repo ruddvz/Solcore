@@ -115,11 +115,11 @@ export function ForumTopicPage() {
 
       <div>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase text-white/55">
+          <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] font-bold uppercase text-white/70">
             {categoryLabel(topic.category)}
           </span>
           {stateName(topic.stateId) && (
-            <span className="text-xs text-white/45">{stateName(topic.stateId)}</span>
+            <span className="text-xs text-white/65">{stateName(topic.stateId)}</span>
           )}
         </div>
         <PageHeader title={topic.title} />
@@ -129,7 +129,7 @@ export function ForumTopicPage() {
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-sm font-extrabold uppercase text-white/45">{t('forum.replies')}</h2>
+        <h2 className="text-sm font-extrabold uppercase text-white/65">{t('forum.replies')}</h2>
         {posts.map((p) => (
           <Card key={p.id}>
             <div className="flex items-start justify-between gap-2">

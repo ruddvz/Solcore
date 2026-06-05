@@ -18,7 +18,7 @@ export function FormField({ label, error, hint, required, children }: FormFieldP
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/50">
+      <label htmlFor={id} className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
         {label}
         {required ? (
           <span className="text-sb-orange" aria-hidden>
@@ -29,7 +29,7 @@ export function FormField({ label, error, hint, required, children }: FormFieldP
       </label>
       {children({ id, describedBy })}
       {hint ? (
-        <p id={hintId} className="text-xs text-white/45">
+        <p id={hintId} className="text-xs text-white/65">
           {hint}
         </p>
       ) : null}

@@ -22,7 +22,7 @@ export function StepIndicator({
                     ? 'bg-sb-gold text-sb-bg'
                     : done
                       ? 'bg-sb-green/20 text-sb-green'
-                      : 'bg-white/10 text-white/50'
+                      : 'bg-white/10 text-white/70'
                 }`}
                 aria-current={active ? 'step' : undefined}
               >
@@ -30,7 +30,7 @@ export function StepIndicator({
               </span>
               <span
                 className={`hidden text-center text-[10px] font-bold uppercase tracking-wide sm:block ${
-                  active ? 'text-sb-gold' : 'text-white/45'
+                  active ? 'text-sb-gold' : 'text-white/65'
                 }`}
               >
                 {labels[i] ?? `Step ${step}`}

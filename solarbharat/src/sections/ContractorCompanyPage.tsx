@@ -82,7 +82,7 @@ export function ContractorCompanyPage() {
             </span>
           )}
         </div>
-        <p className="mt-2 text-sm text-white/55">
+        <p className="mt-2 text-sm text-white/70">
           {stateName(c.stateId)}
           {c.districtIds.length > 0
             ? ` · ${t('contractors.districtCount', { count: c.districtIds.length })}`
@@ -95,13 +95,13 @@ export function ContractorCompanyPage() {
           {paragraphs.length > 0 ? (
             paragraphs.map((p, i) => <p key={i}>{p}</p>)
           ) : (
-            <p className="text-white/45">{t('contractors.noProfile')}</p>
+            <p className="text-white/65">{t('contractors.noProfile')}</p>
           )}
         </div>
 
         {(c.contactEmail || c.contactPhone) && (
           <div className="mt-6 border-t border-white/10 pt-4 text-sm">
-            <div className="text-[11px] font-bold uppercase text-white/45">{t('contractors.contact')}</div>
+            <div className="text-[11px] font-bold uppercase text-white/65">{t('contractors.contact')}</div>
             {c.contactEmail && (
               <a href={`mailto:${c.contactEmail}`} className="mt-1 block text-sb-gold hover:underline">
                 {c.contactEmail}
@@ -112,7 +112,7 @@ export function ContractorCompanyPage() {
         )}
       </Card>
 
-      <p className="text-sm text-white/50">{t('contractors.verifyDisclaimer')}</p>
+      <p className="text-sm text-white/70">{t('contractors.verifyDisclaimer')}</p>
     </div>
   )
 }

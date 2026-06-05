@@ -46,6 +46,18 @@ const nextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
           },
+          {
+            key: 'Content-Security-Policy-Report-Only',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com data:",
+              "img-src 'self' data: blob: https:",
+              "connect-src 'self' https://power.larc.nasa.gov https://developer.nrel.gov https://*.supabase.co https://app.posthog.com",
+              "frame-ancestors 'self'",
+            ].join('; '),
+          },
         ],
       },
     ]

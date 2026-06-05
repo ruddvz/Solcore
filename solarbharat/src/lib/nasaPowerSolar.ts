@@ -24,13 +24,17 @@ function parseNasaMonthly(p: Record<string, number>): SolarMonthly | null {
 }
 
 /** NASA POWER climatology — safe to call from browser (public API). */
-export async function fetchNasaPowerClimatology(lat: number, lon: number): Promise<SolarResource | null> {
+export async function fetchNasaPowerClimatology(
+  lat: number,
+  lon: number,
+  signal?: AbortSignal,
+): Promise<SolarResource | null> {
   const url =
     `https://power.larc.nasa.gov/api/temporal/climatology/point` +
     `?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=${lon}&latitude=${lat}&format=JSON`
 
   try {
-    const res = await fetch(url)
+    const res = await fetch(url, { signal })
     if (!res.ok) return null
     const data = (await res.json()) as {
       properties?: { parameter?: Record<string, Record<string, number>> }

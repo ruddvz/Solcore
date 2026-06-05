@@ -17,7 +17,7 @@ export function KV({
         : 'text-white font-mono text-[22px] font-bold'
   return (
     <div className="flex items-baseline justify-between gap-3 border-b border-white/5 py-2 last:border-0">
-      <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/40">
+      <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/65">
         {label}
       </span>
       <span className={valClass}>{value}</span>

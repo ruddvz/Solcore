@@ -13,7 +13,7 @@ export function Select({
 }) {
   return (
     <label className="flex flex-col gap-1.5" htmlFor={id}>
-      <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/45">
+      <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/65">
         {label}
       </span>
       <select

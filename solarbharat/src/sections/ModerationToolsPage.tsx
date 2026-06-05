@@ -113,7 +113,7 @@ export function ModerationToolsPage() {
             >
               <div>
                 <div className="font-bold text-white">{topic.title}</div>
-                <div className="font-mono text-xs text-white/45">
+                <div className="font-mono text-xs text-white/65">
                   {topic.slug} · {topic.category}
                   {topic.hidden ? ' · hidden' : ''}
                 </div>

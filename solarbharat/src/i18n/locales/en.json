@@ -44,7 +44,9 @@
   "pwa": {
     "iosInstallTitle": "Install SolarBharat on iPhone",
     "iosInstallBody": "Tap Share → Add to Home Screen for a faster, app-like experience.",
-    "iosInstallDismiss": "Not now"
+    "iosInstallDismiss": "Not now",
+    "updateAvailable": "A new version of SolarBharat is ready.",
+    "reload": "Update now"
   },
   "lang": {
     "en": "English",

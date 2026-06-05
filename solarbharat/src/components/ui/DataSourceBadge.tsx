@@ -22,7 +22,7 @@ export function DataSourceBadge({
         {label}
       </span>
       {confidence ? (
-        <span className="text-[11px] font-medium text-white/50">{confidence}</span>
+        <span className="text-[11px] font-medium text-white/70">{confidence}</span>
       ) : null}
     </span>
   )

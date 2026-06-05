@@ -28,7 +28,7 @@ export function RoadmapPage() {
         </section>
       ))}
 
-      <p className="text-sm text-white/50">{t('roadmap.footer')}</p>
+      <p className="text-sm text-white/70">{t('roadmap.footer')}</p>
     </div>
   )
 }

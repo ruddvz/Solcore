@@ -121,7 +121,7 @@ export function AlertsSubscribePage() {
       </Card>
 
       {msg ? <FormStatus message={msg.text} ok={msg.ok} /> : null}
-      <p className="text-sm text-white/50">{t('alerts.disclaimer')}</p>
+      <p className="text-sm text-white/70">{t('alerts.disclaimer')}</p>
     </div>
   )
 }

@@ -17,7 +17,7 @@ function MapLoading() {
   const { t } = useTranslation()
   return (
     <div
-      className="flex h-[260px] items-center justify-center rounded-xl border border-white/10 bg-sb-surface/40 text-base text-white/50"
+      className="flex h-[260px] items-center justify-center rounded-xl border border-white/10 bg-sb-surface/40 text-base text-white/70"
       role="status"
     >
       {t('common.loading')}
@@ -38,10 +38,10 @@ export function PinMapPanel({
   return (
     <div className="space-y-3">
       <PinMapDynamic marker={marker} onMarkerChange={onMarkerChange} {...rest} />
-      <p className="text-xs text-white/50">{t('calc.phase2MapKeyboard')}</p>
+      <p className="text-xs text-white/70">{t('calc.phase2MapKeyboard')}</p>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={latId} className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/50">
+          <label htmlFor={latId} className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
             {t('calc.phase2Lat')}
           </label>
           <input
@@ -57,7 +57,7 @@ export function PinMapPanel({
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor={lonId} className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/50">
+          <label htmlFor={lonId} className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/70">
             {t('calc.phase2Lon')}
           </label>
           <input
