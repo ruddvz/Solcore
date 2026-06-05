@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { withBasePath } from '@/lib/publicBasePath'
+import { AppCard } from '@/components/ui/AppCard'
+import { InfoBanner } from '@/components/ui/InfoBanner'
 
 const SLUGS = [
   'performance',
@@ -19,10 +21,15 @@ const SLUGS = [
 export function Phase3HubPage() {
   const { t } = useTranslation()
   return (
-    <div className="space-y-8">
+    <div className="mx-auto max-w-page space-y-6">
+      <InfoBanner tone="info" title={t('phase3.roadmapLabel')}>
+        {t('phase3.roadmapNote')}
+      </InfoBanner>
+
       <div>
-        <h1 className="text-3xl font-black text-sb-ink">{t('phase3.title')}</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-sb-muted">{t('phase3.intro')}</p>
+        <p className="sb-overline">{t('phase3.roadmapLabel')}</p>
+        <h1 className="sb-title-2 mt-2">{t('phase3.title')}</h1>
+        <p className="sb-body mt-3 max-w-readable">{t('phase3.intro')}</p>
       </div>
 
       <ul className="grid gap-3 sm:grid-cols-2">
@@ -30,16 +37,19 @@ export function Phase3HubPage() {
           <li key={slug}>
             <Link
               href={withBasePath(`/phase3/${slug}`)}
-              className="flex flex-col rounded-2xl border border-sb-line bg-sb-surface px-5 py-4 transition hover:border-sb-gold/35 hover:text-sb-gold"
+              className="block rounded-[26px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sb-gold"
             >
-              <span className="font-extrabold text-sb-ink">{t(`phase3.cards.${slug}.title`)}</span>
-              <span className="mt-1 text-xs text-sb-muted">{t(`phase3.cards.${slug}.blurb`)}</span>
+              <AppCard variant="interactive" className="flex h-full flex-col p-4">
+                <span className="sb-card-title">{t(`phase3.cards.${slug}.title`)}</span>
+                <span className="sb-caption mt-2 flex-1">{t(`phase3.cards.${slug}.blurb`)}</span>
+                <span className="mt-3 text-xs font-bold text-sb-goldDark">{t('phase3.viewFeature')} →</span>
+              </AppCard>
             </Link>
           </li>
         ))}
       </ul>
 
-      <p className="text-xs text-sb-muted">{t('phase3.footer')}</p>
+      <p className="sb-caption">{t('phase3.footer')}</p>
     </div>
   )
 }

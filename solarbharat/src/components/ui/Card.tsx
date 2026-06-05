@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { AppCard } from '@/components/ui/AppCard'
 
-/** @deprecated Prefer AppCard — kept for compatibility */
+/** Thin wrapper — prefer AppCard directly in new code. */
 export function Card({
   children,
   className = '',
@@ -12,9 +12,9 @@ export function Card({
   accent?: 'gold' | 'green' | 'blue'
 }) {
   const variant =
-    accent === 'green' ? 'green' : accent === 'blue' ? 'default' : 'solar'
+    accent === 'green' ? 'green' : accent === 'blue' ? 'blue' : accent === 'gold' ? 'solar' : 'default'
   return (
-    <AppCard variant={variant} className={`border-l-4 ${className}`}>
+    <AppCard variant={variant} className={className}>
       {children}
     </AppCard>
   )

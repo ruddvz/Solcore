@@ -137,7 +137,7 @@ export function PreviewPage() {
         </p>
         <Link
           href={withBasePath('/preview/moderation')}
-          className="mt-3 inline-flex min-h-[44px] items-center rounded-sb-md border border-sb-orange/40 bg-sb-orangeSoft px-4 text-sm font-bold text-sb-orange"
+          className="mt-3 inline-flex min-h-[44px] items-center rounded-sb-md border border-sb-orange/40 bg-sb-orangeSoft px-4 text-sm font-bold text-sb-ink-soft"
         >
           Open moderation tools →
         </Link>
