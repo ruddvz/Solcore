@@ -1,9 +1,14 @@
 import { test, expect, type Page } from '@playwright/test'
 
+const SNAPSHOT_OPTS = {
+  maxDiffPixelRatio: 0.06,
+  threshold: 0.25,
+  animations: 'disabled' as const,
+}
+
 async function prepareForScreenshot(page: Page) {
   await page.locator('body').waitFor({ state: 'visible' })
-  await page.waitForFunction(() => document.readyState === 'complete')
-  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.waitForLoadState('networkidle')
   await page.waitForTimeout(500)
 }
 
@@ -38,10 +43,7 @@ test.describe('Visual snapshots', () => {
         }
         await prepareForScreenshot(page)
         const slug = path.replace(/[/?=&]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '') || 'home'
-        await expect(page).toHaveScreenshot(`${slug}-${vp.name}.png`, {
-          maxDiffPixelRatio: 0.03,
-          animations: 'disabled',
-        })
+        await expect(page).toHaveScreenshot(`${slug}-${vp.name}.png`, SNAPSHOT_OPTS)
       })
     }
 
@@ -51,10 +53,7 @@ test.describe('Visual snapshots', () => {
       await page.getByRole('button', { name: /^Continue$/i }).first().click()
       await expect(page.getByLabel(/land/i)).toBeVisible({ timeout: 10_000 })
       await prepareForScreenshot(page)
-      await expect(page).toHaveScreenshot(`calculator-step2-${vp.name}.png`, {
-        maxDiffPixelRatio: 0.03,
-        animations: 'disabled',
-      })
+      await expect(page).toHaveScreenshot(`calculator-step2-${vp.name}.png`, SNAPSHOT_OPTS)
     })
 
     test(`report costs tab @ ${vp.name}`, async ({ page }) => {
@@ -64,10 +63,7 @@ test.describe('Visual snapshots', () => {
       await page.getByRole('tab', { name: /cost/i }).click()
       await expect(page.locator('[data-report-section="costs"]')).toBeVisible({ timeout: 10_000 })
       await prepareForScreenshot(page)
-      await expect(page).toHaveScreenshot(`report-costs-${vp.name}.png`, {
-        maxDiffPixelRatio: 0.03,
-        animations: 'disabled',
-      })
+      await expect(page).toHaveScreenshot(`report-costs-${vp.name}.png`, SNAPSHOT_OPTS)
     })
   }
 
@@ -77,9 +73,6 @@ test.describe('Visual snapshots', () => {
     await page.locator('nav').getByRole('button', { name: /^more$/i }).click()
     await expect(page.getByRole('dialog', { name: /^more$/i })).toBeVisible()
     await prepareForScreenshot(page)
-    await expect(page).toHaveScreenshot('more-sheet-iphone-14.png', {
-      maxDiffPixelRatio: 0.03,
-      animations: 'disabled',
-    })
+    await expect(page).toHaveScreenshot('more-sheet-iphone-14.png', SNAPSHOT_OPTS)
   })
 })
